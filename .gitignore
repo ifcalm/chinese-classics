@@ -1,0 +1,16 @@
+node_modules
+dist
+dist-ssr
+*.local
+.DS_Store
+.vite
+
+# TypeScript / 构建产物
+*.tsbuildinfo
+vite.config.js
+vite.config.d.ts
+
+# editor
+.vscode/*
+!.vscode/extensions.json
+.idea

@@ -1,0 +1,14 @@
+name = "chinese-classics"
+compatibility_date = "2025-06-01"
+
+# 纯静态阶段：Worker 只托管 React 构建产物，SPA 深链自动回退到 index.html。
+[assets]
+directory = "./dist"
+not_found_handling = "single-page-application"
+
+# —— 未来接入 R2 内容 API 时再启用以下两段 ——
+# main = "src/worker.ts"            # 处理 /api/* 路由（取章节、查索引）
+#
+# [[r2_buckets]]
+# binding = "BOOKS"                 # 代码里用 env.BOOKS 访问
+# bucket_name = "chinese-classics-content"
