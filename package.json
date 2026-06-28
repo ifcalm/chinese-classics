@@ -7,7 +7,11 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
-    "deploy": "npm run build && wrangler deploy"
+    "deploy": "npm run build && wrangler deploy",
+    "content:build": "node scripts/build-content.mjs --all",
+    "content:upload": "node scripts/upload-r2.mjs",
+    "readme": "node scripts/gen-readme.mjs",
+    "content": "npm run content:build && npm run readme"
   },
   "dependencies": {
     "react": "^19.2.7",

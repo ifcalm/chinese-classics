@@ -23,19 +23,28 @@ const NOW = new Date().toISOString().replace(/\.\d+Z$/, 'Z')
 const sha = (s) => crypto.createHash('sha256').update(s).digest('hex').slice(0, 16)
 const prevState = fs.existsSync(STATE_FILE) ? JSON.parse(fs.readFileSync(STATE_FILE, 'utf8')) : {}
 const nextState = { ...prevState }
+const report = { added: [], changed: [] } // 本次新增/改动的书，供「补录」时区分
 function stamp(bookId, hash) {
   const p = prevState[bookId]
   let createdAt, updatedAt
-  if (!p) createdAt = updatedAt = NOW
-  else if (p.hash !== hash) { createdAt = p.createdAt; updatedAt = NOW }
+  if (!p) { createdAt = updatedAt = NOW; report.added.push(bookId) }
+  else if (p.hash !== hash) { createdAt = p.createdAt; updatedAt = NOW; report.changed.push(bookId) }
   else { createdAt = p.createdAt; updatedAt = p.updatedAt }
   nextState[bookId] = { hash, createdAt, updatedAt }
   return { createdAt, updatedAt }
 }
 
-const categories = process.argv.slice(2)
+// 每个产物文件的内容哈希，写入 dist-content/.files.json，供上传脚本做增量
+const fileHashes = {}
+
+let categories = process.argv.slice(2)
+if (categories[0] === '--all') {
+  categories = fs.readdirSync(SRC).filter((n) => {
+    return !n.startsWith('.') && fs.statSync(path.join(SRC, n)).isDirectory()
+  })
+}
 if (categories.length === 0) {
-  console.error('用法: node scripts/build-content.mjs <门类> [<门类> ...]')
+  console.error('用法: node scripts/build-content.mjs <门类> [<门类> ...] | --all')
   process.exit(1)
 }
 
@@ -108,11 +117,14 @@ function longestCommonPrefix(arr) {
 function writeJson(rel, obj) {
   const full = path.join(OUT, rel)
   fs.mkdirSync(path.dirname(full), { recursive: true })
-  fs.writeFileSync(full, JSON.stringify(obj, null, 2) + '\n')
+  const content = JSON.stringify(obj, null, 2) + '\n'
+  fileHashes[rel] = sha(content)
+  fs.writeFileSync(full, content)
 }
 function writeText(rel, body) {
   const full = path.join(OUT, rel)
   fs.mkdirSync(path.dirname(full), { recursive: true })
+  fileHashes[rel] = sha(body)
   fs.writeFileSync(full, body)
 }
 
@@ -299,6 +311,15 @@ writeJson('manifest.json', { schemaVersion: SCHEMA_VERSION, generatedAt: NOW, ca
 
 // 持久化时间戳状态（须随仓库保存，不进 dist-content）
 fs.writeFileSync(STATE_FILE, JSON.stringify(nextState, null, 2) + '\n')
+// 产物文件哈希清单（供上传脚本做内容级增量）
+writeJson('.files.json', fileHashes)
+
+// 本次变更报告：区分「新收录」与「已补录(改动)」
+console.log('\n—— 本次变更 ——')
+console.log(`新收录 ${report.added.length} 部 · 有改动 ${report.changed.length} 部 · 未变 ${Object.keys(nextState).length - report.added.length - report.changed.length} 部`)
+const cap = (a) => a.slice(0, 30).join('\n    ') + (a.length > 30 ? `\n    …共 ${a.length} 部` : '')
+if (report.added.length) console.log('  [新收录]\n    ' + cap(report.added))
+if (report.changed.length) console.log('  [有改动]\n    ' + cap(report.changed))
 
 console.log('\n—— 校验报告 ——')
 if (issues.length === 0) console.log('（无异常）')
