@@ -1478,5 +1478,20 @@
     "hash": "a155f8b6eca7e4dc",
     "createdAt": "2026-06-28T04:27:04Z",
     "updatedAt": "2026-06-28T04:27:04Z"
+  },
+  "literature/tang-shi-san-bai-shou": {
+    "hash": "4f85ef000c59f9d3",
+    "createdAt": "2026-06-28T12:54:29Z",
+    "updatedAt": "2026-06-28T12:55:58Z"
+  },
+  "literature/song-ci-san-bai-shou": {
+    "hash": "afa670419f7ce5a1",
+    "createdAt": "2026-06-28T13:24:12Z",
+    "updatedAt": "2026-06-28T13:24:12Z"
+  },
+  "biji/dong-jing-meng-hua-lu": {
+    "hash": "f687878d0e04a347",
+    "createdAt": "2026-06-28T14:11:41Z",
+    "updatedAt": "2026-06-28T14:11:41Z"
   }
 }
