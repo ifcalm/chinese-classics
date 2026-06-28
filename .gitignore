@@ -1,5 +1,6 @@
 node_modules
 dist
+dist-content
 dist-ssr
 *.local
 .DS_Store
@@ -14,3 +15,10 @@ vite.config.d.ts
 .vscode/*
 !.vscode/extensions.json
 .idea
+
+# 本地内容(由 build-content 生成，dev 用软链)
+public/content
+
+# R2 上传临时记录
+.r2-*.log
+.r2-*.txt
