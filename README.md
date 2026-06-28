@@ -2,7 +2,7 @@
 
 > 读经典，不必正襟危坐。
 
-在线阅读：**[https://chinese-classics.ifcalm.workers.dev](https://chinese-classics.ifcalm.workers.dev)**
+在线阅读：**[https://chinese-classics.org](https://chinese-classics.org)**
 
 收录中国古典典籍，正文以 Markdown 维护，构建为 JSON + 纯文本 md 存于 Cloudflare R2，前端按需取读。
 数据架构见 [docs/data-architecture.md](docs/data-architecture.md)。

@@ -5,7 +5,7 @@
 import fs from 'node:fs'
 
 const OUT = 'dist-content'
-const SITE = 'https://chinese-classics.ifcalm.workers.dev'
+const SITE = 'https://chinese-classics.org'
 
 const manifest = JSON.parse(fs.readFileSync(`${OUT}/manifest.json`, 'utf8'))
 
