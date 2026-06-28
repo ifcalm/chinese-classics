@@ -382,14 +382,30 @@ R2 content/
 
 ---
 
-## 15. 「加 / 改一本书」的工作流
+## 15. 补录工作流（增量 + 已收录/新收录识别）
 
 ```
-新增：  往 base-data/<门类>/<新书>/ 丢符合约定的 md → npm run build:content → 看校验报告 → 上传变化对象到 R2
-改正文：wrangler/rclone 拉下 text/*.md → 改 → 覆盖回 R2（不动索引）
-改结构：改对应 book/catalog/manifest JSON → 上传
+1. 往 base-data/<门类>/<新书>/ 丢符合约定的 md（新书 = git 里显示为未跟踪 ??）
+2. npm run content      # = build-content --all（打印「本次变更」）+ gen-readme（刷新 README）
+3. npm run content:upload   # 只传新增/改动的文件，跳过未变（按内容哈希）
+4. git add -A && commit && push → 自动部署
 —— 全程不碰一行应用代码 ——
 ```
+
+npm 脚本：`content:build`(构建全部门类) · `readme`(刷新 README) · `content`(两者) · `content:upload`(增量上传)。
+
+**README 自动生成**：`scripts/gen-readme.mjs` 从 `dist-content` 读 manifest+catalog，生成 `README.md` 的收录概况(门类/部数/篇数)与全量目录。**勿手改 README**，内容变动跑 `npm run readme` 即刷新——这样"随时更新、保持最新"。
+
+**怎么区分「已收录」与「新收录」**，三重信号：
+
+- **构建变更报告**：每次 `build-content` 打印本轮「新收录 / 有改动 / 未变」的书 id（最直观）。
+- **`content-state.json`**（随仓库提交）：每本书一条 `{hash, createdAt, updatedAt}`。在册=已收录；不在=全新；`createdAt` 即首次收录时间，`updatedAt>createdAt` 即被补录改过。
+- **git 状态**：base-data 里新丢的文件显示为未跟踪 `??`，一眼看出哪些还没纳入。
+
+**增量上传**：`build` 产出 `dist-content/.files.json`（每个产物文件的内容哈希）；`upload-r2.mjs` 拿它与本地 `.r2-uploaded.json`（已传哈希）对比，**只上传哈希变了的文件**。实测改一篇正文 → 仅 4 个文件上传（该篇 + 其 book.json + catalog + manifest），而非全量 8040。
+
+> `.r2-uploaded.json` 是本地缓存（gitignore，丢了重传即可）；`content-state.json` 才是随仓库走的「收录台账」。
+> 上传用 `.env.local` 的 `CLOUDFLARE_API_TOKEN`（走 Cloudflare API，限流 ~4/s，故并发压到 3，对增量小批量足够快）。
 
 ---
 
