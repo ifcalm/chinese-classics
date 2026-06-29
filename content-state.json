@@ -1493,5 +1493,45 @@
     "hash": "f687878d0e04a347",
     "createdAt": "2026-06-28T14:11:41Z",
     "updatedAt": "2026-06-28T14:11:41Z"
+  },
+  "buddha/jingzang/jingji/fu-mu-en-zhong-nan-bao-jing": {
+    "hash": "ae440c09c9d2ad79",
+    "createdAt": "2026-06-29T13:54:31Z",
+    "updatedAt": "2026-06-29T13:54:31Z"
+  },
+  "buddha/jingzang/jingji/yu-lan-pen-jing": {
+    "hash": "a9435d0f6398f0a8",
+    "createdAt": "2026-06-29T13:54:31Z",
+    "updatedAt": "2026-06-29T13:54:31Z"
+  },
+  "buddha/jingzang/jingji/zhancha-shan-e-ye-bao-jing": {
+    "hash": "257aa0f72e3e1c4c",
+    "createdAt": "2026-06-29T13:54:31Z",
+    "updatedAt": "2026-06-29T13:54:31Z"
+  },
+  "buddha/lunzang/rulaizang/fo-xing-lun": {
+    "hash": "edb468b72b410710",
+    "createdAt": "2026-06-29T14:14:08Z",
+    "updatedAt": "2026-06-29T14:14:08Z"
+  },
+  "buddha/lunzang/rulaizang/jiu-jing-yi-cheng-bao-xing-lun": {
+    "hash": "08b5aa1a8c0f6afe",
+    "createdAt": "2026-06-29T14:14:08Z",
+    "updatedAt": "2026-06-29T14:14:08Z"
+  },
+  "buddha/lunzang/shijing/wang-sheng-lun": {
+    "hash": "5ee8bfb7c75f3b34",
+    "createdAt": "2026-06-29T14:14:08Z",
+    "updatedAt": "2026-06-29T14:14:08Z"
+  },
+  "buddha/lunzang/shijing/shi-di-jing-lun": {
+    "hash": "566cf5b3b8076575",
+    "createdAt": "2026-06-29T14:14:08Z",
+    "updatedAt": "2026-06-29T14:14:08Z"
+  },
+  "buddha/lunzang/shijing/shi-zhu-pi-po-sha-lun": {
+    "hash": "2fd5a1a404d5d914",
+    "createdAt": "2026-06-29T14:14:08Z",
+    "updatedAt": "2026-06-29T14:14:08Z"
   }
 }
