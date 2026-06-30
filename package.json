@@ -9,11 +9,12 @@
     "preview": "vite preview",
     "deploy": "npm run build && wrangler deploy",
     "content:build": "node scripts/build-content.mjs --all",
-    "content:upload": "node scripts/upload-r2.mjs",
+    "content:upload": "node scripts/upload-r2-s3.mjs",
     "readme": "node scripts/gen-readme.mjs",
     "content": "npm run content:build && npm run readme"
   },
   "dependencies": {
+    "aws4fetch": "^1.0.20",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-router-dom": "^7.18.0"

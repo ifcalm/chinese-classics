@@ -1553,5 +1553,65 @@
     "hash": "0359b094e127f576",
     "createdAt": "2026-06-29T16:04:15Z",
     "updatedAt": "2026-06-29T16:04:15Z"
+  },
+  "mengxue/di-zi-gui": {
+    "hash": "cd75271c5a1a01b0",
+    "createdAt": "2026-06-30T14:33:09Z",
+    "updatedAt": "2026-06-30T14:33:09Z"
+  },
+  "mengxue/li-weng-dui-yun": {
+    "hash": "74fd6359c9163f03",
+    "createdAt": "2026-06-30T14:33:09Z",
+    "updatedAt": "2026-06-30T14:33:09Z"
+  },
+  "mengxue/long-wen-bian-ying": {
+    "hash": "4307209b6791eab7",
+    "createdAt": "2026-06-30T14:33:09Z",
+    "updatedAt": "2026-06-30T14:33:09Z"
+  },
+  "mengxue/san-zi-jing": {
+    "hash": "6f3f804273cfb851",
+    "createdAt": "2026-06-30T14:33:09Z",
+    "updatedAt": "2026-06-30T14:33:09Z"
+  },
+  "mengxue/sheng-lyu-qi-meng": {
+    "hash": "c2e85be966ae3740",
+    "createdAt": "2026-06-30T14:33:09Z",
+    "updatedAt": "2026-06-30T14:33:09Z"
+  },
+  "mengxue/you-xue-qiong-lin": {
+    "hash": "97b0d121956d9c73",
+    "createdAt": "2026-06-30T14:33:09Z",
+    "updatedAt": "2026-06-30T14:33:09Z"
+  },
+  "mengxue/zeng-guang-xian-wen": {
+    "hash": "b757c1ca729175e4",
+    "createdAt": "2026-06-30T14:33:09Z",
+    "updatedAt": "2026-06-30T14:33:09Z"
+  },
+  "mengxue/zhu-zi-jia-xun": {
+    "hash": "d2639470e0bff360",
+    "createdAt": "2026-06-30T14:33:09Z",
+    "updatedAt": "2026-06-30T14:33:09Z"
+  },
+  "literature/ren-jian-ci-hua": {
+    "hash": "61fe07d5268d269b",
+    "createdAt": "2026-06-30T14:43:53Z",
+    "updatedAt": "2026-06-30T14:43:53Z"
+  },
+  "literature/gu-wen-guan-zhi": {
+    "hash": "64e7af7abd88914b",
+    "createdAt": "2026-06-30T14:43:53Z",
+    "updatedAt": "2026-06-30T14:43:53Z"
+  },
+  "literature/qian-jia-shi": {
+    "hash": "d93cb8c6dc62bd52",
+    "createdAt": "2026-06-30T14:43:53Z",
+    "updatedAt": "2026-06-30T15:41:56Z"
+  },
+  "literature/wen-xin-diao-long": {
+    "hash": "b5bcabef8484436f",
+    "createdAt": "2026-06-30T14:43:53Z",
+    "updatedAt": "2026-06-30T14:43:53Z"
   }
 }
