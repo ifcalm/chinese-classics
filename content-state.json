@@ -1703,5 +1703,30 @@
     "hash": "be133dc352d10f27",
     "createdAt": "2026-07-01T13:17:44Z",
     "updatedAt": "2026-07-01T13:17:44Z"
+  },
+  "literature/bai-shi-chang-qing-ji": {
+    "hash": "6fe16955a1f9e7b2",
+    "createdAt": "2026-07-01T13:51:03Z",
+    "updatedAt": "2026-07-01T13:51:03Z"
+  },
+  "literature/dong-po-ci": {
+    "hash": "6be208d4b689417a",
+    "createdAt": "2026-07-01T13:51:03Z",
+    "updatedAt": "2026-07-01T13:51:03Z"
+  },
+  "literature/jia-xuan-ci": {
+    "hash": "5beacc321fe259d3",
+    "createdAt": "2026-07-01T13:51:03Z",
+    "updatedAt": "2026-07-01T13:51:03Z"
+  },
+  "literature/shu-yu-ci": {
+    "hash": "1a0dd7a973eed2b7",
+    "createdAt": "2026-07-01T13:51:03Z",
+    "updatedAt": "2026-07-01T13:51:03Z"
+  },
+  "medicine/ben-cao-gang-mu": {
+    "hash": "cfcc0dd7ed3deee1",
+    "createdAt": "2026-07-01T13:51:03Z",
+    "updatedAt": "2026-07-01T13:51:03Z"
   }
 }
