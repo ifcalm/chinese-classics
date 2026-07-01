@@ -1613,5 +1613,95 @@
     "hash": "b5bcabef8484436f",
     "createdAt": "2026-06-30T14:43:53Z",
     "updatedAt": "2026-06-30T14:43:53Z"
+  },
+  "literature/cao-cao-shi-ji": {
+    "hash": "6c05aeecfe89f797",
+    "createdAt": "2026-07-01T13:17:44Z",
+    "updatedAt": "2026-07-01T13:17:44Z"
+  },
+  "literature/du-gong-bu-ji": {
+    "hash": "0b2e134b32834362",
+    "createdAt": "2026-07-01T13:17:44Z",
+    "updatedAt": "2026-07-01T13:17:44Z"
+  },
+  "literature/li-tai-bai-ji": {
+    "hash": "a1b8e671f25a145c",
+    "createdAt": "2026-07-01T13:17:44Z",
+    "updatedAt": "2026-07-01T13:17:44Z"
+  },
+  "literature/na-lan-ci": {
+    "hash": "54c250a822c7d577",
+    "createdAt": "2026-07-01T13:17:44Z",
+    "updatedAt": "2026-07-01T13:17:44Z"
+  },
+  "literature/tao-yuan-ming-ji": {
+    "hash": "4c0118df2979c4f7",
+    "createdAt": "2026-07-01T13:17:44Z",
+    "updatedAt": "2026-07-01T13:17:44Z"
+  },
+  "literature/wang-you-cheng-ji": {
+    "hash": "e28ba46396028c18",
+    "createdAt": "2026-07-01T13:17:44Z",
+    "updatedAt": "2026-07-01T13:17:44Z"
+  },
+  "medicine/bei-ji-qian-jin-yao-fang": {
+    "hash": "248956e7507237fe",
+    "createdAt": "2026-07-01T13:17:44Z",
+    "updatedAt": "2026-07-01T13:17:44Z"
+  },
+  "medicine/bin-hu-mai-xue": {
+    "hash": "30dafc9c2451bb5b",
+    "createdAt": "2026-07-01T13:17:44Z",
+    "updatedAt": "2026-07-01T13:17:44Z"
+  },
+  "medicine/ge-zhi-yu-lun": {
+    "hash": "31ebfc2cf568992c",
+    "createdAt": "2026-07-01T13:17:44Z",
+    "updatedAt": "2026-07-01T13:17:44Z"
+  },
+  "medicine/pi-wei-lun": {
+    "hash": "18a9c498158d8959",
+    "createdAt": "2026-07-01T13:17:44Z",
+    "updatedAt": "2026-07-01T13:17:44Z"
+  },
+  "medicine/si-sheng-xin-yuan": {
+    "hash": "7b4c6af1afce0f5e",
+    "createdAt": "2026-07-01T13:17:44Z",
+    "updatedAt": "2026-07-01T13:17:44Z"
+  },
+  "medicine/tang-tou-ge-jue": {
+    "hash": "86f5f4d4b547ee54",
+    "createdAt": "2026-07-01T13:17:44Z",
+    "updatedAt": "2026-07-01T13:17:44Z"
+  },
+  "medicine/wen-bing-tiao-bian": {
+    "hash": "57e118c1888e1b8c",
+    "createdAt": "2026-07-01T13:17:44Z",
+    "updatedAt": "2026-07-01T13:17:44Z"
+  },
+  "medicine/xi-yuan-ji-lu": {
+    "hash": "dd2903e4d53c93e5",
+    "createdAt": "2026-07-01T13:17:44Z",
+    "updatedAt": "2026-07-01T13:17:44Z"
+  },
+  "medicine/yi-xue-san-zi-jing": {
+    "hash": "467bb945315eb6dd",
+    "createdAt": "2026-07-01T13:17:44Z",
+    "updatedAt": "2026-07-01T13:17:44Z"
+  },
+  "medicine/zhen-jiu-jia-yi-jing": {
+    "hash": "ee6ee14188a9a0a8",
+    "createdAt": "2026-07-01T13:17:44Z",
+    "updatedAt": "2026-07-01T13:17:44Z"
+  },
+  "medicine/zhou-hou-bei-ji-fang": {
+    "hash": "b73ec57409f96de3",
+    "createdAt": "2026-07-01T13:17:44Z",
+    "updatedAt": "2026-07-01T13:17:44Z"
+  },
+  "medicine/zhu-bing-yuan-hou-lun": {
+    "hash": "be133dc352d10f27",
+    "createdAt": "2026-07-01T13:17:44Z",
+    "updatedAt": "2026-07-01T13:17:44Z"
   }
 }
