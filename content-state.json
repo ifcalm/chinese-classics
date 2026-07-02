@@ -1728,5 +1728,100 @@
     "hash": "cfcc0dd7ed3deee1",
     "createdAt": "2026-07-01T13:51:03Z",
     "updatedAt": "2026-07-01T13:51:03Z"
+  },
+  "literature/bai-shi-dao-ren-ge-qu": {
+    "hash": "fa86027ab646365a",
+    "createdAt": "2026-07-02T13:16:48Z",
+    "updatedAt": "2026-07-02T13:16:48Z"
+  },
+  "literature/bi-shan-ci": {
+    "hash": "850c3dd0bc962119",
+    "createdAt": "2026-07-02T13:16:48Z",
+    "updatedAt": "2026-07-02T13:16:48Z"
+  },
+  "literature/cao-chuang-ci": {
+    "hash": "a87237eeb7ca7269",
+    "createdAt": "2026-07-02T13:16:48Z",
+    "updatedAt": "2026-07-02T13:16:48Z"
+  },
+  "literature/dong-shan-ci": {
+    "hash": "f1f593a5e09486ca",
+    "createdAt": "2026-07-02T13:16:48Z",
+    "updatedAt": "2026-07-02T13:16:48Z"
+  },
+  "literature/fang-weng-ci": {
+    "hash": "a14fc3448067db5b",
+    "createdAt": "2026-07-02T13:16:48Z",
+    "updatedAt": "2026-07-02T13:16:48Z"
+  },
+  "literature/hou-cun-chang-duan-ju": {
+    "hash": "3987c1e44a40408d",
+    "createdAt": "2026-07-02T13:16:48Z",
+    "updatedAt": "2026-07-02T13:16:48Z"
+  },
+  "literature/huai-hai-ci": {
+    "hash": "dcce68dd3c8bba62",
+    "createdAt": "2026-07-02T13:16:48Z",
+    "updatedAt": "2026-07-02T13:16:48Z"
+  },
+  "literature/liu-yi-ci": {
+    "hash": "f587527c4dba065b",
+    "createdAt": "2026-07-02T13:16:48Z",
+    "updatedAt": "2026-07-02T13:16:48Z"
+  },
+  "literature/mei-xi-ci": {
+    "hash": "531f47cf37b8cc2e",
+    "createdAt": "2026-07-02T13:16:48Z",
+    "updatedAt": "2026-07-02T13:16:48Z"
+  },
+  "literature/meng-chuang-ci": {
+    "hash": "26804652ba53ee86",
+    "createdAt": "2026-07-02T13:16:48Z",
+    "updatedAt": "2026-07-02T13:16:48Z"
+  },
+  "literature/qiao-ge": {
+    "hash": "d5751e5729ce1412",
+    "createdAt": "2026-07-02T13:16:48Z",
+    "updatedAt": "2026-07-02T13:16:48Z"
+  },
+  "literature/qing-zhen-ji": {
+    "hash": "deb576c2b74ac479",
+    "createdAt": "2026-07-02T13:16:48Z",
+    "updatedAt": "2026-07-02T13:16:48Z"
+  },
+  "literature/shan-gu-ci": {
+    "hash": "2d5bce5d8ef4b8fe",
+    "createdAt": "2026-07-02T13:16:48Z",
+    "updatedAt": "2026-07-02T13:20:14Z"
+  },
+  "literature/shan-zhong-bai-yun-ci": {
+    "hash": "3558d26921385546",
+    "createdAt": "2026-07-02T13:16:48Z",
+    "updatedAt": "2026-07-02T13:16:48Z"
+  },
+  "literature/xiao-shan-ci": {
+    "hash": "f0769aa5b16c808f",
+    "createdAt": "2026-07-02T13:16:48Z",
+    "updatedAt": "2026-07-02T13:16:48Z"
+  },
+  "literature/yue-zhang-ji": {
+    "hash": "30b7227e6b835899",
+    "createdAt": "2026-07-02T13:16:48Z",
+    "updatedAt": "2026-07-02T13:16:48Z"
+  },
+  "literature/zhang-zi-ye-ci": {
+    "hash": "8e8486e539e04dce",
+    "createdAt": "2026-07-02T13:16:48Z",
+    "updatedAt": "2026-07-02T13:16:48Z"
+  },
+  "literature/zhu-shan-ci": {
+    "hash": "9f7dc328cb4f214c",
+    "createdAt": "2026-07-02T13:16:48Z",
+    "updatedAt": "2026-07-02T13:16:48Z"
+  },
+  "literature/zhu-yu-ci": {
+    "hash": "a6bd10e4b6e2d229",
+    "createdAt": "2026-07-02T13:16:48Z",
+    "updatedAt": "2026-07-02T13:16:48Z"
   }
 }
