@@ -16,7 +16,7 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-sans);
-  font-size: 15px;
+  font-size: 1rem; /* 跟随 html 的流式根字号 */
   line-height: 1.6;
   transition: background 0.3s var(--ease), color 0.3s var(--ease);
 }

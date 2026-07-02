@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { getManifest } from '../data/content'
+import { errText, getManifest } from '../data/content'
 import type { CategoryMeta } from '../data/types'
 
 export default function Home() {
@@ -10,7 +10,7 @@ export default function Home() {
   useEffect(() => {
     getManifest()
       .then((m) => setCats(m.categories))
-      .catch((e) => setErr(String(e)))
+      .catch((e) => setErr(errText(e)))
   }, [])
 
   const total = cats?.reduce((s, c) => s + c.bookCount, 0) ?? 0
@@ -22,7 +22,7 @@ export default function Home() {
           读经典，<span className="accent">不必正襟危坐。</span>
         </h1>
         <p className="hero__sub">
-          {cats ? `${cats.length} 门类 · ${total} 部典籍 · 全文可搜` : '载入中…'}
+          {cats ? `${cats.length} 门类 · ${total} 部典籍 · 书名可搜` : '载入中…'}
         </p>
       </section>
 
@@ -35,7 +35,9 @@ export default function Home() {
             to={`/category/${c.id}`}
             className={`cat-card cat-card--span${i < 2 ? 2 : 1}`}
           >
-            {c.badge && <span className="cat-card__badge">{c.badge}</span>}
+            <span className="cat-card__badge" aria-hidden="true">
+              {c.badge ?? c.name[0]}
+            </span>
             <span className="cat-card__bottom">
               <span className="cat-card__name">{c.name}</span>
               <span className="cat-card__sub">{c.subtitle ?? `${c.bookCount} 部`}</span>

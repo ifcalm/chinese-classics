@@ -13,9 +13,9 @@ export default function Header() {
           <span className="wordmark__dot" aria-hidden="true" />
         </Link>
         <div className="site-header__right">
-          <button className="search-pill" onClick={open} aria-label="搜索原文、书名">
+          <button className="search-pill" onClick={open} aria-label="搜索书名、作者">
             <SearchIcon size={14} />
-            <span>搜原文、书名</span>
+            <span>搜书名、作者</span>
             <kbd className="search-pill__kbd">/</kbd>
           </button>
           <ThemeToggle />
