@@ -5,14 +5,21 @@ import type { Manifest, Catalog, BookDetail, BookNode, BookText, CatalogNode, Bo
 // dev 走本地软链 /content；部署时用 VITE_CONTENT_BASE 指向 R2 公共域或 Worker /api
 const BASE = import.meta.env.VITE_CONTENT_BASE ?? '/content'
 
+/** SPA fallback 会对不存在的路径返回 200 + index.html，须按 content-type 甄别。 */
 const jsonCache = new Map<string, Promise<unknown>>()
 function getJson<T>(key: string): Promise<T> {
   let p = jsonCache.get(key)
   if (!p) {
-    p = fetch(`${BASE}/${key}`).then((r) => {
-      if (!r.ok) throw new Error(`加载失败 ${key}: ${r.status}`)
-      return r.json()
-    })
+    p = fetch(`${BASE}/${key}`)
+      .then((r) => {
+        const ct = r.headers.get('content-type') ?? ''
+        if (!r.ok || !ct.includes('json')) throw new Error('没有找到这份内容')
+        return r.json()
+      })
+      .catch((e) => {
+        jsonCache.delete(key) // 失败不缓存，下次可重试
+        throw e instanceof Error ? e : new Error('内容暂时无法加载')
+      })
     jsonCache.set(key, p)
   }
   return p as Promise<T>
@@ -26,14 +33,39 @@ const textCache = new Map<string, Promise<string>>()
 export function getChapterText(src: string): Promise<string> {
   let p = textCache.get(src)
   if (!p) {
-    p = fetch(`${BASE}/${src}`).then((r) => {
-      if (!r.ok) throw new Error(`加载正文失败 ${src}: ${r.status}`)
-      return r.text()
-    })
+    p = fetch(`${BASE}/${src}`)
+      .then((r) => {
+        const ct = r.headers.get('content-type') ?? ''
+        if (!r.ok || ct.includes('text/html')) throw new Error('没有找到这篇正文')
+        return r.text()
+      })
+      .catch((e) => {
+        textCache.delete(src)
+        throw e instanceof Error ? e : new Error('正文暂时无法加载')
+      })
     textCache.set(src, p)
   }
   return p
 }
+
+/** 汇总全部门类目录里的书目（书名检索用），12 个 catalog 请求、有缓存。 */
+export async function getAllBooks(): Promise<Array<BookRef & { categoryName: string }>> {
+  const m = await getManifest()
+  const catalogs = await Promise.all(
+    m.categories.map(async (c) => {
+      try {
+        const cat = await getCatalog(c.id)
+        return flattenCatalog(cat.tree).map((b) => ({ ...b, categoryName: c.name }))
+      } catch {
+        return [] // 单个门类失败不拖垮整体检索
+      }
+    })
+  )
+  return catalogs.flat()
+}
+
+/** 统一取用户可读的错误文案。 */
+export const errText = (e: unknown) => (e instanceof Error ? e.message : String(e))
 
 /**
  * chapterId → 所属 bookId。深浅门类层级不一，靠探测最短存在的 book.json 解析：

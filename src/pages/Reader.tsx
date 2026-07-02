@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
-import { getBook, getChapterText, flattenBook, resolveBookId } from '../data/content'
+import { errText, getBook, getChapterText, flattenBook, resolveBookId } from '../data/content'
 import type { BookDetail, BookText } from '../data/types'
 import { useTheme } from '../theme/ThemeProvider'
 import { ChevronLeftIcon } from '../components/Icons'
@@ -53,7 +53,7 @@ export default function Reader() {
   // 解析 bookId：优先 router state，否则按 chapterId 探测
   useEffect(() => {
     if (stateBookId) { setBookId(stateBookId); return }
-    resolveBookId(chapterId).then(setBookId).catch((e) => setErr(String(e)))
+    resolveBookId(chapterId).then(setBookId).catch((e) => setErr(errText(e)))
   }, [chapterId, stateBookId])
 
   const [fontSize, setFontSize] = useState(() => Number(localStorage.getItem('cc-fontsize')) || 18)
@@ -68,7 +68,7 @@ export default function Reader() {
   useEffect(() => {
     if (!bookId) return
     setErr(undefined)
-    getBook(bookId).then(setBook).catch((e) => setErr(String(e)))
+    getBook(bookId).then(setBook).catch((e) => setErr(errText(e)))
   }, [bookId])
 
   const flat = useMemo(() => (book ? flattenBook(book.nodes) : []), [book])
@@ -81,7 +81,7 @@ export default function Reader() {
   useEffect(() => {
     setText(null)
     if (!chapter) return
-    getChapterText(chapter.src).then(setText).catch((e) => setErr(String(e)))
+    getChapterText(chapter.src).then(setText).catch((e) => setErr(errText(e)))
   }, [chapter?.src])
 
   // 阅读进度
@@ -96,6 +96,14 @@ export default function Reader() {
   }, [chapterId, text])
 
   useEffect(() => window.scrollTo(0, 0), [chapterId])
+
+  // Esc 关闭目录抽屉
+  useEffect(() => {
+    if (!tocOpen) return
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setTocOpen(false)
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [tocOpen])
 
   const go = (cid: string) => navigate(`/read/${cid}`, { state: { bookId } })
 
@@ -140,7 +148,8 @@ export default function Reader() {
           <>
             <h1 className="reader__chapter">{chapter.title}</h1>
             <div className="reader__rule" aria-hidden="true" />
-            <div className="reader__flow" style={{ fontSize }}>
+            {/* 用户字号以 rem 应用，随根字号一同适配屏幕 */}
+            <div className="reader__flow" style={{ fontSize: `${fontSize / 15}rem` }}>
               {text == null ? <p className="reader__text">载入中…</p> : renderText(text)}
             </div>
 

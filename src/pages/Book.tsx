@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { getBook } from '../data/content'
+import { errText, getBook, getManifest } from '../data/content'
 import type { BookDetail, BookNode } from '../data/types'
 
 function NodeList({ nodes, bookId }: { nodes: BookNode[]; bookId: string }) {
@@ -27,17 +27,21 @@ function NodeList({ nodes, bookId }: { nodes: BookNode[]; bookId: string }) {
 export default function Book() {
   const { '*': bookId = '' } = useParams()
   const [book, setBook] = useState<BookDetail | null>(null)
+  const [catName, setCatName] = useState<string>()
   const [err, setErr] = useState<string>()
+
+  const categoryId = bookId.split('/')[0]
 
   useEffect(() => {
     setBook(null)
     setErr(undefined)
     getBook(bookId)
       .then(setBook)
-      .catch((e) => setErr(String(e)))
-  }, [bookId])
-
-  const categoryId = bookId.split('/')[0]
+      .catch((e) => setErr(errText(e)))
+    getManifest()
+      .then((m) => setCatName(m.categories.find((c) => c.id === categoryId)?.name))
+      .catch(() => {})
+  }, [bookId, categoryId])
 
   return (
     <main className="page">
@@ -47,7 +51,7 @@ export default function Book() {
         </Link>
         <span className="crumb__sep">/</span>
         <Link to={`/category/${categoryId}`} className="crumb__link">
-          {categoryId}
+          {catName ?? categoryId}
         </Link>
         <span className="crumb__sep">/</span>
         <span>{book?.title ?? '…'}</span>
