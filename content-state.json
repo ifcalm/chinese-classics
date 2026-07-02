@@ -1823,5 +1823,40 @@
     "hash": "a6bd10e4b6e2d229",
     "createdAt": "2026-07-02T13:16:48Z",
     "updatedAt": "2026-07-02T13:16:48Z"
+  },
+  "literature/lin-chuan-wen-ji": {
+    "hash": "c4e87ca80021b7da",
+    "createdAt": "2026-07-02T13:49:19Z",
+    "updatedAt": "2026-07-02T13:49:19Z"
+  },
+  "literature/luan-cheng-ji": {
+    "hash": "60445325fdc6180a",
+    "createdAt": "2026-07-02T13:49:19Z",
+    "updatedAt": "2026-07-02T14:45:59Z"
+  },
+  "literature/yuan-feng-lei-gao": {
+    "hash": "3f6f2dd5ef0efbf2",
+    "createdAt": "2026-07-02T13:49:19Z",
+    "updatedAt": "2026-07-02T14:45:59Z"
+  },
+  "literature/yuan-qu": {
+    "hash": "44e6715b3efdcf82",
+    "createdAt": "2026-07-02T13:49:19Z",
+    "updatedAt": "2026-07-02T13:49:19Z"
+  },
+  "literature/han-yu-ji": {
+    "hash": "dc848a400d909413",
+    "createdAt": "2026-07-02T14:20:54Z",
+    "updatedAt": "2026-07-02T14:45:59Z"
+  },
+  "literature/jia-you-ji": {
+    "hash": "ea1c6585c13abde0",
+    "createdAt": "2026-07-02T14:20:54Z",
+    "updatedAt": "2026-07-02T14:45:59Z"
+  },
+  "literature/liu-he-dong-ji": {
+    "hash": "a16870154bcffcab",
+    "createdAt": "2026-07-02T14:20:54Z",
+    "updatedAt": "2026-07-02T14:45:59Z"
   }
 }
