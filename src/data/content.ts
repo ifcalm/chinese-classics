@@ -5,12 +5,27 @@ import type { Manifest, Catalog, BookDetail, BookNode, BookText, CatalogNode, Bo
 // dev 走本地软链 /content；部署时用 VITE_CONTENT_BASE 指向 R2 公共域或 Worker /api
 const BASE = import.meta.env.VITE_CONTENT_BASE ?? '/content'
 
+/** 请求超时：连接停滞时让 Promise 快速落定，避免挂起的请求永远占住缓存
+    (症状：翻页一直空白，必须刷新才恢复)。旧浏览器无 AbortSignal.timeout 则不限时。 */
+const fetchTimeout = () =>
+  typeof AbortSignal?.timeout === 'function' ? AbortSignal.timeout(12000) : undefined
+
+/** 超时/断网等底层异常转为用户可读文案；业务抛出的 Error 原样保留。 */
+function toFriendlyError(e: unknown, fallback: string): Error {
+  if (e instanceof Error) {
+    if (e.name === 'TimeoutError' || e.name === 'AbortError') return new Error('网络超时，请重试')
+    if (e.name === 'TypeError') return new Error('网络异常，请检查连接后重试')
+    return e
+  }
+  return new Error(fallback)
+}
+
 /** SPA fallback 会对不存在的路径返回 200 + index.html，须按 content-type 甄别。 */
 const jsonCache = new Map<string, Promise<unknown>>()
 function getJson<T>(key: string): Promise<T> {
   let p = jsonCache.get(key)
   if (!p) {
-    p = fetch(`${BASE}/${key}`)
+    p = fetch(`${BASE}/${key}`, { signal: fetchTimeout() })
       .then((r) => {
         const ct = r.headers.get('content-type') ?? ''
         if (!r.ok || !ct.includes('json')) throw new Error('没有找到这份内容')
@@ -18,7 +33,7 @@ function getJson<T>(key: string): Promise<T> {
       })
       .catch((e) => {
         jsonCache.delete(key) // 失败不缓存，下次可重试
-        throw e instanceof Error ? e : new Error('内容暂时无法加载')
+        throw toFriendlyError(e, '内容暂时无法加载')
       })
     jsonCache.set(key, p)
   }
@@ -33,7 +48,7 @@ const textCache = new Map<string, Promise<string>>()
 export function getChapterText(src: string): Promise<string> {
   let p = textCache.get(src)
   if (!p) {
-    p = fetch(`${BASE}/${src}`)
+    p = fetch(`${BASE}/${src}`, { signal: fetchTimeout() })
       .then((r) => {
         const ct = r.headers.get('content-type') ?? ''
         if (!r.ok || ct.includes('text/html')) throw new Error('没有找到这篇正文')
@@ -41,7 +56,7 @@ export function getChapterText(src: string): Promise<string> {
       })
       .catch((e) => {
         textCache.delete(src)
-        throw e instanceof Error ? e : new Error('正文暂时无法加载')
+        throw toFriendlyError(e, '正文暂时无法加载')
       })
     textCache.set(src, p)
   }
