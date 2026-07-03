@@ -8,6 +8,16 @@ import { ChevronLeftIcon } from '../components/Icons'
 const FONT_MIN = 16
 const FONT_MAX = 24
 
+/** 韵文判定(诗/词)：全篇为纯文本短段(无标题、无代码块)，
+    段数 ≥ 3 且每段最长行 ≤ 30 字。散文段落远超此长度，不会误判。
+    将来 build 在 book.json 写入体裁标记后，可改为只信数据。 */
+function isVerse(md: string): boolean {
+  const blocks = md.split(/\n{2,}/).map((b) => b.trim()).filter(Boolean)
+  const hasNonPlain = blocks.some((b) => b.startsWith('```') || /^#{1,6}\s/.test(b))
+  if (hasNonPlain || blocks.length < 3) return false
+  return blocks.every((b) => b.split('\n').every((line) => line.trim().length <= 30))
+}
+
 /** 轻量 md 渲染：空行分段，识别标题与代码块；正文以纯文本为主。 */
 function renderText(md: string) {
   const blocks = md.split(/\n{2,}/)
@@ -84,6 +94,8 @@ export default function Reader() {
     getChapterText(chapter.src).then(setText).catch((e) => setErr(errText(e)))
   }, [chapter?.src])
 
+  const verse = useMemo(() => (text != null ? isVerse(text) : false), [text])
+
   // 阅读进度
   useEffect(() => {
     const onScroll = () => {
@@ -149,8 +161,18 @@ export default function Reader() {
             <h1 className="reader__chapter">{chapter.title}</h1>
             <div className="reader__rule" aria-hidden="true" />
             {/* 用户字号以 rem 应用，随根字号一同适配屏幕 */}
-            <div className="reader__flow" style={{ fontSize: `${fontSize / 15}rem` }}>
-              {text == null ? <p className="reader__text">载入中…</p> : renderText(text)}
+            <div
+              className={`reader__flow${verse ? ' reader__flow--verse' : ''}`}
+              style={{ fontSize: `${fontSize / 15}rem` }}
+            >
+              {text == null ? (
+                <p className="reader__text">载入中…</p>
+              ) : verse ? (
+                // 诗词整块居中：外层居中，内层按最宽行收缩、行间左对齐
+                <div className="reader__verse">{renderText(text)}</div>
+              ) : (
+                renderText(text)
+              )}
             </div>
 
             <nav className="reader__nav">
