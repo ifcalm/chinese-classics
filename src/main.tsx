@@ -6,6 +6,14 @@ import './styles/global.css'
 import App from './App.tsx'
 import { ThemeProvider } from './theme/ThemeProvider.tsx'
 
+// 远程定位辅助：未捕获错误连同完整堆栈醒目输出(线上带 sourcemap，堆栈可读)
+window.addEventListener('error', (e) => {
+  console.error('[全局错误]', e.error?.stack ?? e.message)
+})
+window.addEventListener('unhandledrejection', (e) => {
+  console.error('[未处理的 Promise 异常]', (e.reason as Error)?.stack ?? e.reason)
+})
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <ThemeProvider>

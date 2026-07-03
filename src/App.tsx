@@ -5,11 +5,13 @@ import Category from './pages/Category'
 import Book from './pages/Book'
 import Reader from './pages/Reader'
 import { SearchProvider } from './search/SearchProvider'
+import ErrorBoundary from './components/ErrorBoundary'
 import './styles/app.css'
 
 export default function App() {
   return (
     <SearchProvider>
+      <ErrorBoundary>
       <Routes>
         {/* 阅读页是独立沉浸布局，不带全局 Header */}
         <Route path="/read/*" element={<Reader />} />
@@ -27,6 +29,7 @@ export default function App() {
           }
         />
       </Routes>
+      </ErrorBoundary>
     </SearchProvider>
   )
 }
