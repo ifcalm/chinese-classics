@@ -35,21 +35,67 @@
   align-items: center;
   gap: 12px;
 }
-.search-pill {
+/* 内联搜索：常态为胶囊，聚焦拉长，结果下拉锚定框下 */
+.search-bar {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 7px;
+  width: 12rem;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-pill);
   padding: 7px 14px;
   color: var(--text-tertiary);
   font-size: 0.8rem;
-  transition: background 0.2s var(--ease), border-color 0.2s var(--ease);
+  transition: width 0.28s var(--ease), background 0.2s var(--ease),
+    border-color 0.2s var(--ease);
 }
-.search-pill:hover {
+.search-bar:hover {
   background: var(--surface-hover);
   border-color: var(--border-strong);
+}
+.search-bar:focus-within {
+  width: 26rem;
+  background: var(--bg);
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+}
+.search-bar input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.8rem;
+  outline: none;
+  padding: 0;
+}
+.search-bar input::placeholder {
+  color: var(--text-tertiary);
+}
+.search-bar__kbd {
+  margin-left: 2px;
+}
+.search-drop {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 26rem;
+  max-width: 88vw;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  z-index: 30;
+  animation: slideup 0.18s var(--ease);
+}
+.search-drop__hint {
+  padding: 14px 16px;
+  margin: 0;
+  font-size: 0.867rem;
+  color: var(--text-tertiary);
 }
 .theme-toggle {
   display: inline-flex;
@@ -307,9 +353,6 @@ kbd {
   background: var(--surface);
   border: 1px solid var(--border);
   color: var(--text-tertiary);
-}
-.search-pill__kbd {
-  margin-left: 2px;
 }
 .empty {
   padding: 2.67rem 0;
@@ -571,7 +614,8 @@ kbd {
   padding: 10px 12px;
   border-radius: var(--radius-sm);
 }
-.search-hit:hover {
+.search-hit:hover,
+.search-hit.is-active {
   background: var(--surface);
 }
 .search-hit__title {
@@ -595,8 +639,11 @@ kbd {
   .cat-card--span2 {
     grid-column: span 2;
   }
-  .search-pill span {
-    display: none;
+  .search-bar {
+    width: 8.5rem;
+  }
+  .search-bar:focus-within {
+    width: min(70vw, 20rem);
   }
 }
 
