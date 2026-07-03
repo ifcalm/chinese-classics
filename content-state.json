@@ -800,9 +800,9 @@
     "updatedAt": "2026-06-28T04:27:04Z"
   },
   "buddha/jingzang/jingji/foming/fo-shuo-bai-fo-ming-jing": {
-    "hash": "5360eedecd64dddb",
+    "hash": "6f11f3371864f067",
     "createdAt": "2026-06-28T04:27:04Z",
-    "updatedAt": "2026-06-28T04:27:04Z"
+    "updatedAt": "2026-07-03T08:17:29Z"
   },
   "buddha/jingzang/jingji/foming/fo-shuo-bao-wang-jing": {
     "hash": "144d26f79f12e430",
@@ -825,14 +825,14 @@
     "updatedAt": "2026-06-28T04:27:04Z"
   },
   "buddha/jingzang/jingji/foming/fo-shuo-fo-ming-jing-12": {
-    "hash": "1f7cd77c4bd6f581",
+    "hash": "85ddf9a048281b3b",
     "createdAt": "2026-06-28T04:27:04Z",
-    "updatedAt": "2026-06-28T04:27:04Z"
+    "updatedAt": "2026-07-03T08:17:29Z"
   },
   "buddha/jingzang/jingji/foming/fo-shuo-fo-ming-jing-30": {
-    "hash": "60c83eb2b0b1dd3d",
+    "hash": "f04131c586e290d4",
     "createdAt": "2026-06-28T04:27:04Z",
-    "updatedAt": "2026-06-28T04:27:04Z"
+    "updatedAt": "2026-07-03T08:17:29Z"
   },
   "buddha/jingzang/jingji/foming/fo-shuo-mie-shi-fang-ming-jing": {
     "hash": "aa93b268e282990f",
@@ -865,9 +865,9 @@
     "updatedAt": "2026-06-28T04:27:04Z"
   },
   "buddha/jingzang/jingji/foming/wu-qian-wu-bai-fo-ming-shen-zhou-chu-zhang-mie-zui-jing": {
-    "hash": "f11954a23aa4996a",
+    "hash": "a26a8d8df5525f61",
     "createdAt": "2026-06-28T04:27:04Z",
-    "updatedAt": "2026-06-28T04:27:04Z"
+    "updatedAt": "2026-07-03T08:17:29Z"
   },
   "buddha/jingzang/jingji/foming/xian-jie-jing": {
     "hash": "b569731f20621519",
@@ -1915,9 +1915,9 @@
     "updatedAt": "2026-07-03T06:34:33Z"
   },
   "masters/jin-si-lu": {
-    "hash": "1c832f90328de388",
+    "hash": "6c5ec245460ba3f6",
     "createdAt": "2026-07-03T06:34:33Z",
-    "updatedAt": "2026-07-03T06:34:33Z"
+    "updatedAt": "2026-07-03T08:34:03Z"
   },
   "masters/liao-fan-si-xun": {
     "hash": "9dda7d57b160e9d0",
@@ -1943,5 +1943,50 @@
     "hash": "2b4d0b2b43aacaef",
     "createdAt": "2026-07-03T06:34:33Z",
     "updatedAt": "2026-07-03T06:34:33Z"
+  },
+  "buddha/zongpai/chan/bi-yan-lu": {
+    "hash": "1bc2915528b6b94f",
+    "createdAt": "2026-07-03T07:52:59Z",
+    "updatedAt": "2026-07-03T07:52:59Z"
+  },
+  "buddha/zongpai/chan/chuan-xin-fa-yao": {
+    "hash": "0cf573b0997de1f1",
+    "createdAt": "2026-07-03T07:52:59Z",
+    "updatedAt": "2026-07-03T07:55:09Z"
+  },
+  "buddha/zongpai/chan/jing-de-chuan-deng-lu": {
+    "hash": "f730d33b663339e8",
+    "createdAt": "2026-07-03T07:52:59Z",
+    "updatedAt": "2026-07-03T08:17:29Z"
+  },
+  "buddha/zongpai/chan/lin-ji-lu": {
+    "hash": "c8c6b826472fbfec",
+    "createdAt": "2026-07-03T07:52:59Z",
+    "updatedAt": "2026-07-03T07:55:09Z"
+  },
+  "buddha/zongpai/chan/shi-niu-tu-song": {
+    "hash": "e50db76cbf4c3df0",
+    "createdAt": "2026-07-03T07:52:59Z",
+    "updatedAt": "2026-07-03T07:52:59Z"
+  },
+  "buddha/zongpai/chan/wu-deng-hui-yuan": {
+    "hash": "18ad403dba894dae",
+    "createdAt": "2026-07-03T07:52:59Z",
+    "updatedAt": "2026-07-03T07:52:59Z"
+  },
+  "buddha/zongpai/chan/wu-men-guan": {
+    "hash": "7e6e9f4f6042e3b8",
+    "createdAt": "2026-07-03T07:52:59Z",
+    "updatedAt": "2026-07-03T07:55:09Z"
+  },
+  "buddha/zongpai/chan/xin-xin-ming": {
+    "hash": "4b8512cc7f21a785",
+    "createdAt": "2026-07-03T07:52:59Z",
+    "updatedAt": "2026-07-03T07:52:59Z"
+  },
+  "buddha/zongpai/chan/yong-jia-zheng-dao-ge": {
+    "hash": "53ec8ccb80324fc5",
+    "createdAt": "2026-07-03T07:52:59Z",
+    "updatedAt": "2026-07-03T07:52:59Z"
   }
 }
