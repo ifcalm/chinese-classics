@@ -30,9 +30,9 @@
     "updatedAt": "2026-06-28T04:27:04Z"
   },
   "confucius/li-ji": {
-    "hash": "bdecbcf0e3c7a23c",
+    "hash": "fc01b721b218f39d",
     "createdAt": "2026-06-28T04:27:04Z",
-    "updatedAt": "2026-06-28T04:27:04Z"
+    "updatedAt": "2026-07-03T07:15:03Z"
   },
   "confucius/lun-yu": {
     "hash": "9110c236937dbe6d",
@@ -290,9 +290,9 @@
     "updatedAt": "2026-06-28T04:27:04Z"
   },
   "masters/xunzi": {
-    "hash": "631b5f8d274618b6",
+    "hash": "c5f0d73e189ca20e",
     "createdAt": "2026-06-28T04:27:04Z",
-    "updatedAt": "2026-06-28T04:27:04Z"
+    "updatedAt": "2026-07-03T07:15:03Z"
   },
   "masters/yantielun": {
     "hash": "18faeec08815fc51",
@@ -1858,5 +1858,90 @@
     "hash": "a16870154bcffcab",
     "createdAt": "2026-07-02T14:20:54Z",
     "updatedAt": "2026-07-02T14:45:59Z"
+  },
+  "biji/fu-sheng-liu-ji": {
+    "hash": "7bb7287e430d8b66",
+    "createdAt": "2026-07-03T06:34:33Z",
+    "updatedAt": "2026-07-03T06:34:33Z"
+  },
+  "biji/lao-xue-an-bi-ji": {
+    "hash": "d5808d387be9cfd0",
+    "createdAt": "2026-07-03T06:34:33Z",
+    "updatedAt": "2026-07-03T06:34:33Z"
+  },
+  "biji/meng-xi-bi-tan": {
+    "hash": "cfc4c55cf3794745",
+    "createdAt": "2026-07-03T06:34:33Z",
+    "updatedAt": "2026-07-03T06:34:33Z"
+  },
+  "biji/rong-zhai-sui-bi": {
+    "hash": "4cf521ee2f0589aa",
+    "createdAt": "2026-07-03T06:34:33Z",
+    "updatedAt": "2026-07-03T06:34:33Z"
+  },
+  "biji/tao-an-meng-yi": {
+    "hash": "d1ba9b35cbdd4ac4",
+    "createdAt": "2026-07-03T06:34:33Z",
+    "updatedAt": "2026-07-03T06:34:33Z"
+  },
+  "biji/wu-lin-jiu-shi": {
+    "hash": "0f1a06d26e2b6aec",
+    "createdAt": "2026-07-03T06:34:33Z",
+    "updatedAt": "2026-07-03T06:34:33Z"
+  },
+  "biji/you-meng-ying": {
+    "hash": "43f91258f91e869e",
+    "createdAt": "2026-07-03T06:34:33Z",
+    "updatedAt": "2026-07-03T06:34:33Z"
+  },
+  "biji/yue-wei-cao-tang-bi-ji": {
+    "hash": "c975b8e49ec254c6",
+    "createdAt": "2026-07-03T06:34:33Z",
+    "updatedAt": "2026-07-03T06:34:33Z"
+  },
+  "biji/zi-bu-yu": {
+    "hash": "834795c0f21b615c",
+    "createdAt": "2026-07-03T06:34:33Z",
+    "updatedAt": "2026-07-03T06:34:33Z"
+  },
+  "masters/cai-gen-tan": {
+    "hash": "4934d53d8f062ed4",
+    "createdAt": "2026-07-03T06:34:33Z",
+    "updatedAt": "2026-07-03T06:34:33Z"
+  },
+  "masters/chuan-xi-lu": {
+    "hash": "fe9a7b0eb288d0da",
+    "createdAt": "2026-07-03T06:34:33Z",
+    "updatedAt": "2026-07-03T06:34:33Z"
+  },
+  "masters/jin-si-lu": {
+    "hash": "1c832f90328de388",
+    "createdAt": "2026-07-03T06:34:33Z",
+    "updatedAt": "2026-07-03T06:34:33Z"
+  },
+  "masters/liao-fan-si-xun": {
+    "hash": "9dda7d57b160e9d0",
+    "createdAt": "2026-07-03T06:34:33Z",
+    "updatedAt": "2026-07-03T06:34:33Z"
+  },
+  "masters/lun-heng": {
+    "hash": "f5f4efa00c0bb30b",
+    "createdAt": "2026-07-03T06:34:33Z",
+    "updatedAt": "2026-07-03T06:34:33Z"
+  },
+  "masters/wei-lu-ye-hua": {
+    "hash": "c2c6a2d606a5574d",
+    "createdAt": "2026-07-03T06:34:33Z",
+    "updatedAt": "2026-07-03T06:34:33Z"
+  },
+  "masters/xiao-chuang-you-ji": {
+    "hash": "c6dee8b1e3ca474d",
+    "createdAt": "2026-07-03T06:34:33Z",
+    "updatedAt": "2026-07-03T07:15:03Z"
+  },
+  "masters/yan-shi-jia-xun": {
+    "hash": "2b4d0b2b43aacaef",
+    "createdAt": "2026-07-03T06:34:33Z",
+    "updatedAt": "2026-07-03T06:34:33Z"
   }
 }
