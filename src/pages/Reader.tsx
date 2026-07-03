@@ -60,11 +60,14 @@ export default function Reader() {
   const [text, setText] = useState<string | null>(null)
   const [err, setErr] = useState<string>()
 
+  // 失败重试：错误页点「重试」递增，驱动各加载 effect 重跑(失败请求不缓存，会真正重发)
+  const [retryTick, setRetryTick] = useState(0)
+
   // 解析 bookId：优先 router state，否则按 chapterId 探测
   useEffect(() => {
     if (stateBookId) { setBookId(stateBookId); return }
     resolveBookId(chapterId).then(setBookId).catch((e) => setErr(errText(e)))
-  }, [chapterId, stateBookId])
+  }, [chapterId, stateBookId, retryTick])
 
   const [fontSize, setFontSize] = useState(() => Number(localStorage.getItem('cc-fontsize')) || 18)
   const [vertical, setVertical] = useState(() => localStorage.getItem('cc-vertical') === '1')
@@ -79,7 +82,7 @@ export default function Reader() {
     if (!bookId) return
     setErr(undefined)
     getBook(bookId).then(setBook).catch((e) => setErr(errText(e)))
-  }, [bookId])
+  }, [bookId, retryTick])
 
   const flat = useMemo(() => (book ? flattenBook(book.nodes) : []), [book])
   const index = flat.findIndex((c) => c.id === chapterId)
@@ -87,12 +90,21 @@ export default function Reader() {
   const prev = index > 0 ? flat[index - 1] : undefined
   const next = index >= 0 && index < flat.length - 1 ? flat[index + 1] : undefined
 
-  // 载入当前篇正文
+  // 载入当前篇正文；过期守卫防止快速翻页时旧响应覆盖新内容
   useEffect(() => {
     setText(null)
     if (!chapter) return
-    getChapterText(chapter.src).then(setText).catch((e) => setErr(errText(e)))
-  }, [chapter?.src])
+    let stale = false
+    getChapterText(chapter.src)
+      .then((t) => { if (!stale) setText(t) })
+      .catch((e) => { if (!stale) setErr(errText(e)) })
+    return () => { stale = true }
+  }, [chapter?.src, retryTick])
+
+  // 顺序阅读预取下一篇，翻页即现；失败静默，届时正式请求会重试
+  useEffect(() => {
+    if (text != null && next) getChapterText(next.src).catch(() => {})
+  }, [text, next?.src])
 
   const verse = useMemo(() => (text != null ? isVerse(text) : false), [text])
 
@@ -129,7 +141,19 @@ export default function Reader() {
           <span className="reader__crumb">加载出错</span>
           <span style={{ width: 18 }} />
         </div>
-        <p className="empty">{err}，<Link to="/" className="accent">返回首页</Link>。</p>
+        <p className="empty">
+          {err}，
+          <button
+            className="reader__retry"
+            onClick={() => {
+              setErr(undefined)
+              setRetryTick((t) => t + 1)
+            }}
+          >
+            重试
+          </button>
+          {' '}或 <Link to="/" className="accent">返回首页</Link>。
+        </p>
       </div>
     )
   }
@@ -167,6 +191,8 @@ export default function Reader() {
             >
               {text == null ? (
                 <p className="reader__text">载入中…</p>
+              ) : text.trim() === '' ? (
+                <p className="empty">本篇暂无正文。</p>
               ) : verse ? (
                 // 诗词整块居中：外层居中，内层按最宽行收缩、行间左对齐
                 <div className="reader__verse">{renderText(text)}</div>
