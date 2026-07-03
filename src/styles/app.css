@@ -403,6 +403,27 @@ kbd {
 .reader__flow {
   text-align: justify;
 }
+/* 韵文(诗词)：整块居中、行间左对齐，段距收拢成诗节 */
+.reader__flow--verse {
+  text-align: center;
+}
+.reader__verse {
+  display: inline-block;
+  max-width: 100%;
+  text-align: left;
+}
+.reader__verse .reader__text {
+  text-align: left;
+  margin: 0;
+}
+/* 竖排下恢复常规文档流，交给 writing-mode 排版 */
+.reader--vertical .reader__flow--verse {
+  text-align: start;
+}
+.reader--vertical .reader__verse {
+  display: block;
+  text-align: start;
+}
 .reader__nav {
   display: flex;
   justify-content: space-between;
