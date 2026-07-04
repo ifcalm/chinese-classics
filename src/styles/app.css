@@ -338,6 +338,29 @@ main.page {
   color: var(--text-secondary);
   text-align: justify;
 }
+/* 引用块:僧传卷首传目等底本缩进小字区,与正文视觉区分 */
+.reader__quote {
+  margin: 0 0 1em;
+  padding: 0.2em 0 0.2em 1em;
+  border-left: 2px solid var(--accent);
+  color: var(--text-secondary);
+  font-family: var(--font-serif);
+  font-size: 0.933em;
+  line-height: 1.9;
+  text-align: justify;
+}
+.reader__quote p {
+  margin: 0 0 0.5em;
+}
+.reader__quote p:last-child {
+  margin-bottom: 0;
+}
+.reader--vertical .reader__quote {
+  border-left: none;
+  border-top: 2px solid var(--accent);
+  padding: 1em 0 0 0.2em;
+  margin: 0 0 0 1em;
+}
 .reader__note-tag {
   color: var(--accent);
   margin-right: 8px;

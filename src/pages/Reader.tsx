@@ -13,7 +13,7 @@ const FONT_MAX = 24
     将来 build 在 book.json 写入体裁标记后，可改为只信数据。 */
 function isVerse(md: string): boolean {
   const blocks = md.split(/\n{2,}/).map((b) => b.trim()).filter(Boolean)
-  const hasNonPlain = blocks.some((b) => b.startsWith('```') || /^#{1,6}\s/.test(b))
+  const hasNonPlain = blocks.some((b) => b.startsWith('```') || b.startsWith('>') || /^#{1,6}\s/.test(b))
   if (hasNonPlain || blocks.length < 3) return false
   return blocks.every((b) => b.split('\n').every((line) => line.trim().length <= 30))
 }
@@ -36,6 +36,17 @@ function renderText(md: string) {
         <h3 key={i} className="reader__h">
           {b.replace(/^#{1,6}\s/, '')}
         </h3>
+      )
+    } else if (b.startsWith('> ')) {
+      // 引用块(如僧传卷首传目):相邻引用段并入同一块
+      const quotes = [b]
+      while (i + 1 < blocks.length && blocks[i + 1].trim().startsWith('> ')) quotes.push(blocks[++i].trim())
+      out.push(
+        <blockquote key={i} className="reader__quote">
+          {quotes.map((q, k) => (
+            <p key={k}>{q.replace(/^>\s?/gm, '')}</p>
+          ))}
+        </blockquote>
       )
     } else {
       out.push(
