@@ -2325,9 +2325,9 @@
     "updatedAt": "2026-07-04T02:51:02Z"
   },
   "buddha/lunzang/pitan/a-pi-da-mo-fa-zhi-lun": {
-    "hash": "f26d5a84940c406f",
+    "hash": "4fb3d124b800afe6",
     "createdAt": "2026-07-04T02:51:02Z",
-    "updatedAt": "2026-07-04T02:51:02Z"
+    "updatedAt": "2026-07-04T04:59:08Z"
   },
   "buddha/lunzang/pitan/a-pi-da-mo-ji-yi-men-zu-lun": {
     "hash": "9ec949cc52c550a7",
@@ -2483,5 +2483,55 @@
     "hash": "37d277c842338a50",
     "createdAt": "2026-07-04T03:51:13Z",
     "updatedAt": "2026-07-04T03:51:13Z"
+  },
+  "buddha/shizhuan/fo-guo-ji": {
+    "hash": "7558cbd786d96edc",
+    "createdAt": "2026-07-04T04:27:34Z",
+    "updatedAt": "2026-07-04T04:27:34Z"
+  },
+  "buddha/shizhuan/bi-qiu-ni-zhuan": {
+    "hash": "47ffe81b2dde0a21",
+    "createdAt": "2026-07-04T04:27:34Z",
+    "updatedAt": "2026-07-04T04:44:32Z"
+  },
+  "buddha/shizhuan/chu-san-zang-ji-ji": {
+    "hash": "f4585fcd2b3e663f",
+    "createdAt": "2026-07-04T04:27:34Z",
+    "updatedAt": "2026-07-04T04:59:08Z"
+  },
+  "buddha/shizhuan/da-ci-en-si-san-zang-fa-shi-zhuan": {
+    "hash": "7f1959bf672b09e5",
+    "createdAt": "2026-07-04T04:27:34Z",
+    "updatedAt": "2026-07-04T04:27:34Z"
+  },
+  "buddha/shizhuan/da-tang-xi-yu-qiu-fa-gao-seng-zhuan": {
+    "hash": "215117d89e951600",
+    "createdAt": "2026-07-04T04:27:34Z",
+    "updatedAt": "2026-07-04T04:59:08Z"
+  },
+  "buddha/shizhuan/guang-hong-ming-ji": {
+    "hash": "58a313c3891a2a56",
+    "createdAt": "2026-07-04T04:27:34Z",
+    "updatedAt": "2026-07-04T04:59:08Z"
+  },
+  "buddha/shizhuan/hong-ming-ji": {
+    "hash": "559c1390b4140c1c",
+    "createdAt": "2026-07-04T04:27:34Z",
+    "updatedAt": "2026-07-04T04:59:08Z"
+  },
+  "buddha/shizhuan/nan-hai-ji-gui-nei-fa-zhuan": {
+    "hash": "1d7f56b7b308b639",
+    "createdAt": "2026-07-04T04:27:34Z",
+    "updatedAt": "2026-07-04T04:59:08Z"
+  },
+  "buddha/shizhuan/song-gao-seng-zhuan": {
+    "hash": "381797261a154baa",
+    "createdAt": "2026-07-04T04:27:34Z",
+    "updatedAt": "2026-07-04T04:59:08Z"
+  },
+  "buddha/shizhuan/xu-gao-seng-zhuan": {
+    "hash": "c62fbdd492000b56",
+    "createdAt": "2026-07-04T04:27:34Z",
+    "updatedAt": "2026-07-04T04:44:32Z"
   }
 }

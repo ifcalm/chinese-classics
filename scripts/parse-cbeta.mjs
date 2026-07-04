@@ -1,4 +1,4 @@
-// CBETA TEI-P5 XML → base-data markdown。已收:经藏43+论藏批ABC29+律藏批DE10+三藏收官批6=88部;密教11部已撤收待前端小字注样式,配置保留可随时重收。
+// CBETA TEI-P5 XML → base-data markdown。已收:经藏43+论藏29+律藏10+收官6+史传10=98部;密教11部已撤收待前端小字注样式,配置保留可随时重收。
 // XML 来源:https://raw.githubusercontent.com/cbeta-org/xml-p5/master/T/<册>/<册n经号>.xml → 存本目录 cbeta/ 下。
 // 底本:CBETA 电子佛典(大正藏本,大正藏底本高丽藏)。繁体+新式标点,与站内既有经藏一致。
 // node parse-cbeta.mjs [--write] [T号过滤...]
@@ -132,6 +132,17 @@ const BOOKS = [
   ['T26n1538', '施设论', 'shi-she-lun', 'lunzang/pitan', 42, '宋法护等译，七卷，六足论之一《施设足论》之因施设门汉译。'],
   ['T26n1539', '阿毘达磨识身足论', 'a-pi-da-mo-shi-shen-zu-lun', 'lunzang/pitan', 44, '提婆设摩造，唐玄奘译，十六卷，六足论之一，辨识身诸门。'],
   ['T26n1540', '阿毘达磨界身足论', 'a-pi-da-mo-jie-shen-zu-lun', 'lunzang/pitan', 46, '世友造，唐玄奘译，三卷，六足论之一，明心所诸界相摄。'],
+  // 史传部核心批(既有:高僧传10/大唐西域记30。僧传组12-16,行记组20-36,教史组40-44)
+  ['T50n2060', '续高僧传', 'xu-gao-seng-zhuan', 'shizhuan', 12, '唐道宣撰（645年初成，后有增补），三十卷十科，接慧皎《高僧传》记梁初至唐初高僧。', { mulu: 1 }],
+  ['T50n2061', '宋高僧传', 'song-gao-seng-zhuan', 'shizhuan', 14, '宋赞宁撰（988年），三十卷，记唐宋之际高僧，禅宗诸师史料多赖此存。', { mulu: 1 }],
+  ['T50n2063', '比丘尼传', 'bi-qiu-ni-zhuan', 'shizhuan', 16, '梁宝唱撰，四卷，记晋宋齐梁六十五位尼师，现存唯一古代比丘尼传记专书。', { mulu: 1 }],
+  ['T51n2085', '佛国记', 'fo-guo-ji', 'shizhuan', 20, '东晋法显撰，一卷，即《高僧法显传》，记西行求法陆去海还三十余国见闻，中国现存最早西行行记。'],
+  ['T50n2053', '大唐大慈恩寺三藏法师传', 'da-ci-en-si-san-zang-fa-shi-zhuan', 'shizhuan', 32, '唐慧立本、彦悰笺，十卷，玄奘法师传记，与《大唐西域记》互为表里。'],
+  ['T51n2066', '大唐西域求法高僧传', 'da-tang-xi-yu-qiu-fa-gao-seng-zhuan', 'shizhuan', 34, '唐义净撰于室利佛逝，二卷，记五十六位西行求法僧事迹。', { mulu: 1 }],
+  ['T54n2125', '南海寄归内法传', 'nan-hai-ji-gui-nei-fa-zhuan', 'shizhuan', 36, '唐义净撰，四卷四十章，记印度南海僧团行仪实况。', { mulu: 1 }],
+  ['T55n2145', '出三藏记集', 'chu-san-zang-ji-ji', 'shizhuan', 40, '梁僧祐撰，十五卷，现存最早经录，集经序、译经史料与译人列传，佛教文献学第一书。', { mulu: 1 }],
+  ['T52n2102', '弘明集', 'hong-ming-ji', 'shizhuan', 42, '梁僧祐辑，十四卷，集东汉至梁儒释道论争文献，六朝思想史第一手材料。', { mulu: 1 }],
+  ['T52n2103', '广弘明集', 'guang-hong-ming-ji', 'shizhuan', 44, '唐道宣辑，三十卷十篇，续《弘明集》广收护法文献至唐初。', { mulu: 1 }],
 ]
 
 // ── 缺字表:charDecl → {id映射, PUA码位反查} ──
@@ -176,7 +187,7 @@ const stripTags = (s) => s.replace(/<[^>]+>/g, '')
 const decode = (s) => s.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&apos;/g, "'")
 
 // ── 单文件解析 → {trad题, juans:[{n, blocks:[]}], warn} ──
-function parseXml(file) {
+function parseXml(file, opts) {
   const xml = readFileSync(join(S, file + '.xml'), 'utf8')
   const { m: g, rev } = gaijiMap(xml)
   const tTitle = (xml.match(/<title[^>]*level="m"[^>]*>([^<]*)<\/title>/) || [])[1] || '?'
@@ -204,6 +215,9 @@ function parseXml(file) {
     .replace(/<cb:juan[^>]*fun="open"[^>]*>[\s\S]*?<\/cb:juan>/g, '')
     .replace(/<cb:juan[^>]*fun="close"[^>]*>[\s\S]*?<\/cb:juan>/g, '')
     .replace(/<byline[^>]*>[\s\S]*?<\/byline>/g, '')
+    // list/item 拆包:item 内嵌的块级 p 提升为兄弟段(经录卷「右N部」小注等),item 本体转 p
+    .replace(/<item([^>]*)>([\s\S]*?)<\/item>/g, (_, a, inner) => '<p>' + inner.replace(/<p([^>]*)>/g, '</p><p$1>') + '</p>')
+    .replace(/<\/?list[^>]*>/g, '')
     .replace(/<title[^>]*>/g, '').replace(/<\/title>/g, '')
 
   // 按卷切分(属性顺序不定)
@@ -217,20 +231,24 @@ function parseXml(file) {
     const n = +segs[i]
     const seg = segs[i + 1]
     const blocks = []
-    const re = /<head[^>]*>([\s\S]*?)<\/head>|<p[^>]*>([\s\S]*?)<\/p>|<lg[^>]*>([\s\S]*?)<\/lg>|<item[^>]*>([\s\S]*?)<\/item>/g
+    const re = /<head[^>]*>([\s\S]*?)<\/head>|<p([^>]*)>([\s\S]*?)<\/p>|<lg[^>]*>([\s\S]*?)<\/lg>|<item[^>]*>([\s\S]*?)<\/item>/g
     let m, covered = 0
     while ((m = re.exec(seg))) {
       covered += han(stripTags(m[0]))
       if (m[1] != null) { // head → ## 品题
         const t = fixPua(decode(stripTags(m[1])), rev).replace(/\s+/g, '')
         if (t) blocks.push('## ' + t)
-      } else if (m[3] != null) { // lg 偈颂:每 l 一行,硬换行
-        const lines = [...m[3].matchAll(/<l[^>]*>([\s\S]*?)<\/l>/g)]
+      } else if (m[4] != null) { // lg 偈颂:每 l 一行,硬换行
+        const lines = [...m[4].matchAll(/<l[^>]*>([\s\S]*?)<\/l>/g)]
           .map((x) => fixPua(decode(stripTags(x[1])), rev).replace(/[\r\n\t]+/g, '').replace(/ {2,}/g, ' ').replace(/^[\s　]+|[\s　]+$/g, '')).filter(Boolean)
         if (lines.length) blocks.push(lines.join('  \n'))
       } else { // p / item
-        const t = fixPua(decode(stripTags(m[2] ?? m[4])), rev).replace(/[\r\n]+/g, '').replace(/^\s+|\s+$/g, '')
-        if (t) blocks.push(t)
+        const t = fixPua(decode(stripTags(m[3] ?? m[5])), rev).replace(/[\r\n]+/g, '').replace(/^\s+|\s+$/g, '')
+        if (t) {
+          // 卷首传目(mulu 选项):底本缩进小字排版(margin-left)且含「傳N」→ 引用块与正文区分
+          const isMulu = opts?.mulu && m[2] && m[2].includes('margin-left')
+          blocks.push(isMulu ? '> ' + t : t)
+        }
       }
     }
     const total = han(stripTags(seg))
@@ -262,9 +280,9 @@ const idxFm = (title, summary, weight, extra) => fm({
 })
 
 let grand = 0, grandJ = 0
-for (const [file, title, slug, section, weight, note] of BOOKS) {
+for (const [file, title, slug, section, weight, note, opts] of BOOKS) {
   if (only.length && !only.some((o) => file.startsWith(o))) continue
-  const { tTitle, juans, warn } = parseXml(file)
+  const { tTitle, juans, warn } = parseXml(file, opts)
   const nJ = juans.length
   const h = juans.reduce((s, j) => s + han(j.blocks.join('')), 0)
   grand += h; grandJ += nJ
