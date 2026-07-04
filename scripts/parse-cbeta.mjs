@@ -1,5 +1,4 @@
-// CBETA TEI-P5 XML → base-data markdown。已收:经藏43+论藏29+律藏10+收官6+史传10=98部;密教11部已撤收待前端小字注样式,配置保留可随时重收。
-// XML 来源:https://raw.githubusercontent.com/cbeta-org/xml-p5/master/T/<册>/<册n经号>.xml → 存本目录 cbeta/ 下。
+// CBETA TEI-P5 XML → base-data markdown(经藏补全批②③④⑤,43部)。
 // 底本:CBETA 电子佛典(大正藏本,大正藏底本高丽藏)。繁体+新式标点,与站内既有经藏一致。
 // node parse-cbeta.mjs [--write] [T号过滤...]
 import { readFileSync, writeFileSync, mkdirSync, rmSync } from 'node:fs'
@@ -143,6 +142,8 @@ const BOOKS = [
   ['T55n2145', '出三藏记集', 'chu-san-zang-ji-ji', 'shizhuan', 40, '梁僧祐撰，十五卷，现存最早经录，集经序、译经史料与译人列传，佛教文献学第一书。', { mulu: 1 }],
   ['T52n2102', '弘明集', 'hong-ming-ji', 'shizhuan', 42, '梁僧祐辑，十四卷，集东汉至梁儒释道论争文献，六朝思想史第一手材料。', { mulu: 1 }],
   ['T52n2103', '广弘明集', 'guang-hong-ming-ji', 'shizhuan', 44, '唐道宣辑，三十卷十篇，续《弘明集》广收护法文献至唐初。', { mulu: 1 }],
+  // 跨门类:入神话/志怪组(与搜神记、幽冥问答录同组),释氏辅教志怪之唐代正宗
+  ['T51n2082', '冥报记', 'ming-bao-ji', '../mythology/zhiguai', 65, '唐临撰（唐初），三卷，记冥报轮回感应见闻，皆注明闻见来源，《太平广记》多所采录，释氏辅教志怪之正宗。'],
 ]
 
 // ── 缺字表:charDecl → {id映射, PUA码位反查} ──
