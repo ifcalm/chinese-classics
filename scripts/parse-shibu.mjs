@@ -46,6 +46,7 @@ function clean(s, star) {
     .replace(/__[A-Z]+__/g, '') // MediaWiki 魔术字(__FORCETOC__ 等)
     .replace(/<\/?(?:onlyinclude|noinclude|includeonly)>/g, '') // 换写标签
     .replace(/<s>[\s\S]*?<\/s>/g, '') // 删除线=整理本错简/衍文移除标记,正字已在〔〕
+    .replace(/<\/?(?:small|big|font|center|span|div|u)[^>]*>/g, '') // 装饰性标签(徐霞客卷四六季梦良按语外套、专名划线)
   // 由内向外多轮:先解已知取文模板,再按 star 处理 {{*|}},反复以解嵌套
   for (let i = 0; i < 8; i++) {
     t = t
@@ -59,7 +60,8 @@ function clean(s, star) {
       .replace(/\{\{quote\|([^{}]*)\}\}/gi, '$1') // 引文块(伽蓝记卷五宋云行纪等):留全文
       .replace(/\{\{\+\|([^{}]*)\}\}/g, '$1') // 华阳国志卷十:赞文正文大字标记,保留
       .replace(/-\{[^{}|]*\|([^{}|]*)\}-/g, '$1').replace(/-\{([^{}|]*)\}-/g, '$1')
-    if (star === 'paren') t = t.replace(/\{\{\*\|([^{}]*)\}\}/g, '（$1）')
+    // 注文自带（）者不再重裹(徐霞客「（以下缺）」等);〔〕开头=校补正文(据他本补入,连读),原样保留不裹（）
+    if (star === 'paren') t = t.replace(/\{\{\*\|([^{}]*)\}\}/g, (_, p) => (p.startsWith('〔') || /^（[^（）]*）$/.test(p)) ? p : `（${p}）`)
     else if (star === 'drop') t = t.replace(/\{\{\*\|[^{}]*\}\}/g, '')
   }
   // 源笔误兜底:{{*|…} 单括号闭合(史通卷十八「一無觀字」处)
@@ -161,6 +163,36 @@ const books = []
   books.push({
     dir: 'shi-tong', title: '史通', weight: 298, chapters,
     summary: '唐·刘知几撰（710年），二十卷四十九篇，内篇论史体源流、外篇评史官史书得失，中国第一部史学理论专著。维基文库整理本（繁体新式标点）。',
+  })
+}
+
+
+// 5) 徐霞客游记:52篇(维基文库整理本,现代注在 ref 中已剥)。日记体:年/月标题→##,日期(===)并入次段(仿通行本连排)。
+{
+  const t2s={'遊':'游','記':'记','嶽':'岳','彜':'彝','粵':'粤','雞':'鸡','麗':'丽','閩':'闽','廬':'庐','鯉':'鲤','華':'华','臺':'台','後':'后','隨':'随','筆':'笔','兩':'两','則':'则','盤':'盘','騰':'腾','諸':'诸','說':'说','緣':'缘','起':'起','溯':'溯','紀':'纪','源':'源','恒':'恒','顏':'颜'};
+  const simp=(x)=>[...x].map(c=>t2s[c]||c).join('');
+  const toc=JSON.parse(readFileSync(join(S,'../xxk/toc.json'),'utf8'));
+  const chapters=[];
+  toc.forEach((name,idx)=>{
+    const raw=JSON.parse(readFileSync(join(S,'../xxk/'+String(idx+1).padStart(3,'0')+'.json'),'utf8')).parse.wikitext['*'];
+    const cleaned=clean(raw,'paren')
+      .replace(/（公元[０-９0-9]+年）/g,'') // 整理者所加公元纪年,现代注,剥
+      .replace(/　　+/g,'　'); // 源排版双全角空格归一
+    const blocks=[]; let pendingDay='';
+    for (const l0 of cleaned.split(/\r?\n/)) {
+
+      const l=l0.trim(); if(!l) continue;
+      const m3=l.match(/^===([^=]+)===$/), m12=l.match(/^==?([^=]+?)==?$/);
+      if (m3) { pendingDay=m3[1].trim(); continue }
+      if (m12) { const h=m12[1].trim(); if(h && !/^[注註][释釋]$/.test(h)) blocks.push('## '+h); continue }
+      blocks.push(pendingDay ? pendingDay+'　'+l : l); pendingDay='';
+    }
+    if (pendingDay) blocks.push(pendingDay);
+    chapters.push({ slug: String(idx+1).padStart(3,'0'), title: simp(name), weight: idx+1, blocks });
+  });
+  books.push({
+    dir: 'xu-xia-ke-you-ji', title: '徐霞客游记', weight: 310, chapters,
+    summary: '明·徐弘祖撰（1613—1639 年间日记），五十二篇，以日记体记三十年游历山川地貌、岩溶洞穴之考察，中国古代游记与地学名著。维基文库整理本（繁体新式标点，季会明本系统篇目），现代注释已汰。',
   })
 }
 
