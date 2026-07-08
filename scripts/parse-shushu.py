@@ -578,3 +578,7 @@ print('未知模板:', sorted(unknown_tpl))
 # ---------- 批② (builders in batch2.py) ----------
 if '--batch2' in sys.argv or True:
     exec(open(os.path.join(S, 'batch2.py'), encoding='utf-8').read())
+
+# ---------- 批③ 命理组 (builders in batch3.py) ----------
+if os.path.exists(os.path.join(S, 'batch3.py')):
+    exec(open(os.path.join(S, 'batch3.py'), encoding='utf-8').read())
