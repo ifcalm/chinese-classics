@@ -153,14 +153,23 @@ def _sanming_html(k):
     h = re.sub(r'<[^>]+>', '', h)
     h = _htmllib.unescape(h)
     drop = ('.mw-parser-output', '姊妹計劃', '此文檔', '一般而言，文獻', '「來源」指', '注意：作品',
-            'Public domain', '公有領域', '在全世界', '之前出版', '本作品在', '維基文庫')
-    h = '\n'.join(l for l in h.split('\n') if not any(d in l for d in drop) and not l.strip().startswith('.'))
+            'Public domain', '公有領域', '在全世界', '之前出版', '本作品在', '維基文庫', '<子部')
+    # 末尾维基分类标签(&lt;子部…&gt;,解转义后成 <子部…>)与页尾孤立 □ 皆非正文,剥除
+    h = '\n'.join(l for l in h.split('\n')
+                  if not any(d in l for d in drop)
+                  and not l.strip().startswith('.')
+                  and l.strip() != '□')
     return h.translate(SKVAR).translate(_SM_VAR)
 
+# 卷一已机器断句(逐块汉字保真校验),存断句稿 sanming-c1-punct.md,构建时径用,
+# 白文重排逻辑仅用于卷二至卷十二;如此重跑 parse-shushu 不会以白文覆盖标点。
 def build_sanming():
     hanzi = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二']
     chs = []
     for k in range(1, 13):
+        if k == 1:
+            paras = to_paras(open(os.path.join(S, 'sanming-c1-punct.md'), encoding='utf-8').read())
+            chs.append(('卷一', 1, paras)); continue
         t = _sanming_html(k)
         i = t.find('==三命通會卷' + hanzi[k-1] + '==')
         assert i >= 0, ('三命通會卷名锚点未找到', k)
@@ -178,7 +187,7 @@ def build_sanming():
         chs.append(('卷' + hanzi[k-1], k, paras))
     write_book('san-ming-tong-hui', 'mingli', {
         'title': '三命通会', 'weight': 40, 'kind': 'book',
-        'summary': '明万民英撰，十二卷。子平命理集大成之总汇，博采唐宋以来星命诸家格局、神煞、诗诀之说，考据宏富，为命学类书之渊薮，四库全书子部术数类著录。据四库全书本转录收录（白文，篇目仍旧，双行夹注作括注；维基整理本节录过甚故不用）。'
+        'summary': '明万民英撰，十二卷。子平命理集大成之总汇，博采唐宋以来星命诸家格局、神煞、诗诀之说，考据宏富，为命学类书之渊薮，四库全书子部术数类著录。据四库全书本转录收录（白文，篇目仍旧，双行夹注作括注；维基整理本节录过甚故不用）。卷一为便读者，编者试加新式标点（逐字校勘保真，仅补标点未改一字），余卷仍四库白文原貌。'
     }, chs)
 
 write_mingli_index()
