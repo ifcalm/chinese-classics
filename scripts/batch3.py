@@ -161,13 +161,13 @@ def _sanming_html(k):
                   and l.strip() != '□')
     return h.translate(SKVAR).translate(_SM_VAR)
 
-# 卷一至卷五已机器断句(逐块汉字保真校验),存断句稿 sanming-c<N>-punct.md,构建时径用,
-# 白文重排逻辑仅用于卷六至卷十二;如此重跑 parse-shushu 不会以白文覆盖标点。
+# 卷一至卷七已机器断句(逐块汉字保真校验),存断句稿 sanming-c<N>-punct.md,构建时径用,
+# 白文重排逻辑仅用于卷八至卷十二;如此重跑 parse-shushu 不会以白文覆盖标点。
 def build_sanming():
     hanzi = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二']
     chs = []
     for k in range(1, 13):
-        if k <= 5:
+        if k <= 7:
             paras = to_paras(open(os.path.join(S, 'sanming-c%d-punct.md' % k), encoding='utf-8').read())
             chs.append(('卷' + hanzi[k-1], k, paras)); continue
         t = _sanming_html(k)
@@ -187,7 +187,7 @@ def build_sanming():
         chs.append(('卷' + hanzi[k-1], k, paras))
     write_book('san-ming-tong-hui', 'mingli', {
         'title': '三命通会', 'weight': 40, 'kind': 'book',
-        'summary': '明万民英撰，十二卷。子平命理集大成之总汇，博采唐宋以来星命诸家格局、神煞、诗诀之说，考据宏富，为命学类书之渊薮，四库全书子部术数类著录。据四库全书本转录收录（白文，篇目仍旧，双行夹注作括注；维基整理本节录过甚故不用）。卷一至卷五为便读者，编者试加新式标点（逐字校勘保真，仅补标点未改一字），余卷仍四库白文原貌。'
+        'summary': '明万民英撰，十二卷。子平命理集大成之总汇，博采唐宋以来星命诸家格局、神煞、诗诀之说，考据宏富，为命学类书之渊薮，四库全书子部术数类著录。据四库全书本转录收录（白文，篇目仍旧，双行夹注作括注；维基整理本节录过甚故不用）。卷一至卷七为便读者，编者试加新式标点（逐字校勘保真，仅补标点未改一字），余卷仍四库白文原貌。'
     }, chs)
 
 write_mingli_index()
