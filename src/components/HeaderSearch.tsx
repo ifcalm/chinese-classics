@@ -22,7 +22,9 @@ export default function HeaderSearch() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  useEffect(() => setActive(0), [q])
+  useEffect(() => {
+    setActive(0)
+  }, [q])
 
   const goto = (b: IndexedBook) => {
     navigate(`/book/${b.id}`)
