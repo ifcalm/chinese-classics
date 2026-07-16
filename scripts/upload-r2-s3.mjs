@@ -18,7 +18,7 @@ for (const line of fs.readFileSync('.env.local', 'utf8').split('\n')) {
 const ENDPOINT = `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`
 const aws = new AwsClient({ accessKeyId: process.env.R2_ACCESS_KEY_ID, secretAccessKey: process.env.R2_SECRET_ACCESS_KEY, region: 'auto', service: 's3' })
 
-const ctype = (k) => k.endsWith('.json') ? 'application/json; charset=utf-8' : k.endsWith('.md') ? 'text/markdown; charset=utf-8' : 'application/octet-stream'
+const ctype = (k) => k.endsWith('.json') ? 'application/json; charset=utf-8' : k.endsWith('.md') ? 'text/markdown; charset=utf-8' : k.endsWith('.xml') ? 'application/xml; charset=utf-8' : 'application/octet-stream'
 
 const current = JSON.parse(fs.readFileSync(`${OUT}/.files.json`, 'utf8'))
 const uploaded = fs.existsSync(UPLOADED) ? JSON.parse(fs.readFileSync(UPLOADED, 'utf8')) : {}

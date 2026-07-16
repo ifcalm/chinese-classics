@@ -25,3 +25,4 @@ public/content
 
 # R2 上传缓存(本地，按内容哈希增量；丢了重传即可)
 .r2-uploaded.json
+.wrangler

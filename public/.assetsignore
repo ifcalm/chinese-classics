@@ -1,0 +1,3 @@
+# dev 用软链 public/content -> dist-content，vite 会实体拷进 dist；
+# 线上 /content/* 由 Worker 代理 R2，这 34k 文件不该也不能作为静态资产上传(2 万文件上限)。
+content

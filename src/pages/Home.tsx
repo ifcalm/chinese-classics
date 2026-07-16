@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { errText, getManifest } from '../data/content'
 import type { CategoryMeta } from '../data/types'
+import { SITE_TITLE } from '../seo/meta'
 
 export default function Home() {
   const [cats, setCats] = useState<CategoryMeta[] | null>(null)
@@ -11,6 +12,11 @@ export default function Home() {
     getManifest()
       .then((m) => setCats(m.categories))
       .catch((e) => setErr(errText(e)))
+  }, [])
+
+  // 从内页返回首页时还原默认标题
+  useEffect(() => {
+    document.title = SITE_TITLE
   }, [])
 
   const total = cats?.reduce((s, c) => s + c.bookCount, 0) ?? 0

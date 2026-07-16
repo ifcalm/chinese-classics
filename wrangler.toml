@@ -3,10 +3,14 @@ compatibility_date = "2025-06-01"
 main = "src/worker.ts"
 
 # Worker 托管 React 构建产物（SPA 深链回退 index.html），并把 /content/* 代理到 R2。
+# run_worker_first = true：一切请求先进 Worker。不设时 `/` 精确命中资产 index.html
+# 会被资产层直接应答、绕过 Worker，首页得不到边缘渲染；设成数组(仅列 "/")更糟——
+# 未列出的路径全部降级为资产层兜底，/content 代理与 /read SSR 全部失效(2026-07-16 实测)。
 [assets]
 directory = "./dist"
 binding = "ASSETS"
 not_found_handling = "single-page-application"
+run_worker_first = true
 
 [[r2_buckets]]
 binding = "BOOKS"

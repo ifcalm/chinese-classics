@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { errText, getManifest, getCatalog, flattenCatalog } from '../data/content'
 import type { BookRef, CatalogNode } from '../data/types'
+import { categoryPageTitle, SITE_TITLE } from '../seo/meta'
 
 function BookGrid({ books }: { books: BookRef[] }) {
   if (books.length === 0) return null
@@ -56,6 +57,11 @@ export default function Category() {
       .then((c) => setTree(c.tree))
       .catch((e) => setErr(errText(e)))
   }, [id])
+
+  // 客户端导航时同步标题，派生规则与 Worker 边缘渲染同源(seo/meta)
+  useEffect(() => {
+    document.title = name ? categoryPageTitle(name) : SITE_TITLE
+  }, [name])
 
   const bookCount = tree ? flattenCatalog(tree).length : 0
   const topGroups = tree?.filter((n) => n.type === 'collection') ?? []
