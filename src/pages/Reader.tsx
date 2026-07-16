@@ -1,22 +1,14 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
+import { Link, useLocation, useParams } from 'react-router-dom'
 import { errText, getBook, getChapterText, flattenBook, resolveBookId } from '../data/content'
 import type { BookDetail, BookText } from '../data/types'
 import { useTheme } from '../theme/ThemeProvider'
 import { ChevronLeftIcon } from '../components/Icons'
+import { isVerse } from '../seo/render'
+import { chapterPageTitle, SITE_TITLE } from '../seo/meta'
 
 const FONT_MIN = 16
 const FONT_MAX = 24
-
-/** 韵文判定(诗/词)：全篇为纯文本短段(无标题、无代码块)，
-    段数 ≥ 3 且每段最长行 ≤ 30 字。散文段落远超此长度，不会误判。
-    将来 build 在 book.json 写入体裁标记后，可改为只信数据。 */
-function isVerse(md: string): boolean {
-  const blocks = md.split(/\n{2,}/).map((b) => b.trim()).filter(Boolean)
-  const hasNonPlain = blocks.some((b) => b.startsWith('```') || b.startsWith('>') || /^#{1,6}\s/.test(b))
-  if (hasNonPlain || blocks.length < 3) return false
-  return blocks.every((b) => b.split('\n').every((line) => line.trim().length <= 30))
-}
 
 /** 轻量 md 渲染：空行分段，识别标题与代码块；正文以纯文本为主。 */
 function renderText(md: string) {
@@ -72,7 +64,6 @@ function renderText(md: string) {
 
 export default function Reader() {
   const { '*': chapterId = '' } = useParams()
-  const navigate = useNavigate()
   const location = useLocation()
   const { theme, toggle } = useTheme()
 
@@ -149,6 +140,11 @@ export default function Reader() {
 
   useEffect(() => { window.scrollTo(0, 0) }, [chapterId])
 
+  // 客户端导航时同步标题，派生规则与 Worker 边缘渲染同源(seo/meta)
+  useEffect(() => {
+    document.title = book && chapter ? chapterPageTitle(book.title, chapter.title) : SITE_TITLE
+  }, [book, chapter])
+
   // Esc 关闭目录抽屉
   useEffect(() => {
     if (!tocOpen) return
@@ -156,8 +152,6 @@ export default function Reader() {
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [tocOpen])
-
-  const go = (cid: string) => navigate(`/read/${cid}`, { state: { bookId } })
 
   if (err) {
     return (
@@ -229,18 +223,19 @@ export default function Reader() {
               )}
             </div>
 
+            {/* 翻页用真实链接(爬虫可循此发现全部篇章)，router state 带 bookId 免探测 */}
             <nav className="reader__nav">
               {prev ? (
-                <button onClick={() => go(prev.id)} className="reader__nav-btn">
+                <Link to={`/read/${prev.id}`} state={{ bookId }} className="reader__nav-btn" rel="prev">
                   ← {prev.title}
-                </button>
+                </Link>
               ) : (
                 <span />
               )}
               {next ? (
-                <button onClick={() => go(next.id)} className="reader__nav-btn">
+                <Link to={`/read/${next.id}`} state={{ bookId }} className="reader__nav-btn" rel="next">
                   {next.title} →
-                </button>
+                </Link>
               ) : (
                 <span />
               )}
@@ -288,15 +283,14 @@ export default function Reader() {
             <ul className="drawer__list">
               {flat.map((c) => (
                 <li key={c.id}>
-                  <button
+                  <Link
+                    to={`/read/${c.id}`}
+                    state={{ bookId }}
                     className={`drawer__item ${c.id === chapterId ? 'is-current' : ''}`}
-                    onClick={() => {
-                      go(c.id)
-                      setTocOpen(false)
-                    }}
+                    onClick={() => setTocOpen(false)}
                   >
                     {c.title}
-                  </button>
+                  </Link>
                 </li>
               ))}
             </ul>

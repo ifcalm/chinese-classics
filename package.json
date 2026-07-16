@@ -9,7 +9,7 @@
     "lint": "eslint src",
     "preview": "vite preview",
     "deploy": "npm run build && wrangler deploy",
-    "content:build": "node scripts/build-content.mjs --all",
+    "content:build": "node scripts/build-content.mjs --all && node scripts/gen-sitemap.mjs",
     "content:upload": "node scripts/upload-r2-s3.mjs",
     "readme": "node scripts/gen-readme.mjs",
     "content": "npm run content:build && npm run readme"

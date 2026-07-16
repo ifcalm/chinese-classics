@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { errText, getBook, getManifest } from '../data/content'
 import type { BookDetail, BookNode } from '../data/types'
+import { bookPageTitle, SITE_TITLE } from '../seo/meta'
 
 function NodeList({ nodes, bookId }: { nodes: BookNode[]; bookId: string }) {
   return (
@@ -42,6 +43,11 @@ export default function Book() {
       .then((m) => setCatName(m.categories.find((c) => c.id === categoryId)?.name))
       .catch(() => {})
   }, [bookId, categoryId])
+
+  // 客户端导航时同步标题，派生规则与 Worker 边缘渲染同源(seo/meta)
+  useEffect(() => {
+    document.title = book ? bookPageTitle(book.title) : SITE_TITLE
+  }, [book])
 
   return (
     <main className="page">
