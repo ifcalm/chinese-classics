@@ -11,7 +11,10 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
   const navigate = useNavigate()
   const { books, hits } = useBookSearch(q)
 
-  useEffect(() => inputRef.current?.focus(), [])
+  // 块体：隐式返回会把 focus() 的返回值当清理函数(见 Reader 同注)
+  useEffect(() => {
+    inputRef.current?.focus()
+  }, [])
 
   const goto = (b: IndexedBook) => {
     navigate(`/book/${b.id}`)

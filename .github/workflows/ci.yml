@@ -1,0 +1,34 @@
+name: CI
+
+# 守两件此前无人把关的事：
+#  1. 前端 lint —— 特别是 effect 隐式返回(2026-07-16 线上「l is not a function」的根因)
+#  2. 内容保真 —— 「仅补标点未改一字」此前只靠 scratchpad 临时脚本，清掉就没了
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+
+jobs:
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Lint（effect 隐式返回等违反即拦下）
+        run: npm run lint
+      - name: Typecheck + build
+        run: npm run build
+
+  content:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: 内容保真校验（断句稿↔base-data、汉字流基线）
+        run: python3 scripts/check-integrity.py

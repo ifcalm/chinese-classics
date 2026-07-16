@@ -26,11 +26,22 @@ function renderText(md: string) {
     const b = blocks[i].trim()
     if (!b) continue
     if (b.startsWith('```')) {
+      // 易经卦象等处，闭合围栏后紧跟正文(如「坤下坎上」)且源本无空行相隔，与围栏同属一段。
+      // 故显式切出围栏内容与其后余文；不可只剥段尾围栏(段尾是余文，围栏会漏出且余文被吞进 pre)。
+      const m = /^```[a-z]*\n?([\s\S]*?)\n?```(?:\n([\s\S]*))?$/.exec(b)
       out.push(
         <pre key={i} className="reader__pre">
-          {b.replace(/^```[a-z]*\n?/, '').replace(/```$/, '')}
+          {m ? m[1] : b.replace(/^```[a-z]*\n?/, '').replace(/```$/, '')}
         </pre>
       )
+      const rest = m?.[2]?.trim()
+      if (rest) {
+        out.push(
+          <p key={`${i}-rest`} className="reader__text">
+            {rest}
+          </p>
+        )
+      }
     } else if (/^#{1,6}\s/.test(b)) {
       out.push(
         <h3 key={i} className="reader__h">
@@ -85,8 +96,14 @@ export default function Reader() {
   const [tocOpen, setTocOpen] = useState(false)
   const [progress, setProgress] = useState(0)
 
-  useEffect(() => localStorage.setItem('cc-fontsize', String(fontSize)), [fontSize])
-  useEffect(() => localStorage.setItem('cc-vertical', vertical ? '1' : '0'), [vertical])
+  // effect 一律用块体：箭头隐式返回会把 API 返回值当成清理函数，
+  // 遇到被扩展/polyfill 覆写过的宿主 API(返回非 undefined) 即 "x is not a function"
+  useEffect(() => {
+    localStorage.setItem('cc-fontsize', String(fontSize))
+  }, [fontSize])
+  useEffect(() => {
+    localStorage.setItem('cc-vertical', vertical ? '1' : '0')
+  }, [vertical])
 
   // 载入书目录树
   useEffect(() => {
@@ -130,7 +147,7 @@ export default function Reader() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [chapterId, text])
 
-  useEffect(() => window.scrollTo(0, 0), [chapterId])
+  useEffect(() => { window.scrollTo(0, 0) }, [chapterId])
 
   // Esc 关闭目录抽屉
   useEffect(() => {
