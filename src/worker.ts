@@ -155,6 +155,12 @@ export default {
   async fetch(req: Request, env: Env, ctx: Ctx): Promise<Response> {
     const url = new URL(req.url)
 
+    // 裸域 301 归一到 www：canonical/sitemap 都以 www 为准，双入口 200 会摊薄权重
+    if (url.hostname === 'chinese-classics.org') {
+      url.hostname = 'www.chinese-classics.org'
+      return Response.redirect(url.toString(), 301)
+    }
+
     // R2 内容代理（原始数据，不参与收录）
     if (url.pathname.startsWith(PREFIX)) {
       const key = decodeURIComponent(url.pathname.slice(PREFIX.length))
