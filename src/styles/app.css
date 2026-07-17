@@ -732,10 +732,18 @@ kbd {
 }
 
 /* —— 书目录树(Book TOC) —— */
+/* 目录多列网格：桌面 3~4 列一屏尽收(52 卷两屏内)，窄屏自动退化单列 */
 .toc-list {
   list-style: none;
   margin: 0;
   padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 2px 14px;
+}
+/* 藏/部分组横贯整行，组内再起网格 */
+.toc-group {
+  grid-column: 1 / -1;
 }
 .toc-list .toc-list {
   padding-left: 14px;
@@ -750,14 +758,25 @@ kbd {
   font-size: 0.933rem;
 }
 .toc-item {
-  display: block;
-  padding: 9px 12px;
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  padding: 7px 10px;
   border-radius: 8px;
   color: inherit;
   text-decoration: none;
 }
 .toc-item:hover {
   background: var(--surface);
+}
+/* 卷号路标：全书连续序数，长目录扫读锚点 */
+.toc-item__num {
+  flex: none;
+  min-width: 18px;
+  text-align: right;
+  font-size: 0.733rem;
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
 }
 
 /* —— 阅读页正文块 —— */
