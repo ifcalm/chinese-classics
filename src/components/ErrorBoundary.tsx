@@ -35,8 +35,15 @@ export default class ErrorBoundary extends Component<Props, State> {
     const componentStack = info.componentStack ?? ''
     this.setState({ componentStack })
     console.error('页面渲染出错:', error, componentStack)
+    const text = report(error, componentStack)
     // 留一份在全局，便于在控制台直接取用：copy(__ccLastError)
-    ;(window as unknown as { __ccLastError?: string }).__ccLastError = report(error, componentStack)
+    ;(window as unknown as { __ccLastError?: string }).__ccLastError = text
+    // 上报 Worker 落 Workers Logs，线上报错不再依赖用户回报。静默失败，绝不二次抛错。
+    try {
+      fetch('/api/err', { method: 'POST', body: text, keepalive: true }).catch(() => {})
+    } catch {
+      /* fetch 本身不可用(极老环境)也不影响兜底 UI */
+    }
   }
 
   private copy = () => {

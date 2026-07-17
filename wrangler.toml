@@ -15,3 +15,8 @@ run_worker_first = true
 [[r2_buckets]]
 binding = "BOOKS"
 bucket_name = "chinese-classics"
+
+# Workers Logs：/api/err 上报的前端错误经 console.error 落到这里
+# (控制台 Workers → chinese-classics → Logs 查看；免费档 20 万条/天、留 3 天)
+[observability]
+enabled = true
