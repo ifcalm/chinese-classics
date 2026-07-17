@@ -38,6 +38,19 @@ SPA 对爬虫是空页面（`<div id="root">` 无内容、全站共用一份 tit
 Worker 把 `/sitemap.xml`、`/sitemap/*.xml` 映射到这些 key。
 `public/robots.txt` 声明 sitemap 地址。
 
+### 2.5 IndexNow 即时推送（挂在 content:upload 里）
+
+`scripts/upload-r2-s3.mjs` 上传完成后，把**本次真正上传成功的 R2 key**
+映射回页面 URL（`text/*.md`→`/read/*`、`book/*.json`→`/book/*`、
+`catalog/*.json`→`/category/*`、`manifest.json`→`/`），POST 给
+`api.indexnow.org`（Bing/Yandex 等参与引擎，Google 不支持），
+新增/改动的收录延迟从天级降到小时级。推送失败只记日志，不影响上传。
+
+- API key：`ddeed9f50cd0a63cc3e51d7b6a882666`，验证文件托管在
+  `public/<key>.txt`（Worker 静态资产），与脚本内常量须一致；
+- 协议单次上限 1 万 URL，脚本自动分批；正常增量远小于此；
+- sitemap/`.files.json` 等非页面产物不推送。
+
 ### 3. 前端同步（派生规则与 Worker 同源）
 
 - 标题/描述派生规则唯一事实源在 `src/seo/meta.ts`，Worker 模板与各页面

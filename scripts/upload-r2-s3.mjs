@@ -55,4 +55,34 @@ const up = await pool(toUpload, put)
 const dl = toDelete.length ? await pool(toDelete, del) : { ok: 0, fail: 0 }
 save()
 console.log(`\n完成: 上传 ${up.ok} 成功/${up.fail} 失败 · 删除 ${dl.ok}`)
+
+// ── IndexNow：把本次真正上传成功的 key 映射回页面 URL 推给 Bing 等参与引擎，
+//    新增/改动的收录延迟从天级降到小时级。推送失败只记日志，不影响上传结果。
+//    key 文件托管在 public/<KEY>.txt(Worker 静态资产)，与此处常量须一致。
+const SITE = 'https://www.chinese-classics.org'
+const INDEXNOW_KEY = 'ddeed9f50cd0a63cc3e51d7b6a882666'
+const keyToPage = (k) =>
+  k.startsWith('text/') && k.endsWith('.md') ? `${SITE}/read/${k.slice(5, -3)}`
+  : k.startsWith('book/') && k.endsWith('.json') ? `${SITE}/book/${k.slice(5, -5)}`
+  : k.startsWith('catalog/') && k.endsWith('.json') ? `${SITE}/category/${k.slice(8, -5)}`
+  : k === 'manifest.json' ? `${SITE}/`
+  : null // sitemap/.files 等非页面产物不推
+const pages = [...new Set(toUpload.filter((k) => uploaded[k] === current[k]).map(keyToPage).filter(Boolean))]
+for (let i = 0; i < pages.length; i += 10000) { // 协议单次上限 1 万
+  const batch = pages.slice(i, i + 10000)
+  try {
+    const r = await fetch('https://api.indexnow.org/indexnow', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json; charset=utf-8' },
+      body: JSON.stringify({
+        host: 'www.chinese-classics.org', key: INDEXNOW_KEY,
+        keyLocation: `${SITE}/${INDEXNOW_KEY}.txt`, urlList: batch,
+      }),
+    })
+    console.log(`IndexNow: 推送 ${batch.length} URL → HTTP ${r.status}`)
+  } catch (e) {
+    console.log(`IndexNow: 推送失败(不影响上传): ${e.cause?.message ?? e.message}`)
+  }
+}
+
 if (up.fail) process.exit(1)

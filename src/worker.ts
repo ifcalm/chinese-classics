@@ -161,6 +161,18 @@ export default {
       return Response.redirect(url.toString(), 301)
     }
 
+    // 前端错误上报：ErrorBoundary 兜底时 POST 错误报告，console.error 落 Workers Logs。
+    // 公开端点，只收同源小报文：截断到 8KB，防滥用；响应恒 204 不回显任何信息。
+    if (url.pathname === '/api/err' && req.method === 'POST') {
+      try {
+        const body = (await req.text()).slice(0, 8192)
+        console.error('[client-error]', body)
+      } catch {
+        /* 报文读取失败也不影响响应 */
+      }
+      return new Response(null, { status: 204 })
+    }
+
     // R2 内容代理（原始数据，不参与收录）
     if (url.pathname.startsWith(PREFIX)) {
       const key = decodeURIComponent(url.pathname.slice(PREFIX.length))
