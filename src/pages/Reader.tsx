@@ -5,7 +5,7 @@ import type { BookDetail, BookText } from '../data/types'
 import { useTheme } from '../theme/ThemeProvider'
 import { ChevronLeftIcon } from '../components/Icons'
 import { isVerse } from '../seo/render'
-import { chapterPageTitle, SITE_TITLE } from '../seo/meta'
+import { chapterDisplayTitle, chapterPageTitle, SITE_TITLE } from '../seo/meta'
 
 const FONT_MIN = 16
 const FONT_MAX = 24
@@ -192,7 +192,7 @@ export default function Reader() {
         </Link>
         <span className="reader__crumb">
           {book?.title ?? '…'}
-          {chapter && ` · ${chapter.title}`}
+          {book && chapter && ` · ${chapterDisplayTitle(book.title, chapter.title)}`}
         </span>
         <button className="reader__toc-btn" onClick={() => setTocOpen(true)} aria-label="目录">
           目录
@@ -204,7 +204,7 @@ export default function Reader() {
           <p className="empty">{book ? '未找到该篇。' : '载入中…'}</p>
         ) : (
           <>
-            <h1 className="reader__chapter">{chapter.title}</h1>
+            <h1 className="reader__chapter">{book ? chapterDisplayTitle(book.title, chapter.title) : chapter.title}</h1>
             <div className="reader__rule" aria-hidden="true" />
             {/* 用户字号以 rem 应用，随根字号一同适配屏幕 */}
             <div
@@ -227,14 +227,14 @@ export default function Reader() {
             <nav className="reader__nav">
               {prev ? (
                 <Link to={`/read/${prev.id}`} state={{ bookId }} className="reader__nav-btn" rel="prev">
-                  ← {prev.title}
+                  ← {book ? chapterDisplayTitle(book.title, prev.title) : prev.title}
                 </Link>
               ) : (
                 <span />
               )}
               {next ? (
                 <Link to={`/read/${next.id}`} state={{ bookId }} className="reader__nav-btn" rel="next">
-                  {next.title} →
+                  {book ? chapterDisplayTitle(book.title, next.title) : next.title} →
                 </Link>
               ) : (
                 <span />
@@ -289,7 +289,7 @@ export default function Reader() {
                     className={`drawer__item ${c.id === chapterId ? 'is-current' : ''}`}
                     onClick={() => setTocOpen(false)}
                   >
-                    {c.title}
+                    {chapterDisplayTitle(book.title, c.title)}
                   </Link>
                 </li>
               ))}

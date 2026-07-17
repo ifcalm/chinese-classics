@@ -1,22 +1,25 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { errText, getBook, getManifest } from '../data/content'
+import { errText, flattenBook, getBook, getManifest } from '../data/content'
 import type { BookDetail, BookNode } from '../data/types'
-import { bookPageTitle, SITE_TITLE } from '../seo/meta'
+import { bookPageTitle, chapterDisplayTitle, SITE_TITLE } from '../seo/meta'
 
-function NodeList({ nodes, bookId }: { nodes: BookNode[]; bookId: string }) {
+/** num：chapterId → 全书连续序数(跨分组连贯，与拍平阅读顺序一致)，目录里的路标。
+    篇名剥「书名-」前缀(与阅读页标题同规则)，书名页头已示，不必每项重复。 */
+function NodeList({ nodes, book, num }: { nodes: BookNode[]; book: BookDetail; num: Map<string, number> }) {
   return (
     <ul className="toc-list">
       {nodes.map((n, i) =>
         n.type === 'collection' ? (
           <li key={i} className="toc-group">
-            <span className="toc-group__title">{n.title}</span>
-            <NodeList nodes={n.children} bookId={bookId} />
+            <span className="toc-group__title">{chapterDisplayTitle(book.title, n.title)}</span>
+            <NodeList nodes={n.children} book={book} num={num} />
           </li>
         ) : (
           <li key={n.id}>
-            <Link to={`/read/${n.id}`} state={{ bookId }} className="toc-item">
-              {n.title}
+            <Link to={`/read/${n.id}`} state={{ bookId: book.id }} className="toc-item">
+              <span className="toc-item__num" aria-hidden="true">{num.get(n.id)}</span>
+              {chapterDisplayTitle(book.title, n.title)}
             </Link>
           </li>
         )
@@ -70,7 +73,11 @@ export default function Book() {
         <>
           <h1 className="cat-title">{book.title}</h1>
           {book.summary && <p className="cat-title__sub">{book.summary}</p>}
-          <NodeList nodes={book.nodes} bookId={book.id} />
+          <NodeList
+            nodes={book.nodes}
+            book={book}
+            num={new Map(flattenBook(book.nodes).map((c, i) => [c.id, i + 1]))}
+          />
         </>
       )}
     </main>

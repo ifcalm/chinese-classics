@@ -105,15 +105,19 @@ ${catalogHtml(tree, 0)}</main>`,
 }
 
 // ── 书目页 ────────────────────────────────────────────
-function tocHtml(nodes: BookNode[]): string {
-  const items = nodes
-    .map((n) =>
-      n.type === 'collection'
-        ? `<li class="toc-group"><span class="toc-group__title">${e(n.title)}</span>${tocHtml(n.children)}</li>`
-        : `<li><a class="toc-item" href="/read/${e(n.id)}">${e(n.title)}</a></li>`
-    )
-    .join('')
-  return `<ul class="toc-list">${items}</ul>`
+function tocHtml(bookTitle: string, nodes: BookNode[]): string {
+  // 卷号 = 全书连续序数(DFS 与拍平阅读顺序一致)；篇名剥「书名-」前缀。与 Book.tsx 同款
+  let n = 0
+  const t = (s: string) => e(chapterDisplayTitle(bookTitle, s))
+  const walk = (ns: BookNode[]): string =>
+    `<ul class="toc-list">${ns
+      .map((node) =>
+        node.type === 'collection'
+          ? `<li class="toc-group"><span class="toc-group__title">${t(node.title)}</span>${walk(node.children)}</li>`
+          : `<li><a class="toc-item" href="/read/${e(node.id)}"><span class="toc-item__num" aria-hidden="true">${++n}</span>${t(node.title)}</a></li>`
+      )
+      .join('')}</ul>`
+  return walk(nodes)
 }
 
 export function renderBookPage(book: BookDetail, catName: string, chapterCount: number): PageMeta {
@@ -145,7 +149,7 @@ export function renderBookPage(book: BookDetail, catName: string, chapterCount: 
 <nav class="crumb"><a class="crumb__link" href="/">首页</a><span class="crumb__sep">/</span><a class="crumb__link" href="/category/${e(categoryId)}">${e(catName)}</a><span class="crumb__sep">/</span><span>${e(book.title)}</span></nav>
 <h1 class="cat-title">${e(book.title)}</h1>
 ${book.summary ? `<p class="cat-title__sub">${e(book.summary)}</p>` : ''}
-${tocHtml(book.nodes)}</main>`,
+${tocHtml(book.title, book.nodes)}</main>`,
   }
 }
 
