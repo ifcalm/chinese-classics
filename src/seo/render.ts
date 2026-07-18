@@ -29,7 +29,10 @@ export function mdToHtml(md: string): string {
       const rest = m?.[2]?.trim()
       if (rest) out.push(`<p class="reader__text">${escapeHtml(rest)}</p>`)
     } else if (/^#{1,6}\s/.test(b)) {
-      out.push(`<h3 class="reader__h">${escapeHtml(b.replace(/^#{1,6}\s/, ''))}</h3>`)
+      // 与 Reader 一致：##及以上为部级 h2，###及以下为节级 h3
+      const part = /^#{1,2}\s/.test(b)
+      const text = escapeHtml(b.replace(/^#{1,6}\s/, ''))
+      out.push(part ? `<h2 class="reader__h reader__h--part">${text}</h2>` : `<h3 class="reader__h">${text}</h3>`)
     } else if (b.startsWith('> ')) {
       const quotes = [b]
       while (i + 1 < blocks.length && blocks[i + 1].trim().startsWith('> ')) quotes.push(blocks[++i].trim())
