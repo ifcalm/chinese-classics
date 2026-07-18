@@ -3098,5 +3098,60 @@
     "hash": "8a670de972f38d16",
     "createdAt": "2026-07-18T08:31:00Z",
     "updatedAt": "2026-07-18T08:31:00Z"
+  },
+  "taoism/alchemy/dadan-zhizhi": {
+    "hash": "acdf60db564ad00a",
+    "createdAt": "2026-07-18T12:22:19Z",
+    "updatedAt": "2026-07-18T12:22:19Z"
+  },
+  "taoism/alchemy/guizhong-zhinan": {
+    "hash": "0d14abaa7742e8b0",
+    "createdAt": "2026-07-18T12:22:19Z",
+    "updatedAt": "2026-07-18T12:22:19Z"
+  },
+  "taoism/alchemy/lingyuan-dadao-ge": {
+    "hash": "6fb9358aeeee5192",
+    "createdAt": "2026-07-18T12:22:19Z",
+    "updatedAt": "2026-07-18T12:22:19Z"
+  },
+  "taoism/alchemy/zhonghe-ji": {
+    "hash": "44381268699b77b4",
+    "createdAt": "2026-07-18T12:22:19Z",
+    "updatedAt": "2026-07-18T12:22:19Z"
+  },
+  "taoism/cultivation/fuqi-jingyi-lun": {
+    "hash": "ace8d9e1c0be5685",
+    "createdAt": "2026-07-18T12:22:19Z",
+    "updatedAt": "2026-07-18T12:22:19Z"
+  },
+  "taoism/cultivation/tianyinzi": {
+    "hash": "28d23876c9249e34",
+    "createdAt": "2026-07-18T12:22:19Z",
+    "updatedAt": "2026-07-18T12:22:19Z"
+  },
+  "taoism/cultivation/xuangang-lun": {
+    "hash": "267beac6d2044b94",
+    "createdAt": "2026-07-18T12:22:19Z",
+    "updatedAt": "2026-07-18T12:22:19Z"
+  },
+  "taoism/cultivation/yangxing-yanming-lu": {
+    "hash": "1a3fe83ce601f731",
+    "createdAt": "2026-07-18T12:22:19Z",
+    "updatedAt": "2026-07-18T12:22:19Z"
+  },
+  "taoism/immortals/hanwudi-neizhuan": {
+    "hash": "a4bea37180b1bd01",
+    "createdAt": "2026-07-18T12:22:19Z",
+    "updatedAt": "2026-07-18T12:22:19Z"
+  },
+  "taoism/immortals/changchun-zhenren-xiyou-ji": {
+    "hash": "5af3400e308388a1",
+    "createdAt": "2026-07-18T12:22:19Z",
+    "updatedAt": "2026-07-18T12:22:19Z"
+  },
+  "taoism/shangqing/zhenling-weiye-tu": {
+    "hash": "ce57bb4331ea33ce",
+    "createdAt": "2026-07-18T12:22:19Z",
+    "updatedAt": "2026-07-18T12:22:19Z"
   }
 }
