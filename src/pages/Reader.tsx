@@ -35,10 +35,19 @@ function renderText(md: string) {
         )
       }
     } else if (/^#{1,6}\s/.test(b)) {
+      // 标题分两档：##及以上为部级(如功过格的「功格/過律」总纲)，###及以下为节级
+      const part = /^#{1,2}\s/.test(b)
+      const text = b.replace(/^#{1,6}\s/, '')
       out.push(
-        <h3 key={i} className="reader__h">
-          {b.replace(/^#{1,6}\s/, '')}
-        </h3>
+        part ? (
+          <h2 key={i} className="reader__h reader__h--part">
+            {text}
+          </h2>
+        ) : (
+          <h3 key={i} className="reader__h">
+            {text}
+          </h3>
+        )
       )
     } else if (b.startsWith('> ')) {
       // 引用块(如僧传卷首传目):相邻引用段并入同一块

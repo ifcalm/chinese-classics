@@ -786,6 +786,11 @@ kbd {
   font-weight: 600;
   color: var(--text-secondary);
 }
+.reader__h--part {
+  margin-top: 1.8em;
+  font-size: 1.2em;
+  color: var(--text-primary);
+}
 .reader__pre {
   white-space: pre-wrap;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;

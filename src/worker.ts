@@ -51,7 +51,8 @@ async function r2Json<T>(env: Env, key: string): Promise<T | null> {
 /** chapterId → 所属书。与前端 resolveBookId 同策略：由浅入深探测第一个存在的 book.json。 */
 async function resolveBook(env: Env, chapterId: string): Promise<BookDetail | null> {
   const parts = chapterId.split('/')
-  for (let i = 2; i < parts.length; i++) {
+  // i <= length：单文件书的章节 id 即书 id 本身，须探测全路径（与前端 resolveBookId 一致，曾差一个等号致全站单文件书 /read 404）
+  for (let i = 2; i <= parts.length; i++) {
     const book = await r2Json<BookDetail>(env, `book/${parts.slice(0, i).join('/')}.json`)
     if (book) return book
   }
