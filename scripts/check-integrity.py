@@ -97,6 +97,62 @@ def check_baseline(errs):
             errs.append('卷%s 汉字流已变(%s)：断句不得改字，请复核是否手误' % (k, how))
 
 
+BASE_DATA = os.path.join(ROOT, 'base-data')
+QUOTES = os.path.join(ROOT, 'data/quotes.json')
+CJK = re.compile(r'[㐀-鿿豈-﫿]')
+
+
+def chapter_map():
+    """chapterId → base-data md 路径。规则与 build-content.mjs 一致：
+    相对路径去 .md、折叠数字分批目录段(\\d+-\\d+)、排除 _index.md。"""
+    m = {}
+    for dp, dns, fns in os.walk(BASE_DATA):
+        dns[:] = [d for d in dns if not d.startswith('.')]
+        for fn in fns:
+            if not fn.endswith('.md') or fn == '_index.md':
+                continue
+            rel = os.path.relpath(os.path.join(dp, fn), BASE_DATA)[:-3]
+            parts = [p for p in rel.split(os.sep) if not re.fullmatch(r'\d+-\d+', p)]
+            m['/'.join(parts)] = os.path.join(dp, fn)
+    return m
+
+
+def check_quotes(errs):
+    """名句库保真：data/quotes.json 每条名句的汉字流（剥标点空白后）须原样
+    命中其 chapterId 指向的 base-data 篇章正文——名句永远不得与正文脱节，
+    正文改字也会立即在此暴露。标点允许编辑（与断句同理），字不允许。"""
+    if not os.path.exists(QUOTES):
+        return 0
+    quotes = json.loads(read(QUOTES)).get('quotes', [])
+    cmap = chapter_map()
+    body_cache = {}
+    seen = set()
+    for q in quotes:
+        qid = q.get('id', '?')
+        if qid in seen:
+            errs.append('名句 id 重复: %s' % qid)
+            continue
+        seen.add(qid)
+        missing = [f for f in ('text', 'source', 'chapterId') if not q.get(f)]
+        if missing:
+            errs.append('名句 %s 缺字段: %s' % (qid, ','.join(missing)))
+            continue
+        path = cmap.get(q['chapterId'])
+        if not path:
+            errs.append('名句 %s 的 chapterId 无对应篇章: %s' % (qid, q['chapterId']))
+            continue
+        flow = ''.join(CJK.findall(q['text']))
+        if not flow:
+            errs.append('名句 %s 无汉字' % qid)
+            continue
+        if path not in body_cache:
+            body_cache[path] = ''.join(CJK.findall(body_of(read(path))))
+        if flow not in body_cache[path]:
+            errs.append('名句 %s 汉字流未命中出处 %s（逐字比对失败，勿凭记忆改句）'
+                        % (qid, q['chapterId']))
+    return len(quotes)
+
+
 def main():
     if '--baseline' in sys.argv:
         total = sum(v['n'] for v in hanzi_map().values())
@@ -114,6 +170,7 @@ def main():
     check_draft_parity(errs)
     check_punctuated(errs)
     check_baseline(errs)
+    n_quotes = check_quotes(errs)
 
     if errs:
         print('内容保真校验未通过：')
@@ -121,7 +178,8 @@ def main():
             print('  ✗ ' + e)
         return 1
     total = sum(v['n'] for v in hanzi_map().values())
-    print('内容保真校验通过：三命通会十二卷 断句稿↔base-data 一致、均有标点、汉字流合基线（合计 %d 字）' % total)
+    print('内容保真校验通过：三命通会十二卷 断句稿↔base-data 一致、均有标点、汉字流合基线（合计 %d 字）；'
+          '名句库 %d 条逐字命中出处' % (total, n_quotes))
     return 0
 
 

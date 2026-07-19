@@ -1,18 +1,37 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { errText, getManifest } from '../data/content'
-import type { CategoryMeta } from '../data/types'
+import { getRandomQuote } from '../data/quotes'
+import type { CategoryMeta, Quote } from '../data/types'
 import { SITE_TITLE } from '../seo/meta'
 
 export default function Home() {
   const [cats, setCats] = useState<CategoryMeta[] | null>(null)
   const [err, setErr] = useState<string>()
+  const [quote, setQuote] = useState<Quote | null>(null)
 
   useEffect(() => {
     getManifest()
       .then((m) => setCats(m.categories))
       .catch((e) => setErr(errText(e)))
   }, [])
+
+  // 名句异步淡入，不阻塞首屏；取不到就保持隐藏
+  useEffect(() => {
+    let alive = true
+    void getRandomQuote().then((q) => {
+      if (alive && q) setQuote(q)
+    })
+    return () => {
+      alive = false
+    }
+  }, [])
+
+  const nextQuote = () => {
+    void getRandomQuote(quote?.id).then((q) => {
+      if (q) setQuote(q)
+    })
+  }
 
   // 从内页返回首页时还原默认标题
   useEffect(() => {
@@ -33,6 +52,22 @@ export default function Home() {
       </section>
 
       {err && <p className="empty">内容加载失败：{err}</p>}
+
+      <section className={`quote-box${quote ? ' quote-box--in' : ''}`} aria-label="典籍名句">
+        {quote && (
+          <blockquote className="quote-box__inner">
+            <p className="quote-box__text">{quote.text}</p>
+            <footer className="quote-box__meta">
+              <Link className="quote-box__src" to={`/read/${quote.chapterId}`}>
+                —— {quote.source}
+              </Link>
+              <button type="button" className="quote-box__next" onClick={nextQuote}>
+                换一句
+              </button>
+            </footer>
+          </blockquote>
+        )}
+      </section>
 
       <section className="bento" aria-label="门类导航">
         {(cats ?? []).map((c, i) => (

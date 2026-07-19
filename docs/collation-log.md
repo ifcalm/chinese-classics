@@ -799,3 +799,23 @@
   官场第五回「一清如水」谕单线上已验渲染）；楔子回目携 `'''` 粗体标记须剥后再送标题转换。
 - 殆知阁二十年正文回标用汉字数字、目录用阿拉伯数字，分账切片须两式并取末次出现。
 - 上传 173 对象，IndexNow 172 URL（HTTP 200）；线上抽验目录/58 回/楔子/末回均正常。
+
+### 首页名句库 + 唐诗改字一处（2026-07-19）
+
+- **新增名句精选库**：`data/quotes.json`（git 唯一源）134 条，跨 11 门类，每条含
+  逐字取自站内源本的 text（繁简随源）、展示出处 source、阅读路径 chapterId。
+  分发双路：`content:build` 产出 `dist-content/quotes.json` 上 R2；
+  `scripts/sync-quotes-d1.mjs` 幂等全量重建 D1 `chinese-classics-quotes`
+  （id 6a5fc70a-b029-401d-ad8d-d6e34fd6eed2）。**永不手改 D1，改源文件重跑同步。**
+- **保真闸扩容**：check-integrity.py 新增 check_quotes——每条名句汉字流（剥标点）
+  须原样命中出处篇章 base-data 正文，chapterId 折叠分批目录规则与 build 一致，
+  正文改字或名句脱节都会在 CI 拦下。134 条全过，且逐条比对 dist-content/text 产物存在。
+- **Worker /api/quotes/random**：D1 服务端 RANDOM() 主路，R2 quotes.json 兜底，
+  no-store + noindex。首页新增名句区块（异步淡入 + 换一句 + 出处直达 /read）。
+- **改字一处**：唐诗三百首·山居秋暝「明月鬆間照」→「松間照」，简转繁过度转换
+  （站内王右丞集 0211 同诗作「松間照」互证）。编纂途中另见四处疑似讹字/缺篇
+  已挂独立任务：孙子兵法始计缺开篇段、了凡四训缺立命之学篇、
+  菜根谭「支卷云舒」、千字文「律召調陽」、无题「淚始幹」、后汉书「有誌者」繁简混杂。
+  名句一律避开存疑句。
+- 上传 7 对象删除 0；线上 quotes.json 与改字均已验证。**API 与首页区块待
+  `npx wrangler deploy` 后生效**（含 D1 绑定，与前日 resolveBook 修复、h2 部级标题同批）。

@@ -115,3 +115,25 @@ export interface BookText {
 // L4: text/<category>/<book>/<chapter>.md —— 纯正文，无字段、无 frontmatter。
 // 元数据全在上面的 book.json 里，故此处无对应类型。
 // ─────────────────────────────────────────────────────────────
+
+// ─────────────────────────────────────────────────────────────
+// quotes.json —— 名句精选库（git 源 data/quotes.json，build 分发 R2 + D1）。
+// Worker /api/quotes/random 与 R2 兜底路径返回同一形状的单条 Quote。
+// ─────────────────────────────────────────────────────────────
+export interface Quote {
+  id: string
+  /** 名句正文，逐字取自出处篇章源本（繁简随源），check-integrity 校验命中 */
+  text: string
+  /** 展示出处，如 "《论语·学而》"、"李白《行路难》" */
+  source: string
+  /** 站内阅读路径 /read/<chapterId> */
+  chapterId: string
+  category?: string
+}
+
+export interface QuotesFile {
+  schemaVersion: SchemaVersion
+  generatedAt: string
+  count: number
+  quotes: Quote[]
+}
