@@ -134,6 +134,63 @@
   color: var(--accent);
 }
 
+/* ---------- 首页名句 ---------- */
+/* 占位高度先行保留，避免异步载入引起布局跳动；载入后整块淡入 */
+.quote-box {
+  min-height: 5.6rem;
+  margin: 0 0 1.6rem;
+  opacity: 0;
+  transition: opacity 0.55s var(--ease);
+}
+.quote-box--in {
+  opacity: 1;
+}
+.quote-box__inner {
+  margin: 0;
+  padding: 1.067rem 1.33rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius-md);
+}
+.quote-box__text {
+  margin: 0;
+  font-size: 1.13rem;
+  line-height: 1.9;
+  color: var(--text-primary);
+}
+.quote-box__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.53rem;
+}
+.quote-box__src {
+  font-size: 0.867rem;
+  color: var(--text-tertiary);
+  text-decoration: none;
+  transition: color 0.2s var(--ease);
+}
+.quote-box__src:hover {
+  color: var(--accent);
+}
+.quote-box__next {
+  flex-shrink: 0;
+  padding: 4px 12px;
+  font-size: 0.8rem;
+  color: var(--text-tertiary);
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: color 0.2s var(--ease), border-color 0.2s var(--ease);
+}
+.quote-box__next:hover {
+  color: var(--accent);
+  border-color: var(--border-strong);
+}
+
 /* ---------- Bento 门类网格 ---------- */
 .bento {
   display: grid;

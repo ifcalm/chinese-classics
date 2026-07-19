@@ -309,6 +309,20 @@ for (const cat of categories) {
 manifestCategories.sort((a, b) => a.order - b.order)
 writeJson('manifest.json', { schemaVersion: SCHEMA_VERSION, generatedAt: NOW, categories: manifestCategories })
 
+// 名句库：data/quotes.json(git 源) → dist-content/quotes.json(R2 分发副本)。
+// 必须由本脚本产出——.files.json 每次全量重写，旁挂脚本写的产物会在下次
+// 构建后被上传脚本当作「已删除」清掉。逐字保真由 check-integrity.py 把关。
+const QUOTES_SRC = 'data/quotes.json'
+if (fs.existsSync(QUOTES_SRC)) {
+  const src = JSON.parse(fs.readFileSync(QUOTES_SRC, 'utf8'))
+  const quotes = (src.quotes ?? []).map((q) => ({
+    id: q.id, text: q.text, source: q.source, chapterId: q.chapterId,
+    category: q.chapterId.split('/')[0],
+  }))
+  writeJson('quotes.json', { schemaVersion: SCHEMA_VERSION, generatedAt: NOW, count: quotes.length, quotes })
+  console.log(`✓ 名句库：${quotes.length} 条`)
+}
+
 // 持久化时间戳状态（须随仓库保存，不进 dist-content）
 fs.writeFileSync(STATE_FILE, JSON.stringify(nextState, null, 2) + '\n')
 // 产物文件哈希清单（供上传脚本做内容级增量）

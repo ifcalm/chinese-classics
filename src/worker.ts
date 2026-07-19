@@ -21,9 +21,14 @@ interface R2Object {
   httpEtag: string
   writeHttpMetadata(headers: Headers): void
 }
+interface D1PreparedStatement {
+  first<T = unknown>(): Promise<T | null>
+}
 interface Env {
   ASSETS: { fetch(req: Request): Promise<Response> }
   BOOKS: { get(key: string): Promise<R2Object | null> }
+  /** 名句库 D1。可缺省：未绑定或查询失败时回退 R2 quotes.json。 */
+  QUOTES_DB?: { prepare(query: string): D1PreparedStatement }
 }
 interface Ctx {
   waitUntil(p: Promise<unknown>): void
@@ -150,6 +155,32 @@ async function renderRoute(env: Env, pathname: string): Promise<PageMeta | null>
   return renderChapterPage(book, chapter, flat[idx - 1], flat[idx + 1], text)
 }
 
+/** 随机名句：D1 主（服务端 RANDOM()），R2 quotes.json 兜底。两路数据同源于
+    git 的 data/quotes.json，形状一致（chapterId 驼峰）。响应不缓存——随机即卖点。 */
+async function randomQuote(env: Env): Promise<Response> {
+  let q: unknown = null
+  try {
+    q = await env.QUOTES_DB
+      ?.prepare('SELECT id, text, source, chapter_id AS chapterId FROM quotes ORDER BY RANDOM() LIMIT 1')
+      .first()
+  } catch {
+    // D1 故障不致命，落 R2 兜底
+  }
+  if (!q) {
+    const data = await r2Json<{ quotes?: unknown[] }>(env, 'quotes.json')
+    const list = data?.quotes ?? []
+    if (list.length) q = list[Math.floor(Math.random() * list.length)]
+  }
+  if (!q) return new Response('Not found', { status: 404 })
+  return new Response(JSON.stringify(q), {
+    headers: {
+      'content-type': 'application/json; charset=utf-8',
+      'cache-control': 'no-store',
+      'x-robots-tag': 'noindex',
+    },
+  })
+}
+
 const isDocRoute = (p: string) => p === '/' || /^\/(category|book|read)\//.test(p)
 
 export default {
@@ -172,6 +203,11 @@ export default {
         /* 报文读取失败也不影响响应 */
       }
       return new Response(null, { status: 204 })
+    }
+
+    // 首页随机名句
+    if (url.pathname === '/api/quotes/random' && req.method === 'GET') {
+      return randomQuote(env)
     }
 
     // R2 内容代理（原始数据，不参与收录）

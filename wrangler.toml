@@ -16,6 +16,14 @@ run_worker_first = true
 binding = "BOOKS"
 bucket_name = "chinese-classics"
 
+# 名句库（首页随机名句）。git 的 data/quotes.json 是唯一源：
+# 改动走 scripts/sync-quotes-d1.mjs 全量重建，永远不要手改 D1。
+# Worker 里绑定可缺省——D1 不可用时 /api/quotes/random 自动回退 R2 quotes.json。
+[[d1_databases]]
+binding = "QUOTES_DB"
+database_name = "chinese-classics-quotes"
+database_id = "6a5fc70a-b029-401d-ad8d-d6e34fd6eed2"
+
 # Workers Logs：/api/err 上报的前端错误经 console.error 落到这里
 # (控制台 Workers → chinese-classics → Logs 查看；免费档 20 万条/天、留 3 天)
 [observability]
