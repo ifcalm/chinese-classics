@@ -3183,5 +3183,15 @@
     "hash": "05abbbecbe01689b",
     "createdAt": "2026-07-26T14:37:15Z",
     "updatedAt": "2026-07-26T14:37:15Z"
+  },
+  "literature/dong-po-quan-ji": {
+    "hash": "bdc0ebc2712272c0",
+    "createdAt": "2026-07-27T13:22:20Z",
+    "updatedAt": "2026-07-27T13:32:12Z"
+  },
+  "literature/wang-lin-chuan-ji": {
+    "hash": "7d90e1f8b4382533",
+    "createdAt": "2026-07-27T13:22:20Z",
+    "updatedAt": "2026-07-27T14:12:03Z"
   }
 }
