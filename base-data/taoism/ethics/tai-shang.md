@@ -1,5 +1,6 @@
 ---
 title: "太上感应篇"
+weight: 10
 date: 2021-02-21
 tags: ["太上感应篇"]
 draft: false

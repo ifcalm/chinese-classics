@@ -1,5 +1,6 @@
 ---
 title: "德道经 (帛书版)"
+weight: 2
 date: 2026-01-12
 tags: ["道德经"]
 draft: false
