@@ -1,5 +1,6 @@
 ---
 title: "道德经"
+weight: 1
 date: 2025-08-03
 tags: ["道德经"]
 draft: false

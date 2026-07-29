@@ -3193,5 +3193,45 @@
     "hash": "7d90e1f8b4382533",
     "createdAt": "2026-07-27T13:22:20Z",
     "updatedAt": "2026-07-27T14:12:03Z"
+  },
+  "taoism/alchemy/gushen-pian": {
+    "hash": "6d910122582640a6",
+    "createdAt": "2026-07-27T15:47:43Z",
+    "updatedAt": "2026-07-27T15:50:13Z"
+  },
+  "taoism/alchemy/qinghua-miwen": {
+    "hash": "af84537f2e1ef8d4",
+    "createdAt": "2026-07-27T15:47:43Z",
+    "updatedAt": "2026-07-27T15:47:43Z"
+  },
+  "taoism/alchemy/xingming-guizhi": {
+    "hash": "76bb600baa4b5c14",
+    "createdAt": "2026-07-27T15:47:43Z",
+    "updatedAt": "2026-07-27T15:50:13Z"
+  },
+  "taoism/classics/miaomen-youqi": {
+    "hash": "cbfe87c0b14a475f",
+    "createdAt": "2026-07-27T15:47:43Z",
+    "updatedAt": "2026-07-27T15:47:43Z"
+  },
+  "taoism/ethics/ganying-pian-jizhu": {
+    "hash": "47cc63df0d87be08",
+    "createdAt": "2026-07-27T15:47:43Z",
+    "updatedAt": "2026-07-27T15:47:43Z"
+  },
+  "taoism/ethics/jingming-zhongxiao-quanshu": {
+    "hash": "11de7d60b302e633",
+    "createdAt": "2026-07-27T15:47:43Z",
+    "updatedAt": "2026-07-27T15:47:43Z"
+  },
+  "taoism/immortals/yixian-zhuan": {
+    "hash": "85b6ef655b43e900",
+    "createdAt": "2026-07-27T15:47:43Z",
+    "updatedAt": "2026-07-27T15:47:43Z"
+  },
+  "taoism/ritual/chishu-yujue": {
+    "hash": "c0b28821eaf44b0c",
+    "createdAt": "2026-07-27T15:47:43Z",
+    "updatedAt": "2026-07-27T15:49:15Z"
   }
 }
