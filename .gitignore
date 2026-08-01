@@ -27,4 +27,7 @@ public/content
 .r2-uploaded.json
 .wrangler
 .ws-cache/
-scripts/__pycache__/
+# Python 字节码缓存（原为 scripts/__pycache__/，不匹配嵌套子目录，
+# scripts/quanzhen/__pycache__/ 曾因此被误提交）
+__pycache__/
+*.pyc
