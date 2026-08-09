@@ -6,10 +6,14 @@ main = "src/worker.ts"
 # run_worker_first = true：一切请求先进 Worker。不设时 `/` 精确命中资产 index.html
 # 会被资产层直接应答、绕过 Worker，首页得不到边缘渲染；设成数组(仅列 "/")更糟——
 # 未列出的路径全部降级为资产层兜底，/content 代理与 /read SSR 全部失效(2026-07-16 实测)。
+# not_found_handling = "none"：未命中资产即 404。曾用 "single-page-application"，
+# 结果一切路径（含域名前主站遗留的 /old.php、/?p=123、/wp-content/*）都回 200 空壳，
+# 被 GSC 判为软 404 且永不消退。SPA 深链由 Worker 的边缘渲染负责，
+# 渲染失败时 Worker 自己取 index.html 兜底，不依赖资产层的 SPA fallback。
 [assets]
 directory = "./dist"
 binding = "ASSETS"
-not_found_handling = "single-page-application"
+not_found_handling = "none"
 run_worker_first = true
 
 [[r2_buckets]]

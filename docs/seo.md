@@ -20,6 +20,12 @@ SPA 对爬虫是空页面（`<div id="root">` 无内容、全站共用一份 tit
 - 结果注入构建产物 `dist/index.html` 的 `#root`，SPA 脚本照常加载，
   React `createRoot` 首次 render 时整体替换接管交互。用户侧白赚正文首屏直出；
 - 未知 ID 返回 **HTTP 404**（此前 SPA 对一切路径回 200，是软 404）；
+- 不匹配任何路由、也不命中静态资产的路径同样返回 **404**：`[assets]`
+  的 `not_found_handling` 已从 `single-page-application` 改为 `none`
+  （见 wrangler.toml 注释）。此前一切路径都拿到 200 空壳，域名绑本站之前
+  遗留的旧站地址（`/old.php`、`/2023/05/*`、`/wp-content/*` 等）因此被
+  GSC 判为软 404 且永不消退；现在回真 404，Google 会逐步丢弃。
+  SPA 深链不依赖资产层兜底——边缘渲染负责，渲染失败时 Worker 自取 index.html；
 - 渲染结果经 Cloudflare Cache API 缓存（`s-maxage=3600`）；
 - **任何渲染异常回退纯 SPA shell** —— SEO 层故障不影响可用性；
 - `/content/*` 原始 JSON/md 加 `X-Robots-Tag: noindex`，防与页面重复收录
