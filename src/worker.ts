@@ -91,6 +91,16 @@ function getShell(env: Env, origin: string): Promise<string> {
   return shellPromise
 }
 
+/** 边缘渲染失败时的兜底：直出 SPA shell 由前端自己路由。
+    资产层已关掉 SPA fallback，故须显式取 index.html。不缓存——降级响应别粘住。 */
+async function spaFallback(env: Env, origin: string): Promise<Response> {
+  const r = await env.ASSETS.fetch(new Request(`${origin}/index.html`))
+  return new Response(r.body, {
+    status: r.ok ? 200 : r.status,
+    headers: { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store' },
+  })
+}
+
 /** 把渲染结果注入 shell：换 title/description，补 canonical/og/JSON-LD，填 #root。 */
 function inject(shell: string, m: PageMeta): string {
   const canonical = SITE_URL + m.path
@@ -265,8 +275,26 @@ export default {
       } catch {
         // 渲染失败 → SPA shell 兜底
       }
+      // renderRoute 返回 null（如 manifest 缺失）或抛异常都到这里
+      return spaFallback(env, url.origin)
     }
 
-    return env.ASSETS.fetch(req)
+    // 静态资产。未命中时资产层回 404（not_found_handling = "none"），
+    // 对 HTML 请求换成站点自己的 404 页：域名前主站遗留的地址从此回真 404，
+    // 不再是 200 空壳（软 404）。
+    const asset = await env.ASSETS.fetch(req)
+    if (asset.status === 404 && (req.headers.get('accept') ?? '').includes('text/html')) {
+      try {
+        const page = renderNotFound(url.pathname)
+        const shell = await getShell(env, url.origin)
+        return new Response(inject(shell, page), {
+          status: 404,
+          headers: { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store' },
+        })
+      } catch {
+        // shell 取不到就退回资产层那份朴素 404
+      }
+    }
+    return asset
   },
 }
