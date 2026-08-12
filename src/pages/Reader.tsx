@@ -4,15 +4,15 @@ import { errText, getBook, getChapterText, flattenBook, resolveBookId } from '..
 import type { BookDetail, BookText } from '../data/types'
 import { useTheme } from '../theme/ThemeProvider'
 import { ChevronLeftIcon } from '../components/Icons'
-import { isVerse } from '../seo/render'
+import { isVerse, splitBlocks } from '../seo/render'
 import { chapterDisplayTitle, chapterPageTitle, SITE_TITLE } from '../seo/meta'
 
 const FONT_MIN = 16
 const FONT_MAX = 24
 
-/** 轻量 md 渲染：空行分段，识别标题与代码块；正文以纯文本为主。 */
+/** 轻量 md 渲染：空行分段(标题行另行切出，见 splitBlocks)，识别标题与代码块；正文以纯文本为主。 */
 function renderText(md: string) {
-  const blocks = md.split(/\n{2,}/)
+  const blocks = splitBlocks(md)
   const out: React.ReactNode[] = []
   for (let i = 0; i < blocks.length; i++) {
     const b = blocks[i].trim()

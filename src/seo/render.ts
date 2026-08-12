@@ -9,14 +9,42 @@ export function escapeHtml(s: string): string {
 /** 韵文判定(诗/词)，与 Reader 同一份实现(Reader 从这里 import)。
     全篇为纯文本短段(无标题、无代码块)，段数 ≥ 3 且每段最长行 ≤ 30 字。 */
 export function isVerse(md: string): boolean {
-  const blocks = md.split(/\n{2,}/).map((b) => b.trim()).filter(Boolean)
+  const blocks = splitBlocks(md)
   const hasNonPlain = blocks.some((b) => b.startsWith('```') || b.startsWith('>') || /^#{1,6}\s/.test(b))
   if (hasNonPlain || blocks.length < 3) return false
   return blocks.every((b) => b.split('\n').every((line) => line.trim().length <= 30))
 }
 
+/** 空行分段，并把标题行从所在段中单独切出。
+    底本常见标题与正文之间不空行(如金刚经「### 第一 法会因由分」紧接经文)，
+    若只按空行分段，整段会被判成标题、正文被吞进 <h3>；标题若不在段首则连 ### 一起当正文输出。
+    围栏块整体跳过，其内容不做标题识别。 */
+export function splitBlocks(md: string): string[] {
+  const out: string[] = []
+  for (const raw of md.split(/\n{2,}/)) {
+    const b = raw.trim()
+    if (!b) continue
+    if (b.startsWith('```')) {
+      out.push(b)
+      continue
+    }
+    let buf: string[] = []
+    for (const line of b.split('\n')) {
+      if (/^#{1,6}\s/.test(line)) {
+        if (buf.join('\n').trim()) out.push(buf.join('\n').trim())
+        out.push(line.trim())
+        buf = []
+      } else {
+        buf.push(line)
+      }
+    }
+    if (buf.join('\n').trim()) out.push(buf.join('\n').trim())
+  }
+  return out
+}
+
 export function mdToHtml(md: string): string {
-  const blocks = md.split(/\n{2,}/)
+  const blocks = splitBlocks(md)
   const out: string[] = []
   for (let i = 0; i < blocks.length; i++) {
     const b = blocks[i].trim()
