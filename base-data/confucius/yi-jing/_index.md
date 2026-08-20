@@ -5,6 +5,8 @@ weight: 1
 tags: ["易经"]
 draft: true
 summary: "天行健，君子以自強不息；地勢坤，君子以厚德載物。"
+author: "佚名"
+dynasty: "先秦"
 showToc: false
 tocOpen: false
 ShowShareButtons: false

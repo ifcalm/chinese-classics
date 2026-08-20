@@ -59,9 +59,9 @@ export interface BookRef {
   id: string
   title: string
   summary?: string
-  /** 作者，源数据暂无，预留 */
+  /** 作者/撰人；未考订的书留空，不猜 */
   author?: string
-  /** 成书年代/朝代(≠ 录入时间)，预留 */
+  /** 成书年代/朝代(≠ 录入时间)；未考订的书留空 */
   dynasty?: string
   /** 篇/卷数 = text 叶子总数 */
   chapterCount: number

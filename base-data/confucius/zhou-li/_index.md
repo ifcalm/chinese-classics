@@ -5,6 +5,8 @@ weight: 12
 tags: ["周礼"]
 draft: true
 summary: "周礼，记载古代官制与政教制度的礼学典籍。"
+author: "佚名"
+dynasty: "先秦"
 showToc: false
 tocOpen: false
 ShowShareButtons: false

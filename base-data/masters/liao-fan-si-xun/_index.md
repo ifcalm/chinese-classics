@@ -3,4 +3,6 @@ title: "了凡四训"
 weight: 28
 kind: "book"
 summary: "明·袁了凡训子书，立命、改过、积善、谦德四篇，以自身际遇论命由我作、福自己求。"
+author: "袁黄"
+dynasty: "明"
 ---

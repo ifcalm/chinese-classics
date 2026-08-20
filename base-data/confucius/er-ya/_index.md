@@ -5,6 +5,8 @@ weight: 55
 tags: ["尔雅"]
 draft: true
 summary: "尔雅，中国早期训诂辞书，儒家十三经之一。"
+author: "佚名"
+dynasty: "先秦"
 showToc: false
 tocOpen: false
 ShowShareButtons: false
