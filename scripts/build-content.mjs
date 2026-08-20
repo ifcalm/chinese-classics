@@ -31,8 +31,12 @@ function stamp(bookId, hash) {
   else if (p.hash !== hash) { createdAt = p.createdAt; updatedAt = NOW; report.changed.push(bookId) }
   else { createdAt = p.createdAt; updatedAt = p.updatedAt }
   nextState[bookId] = { hash, createdAt, updatedAt }
+  emitted.add(bookId)
   return { createdAt, updatedAt }
 }
+// 本次实际产出的书；「未变」计数须用它，不能用 nextState 的规模——
+// nextState 会留着历次撤收书目的记录，据以计数会虚报书数(2026-08-20 虚报 662 vs 实际 602)。
+const emitted = new Set()
 
 // 每个产物文件的内容哈希，写入 dist-content/.files.json，供上传脚本做增量
 const fileHashes = {}
@@ -337,6 +341,34 @@ if (fs.existsSync(QUOTES_SRC)) {
   console.log(`✓ 名句库：${quotes.length} 条`)
 }
 
+// 陈旧产物剪枝：撤收、改名、重组书目后，上一轮写下的 book/text 会赖在 OUT 里不走
+// （writeJson/writeText 只写不删）。它们进不了 .files.json 故上传时不受影响，但会冒充
+// 书目把统计和排查带偏（2026-08-20 查出 474 个：临川文集、密教部、西游记重组等）。
+// 只在本次构建的门类子树内剪，分门类构建才不会误删别的门类。
+function pruneStale(cats) {
+  const keep = new Set(Object.keys(fileHashes).map((k) => path.join(OUT, k)))
+  const removed = []
+  const walk = (dir) => {
+    if (!fs.existsSync(dir)) return
+    for (const n of fs.readdirSync(dir)) {
+      const full = path.join(dir, n)
+      if (fs.statSync(full).isDirectory()) {
+        walk(full)
+        if (!fs.readdirSync(full).length) fs.rmdirSync(full)
+      } else if (!keep.has(full)) {
+        fs.unlinkSync(full); removed.push(path.relative(OUT, full))
+      }
+    }
+  }
+  for (const c of cats) { walk(path.join(OUT, 'book', c)); walk(path.join(OUT, 'text', c)) }
+  return removed
+}
+const pruned = pruneStale(categories)
+if (pruned.length) {
+  console.log(`\n—— 剪除陈旧产物 ${pruned.length} 个 ——`)
+  console.log('  ' + pruned.slice(0, 10).join('\n  ') + (pruned.length > 10 ? `\n  …共 ${pruned.length} 个` : ''))
+}
+
 // 持久化时间戳状态（须随仓库保存，不进 dist-content）
 fs.writeFileSync(STATE_FILE, JSON.stringify(nextState, null, 2) + '\n')
 // 产物文件哈希清单（供上传脚本做内容级增量）
@@ -344,7 +376,7 @@ writeJson('.files.json', fileHashes)
 
 // 本次变更报告：区分「新收录」与「已补录(改动)」
 console.log('\n—— 本次变更 ——')
-console.log(`新收录 ${report.added.length} 部 · 有改动 ${report.changed.length} 部 · 未变 ${Object.keys(nextState).length - report.added.length - report.changed.length} 部`)
+console.log(`新收录 ${report.added.length} 部 · 有改动 ${report.changed.length} 部 · 未变 ${emitted.size - report.added.length - report.changed.length} 部（本次产出 ${emitted.size} 部）`)
 const cap = (a) => a.slice(0, 30).join('\n    ') + (a.length > 30 ? `\n    …共 ${a.length} 部` : '')
 if (report.added.length) console.log('  [新收录]\n    ' + cap(report.added))
 if (report.changed.length) console.log('  [有改动]\n    ' + cap(report.changed))
