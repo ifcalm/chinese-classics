@@ -5,6 +5,8 @@ weight: 90
 tags: ["春秋谷梁传"]
 draft: true
 summary: "《春秋》三传之一，以义例阐释经文。"
+author: "旧题谷梁赤"
+dynasty: "西汉"
 showToc: false
 tocOpen: false
 ShowShareButtons: false

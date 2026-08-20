@@ -5,6 +5,8 @@ weight: 14
 tags: ["礼记"]
 draft: true
 summary: "礼记，儒家礼学文献汇编，传世四十九篇。"
+author: "戴圣"
+dynasty: "西汉"
 showToc: false
 tocOpen: false
 ShowShareButtons: false

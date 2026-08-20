@@ -5,6 +5,8 @@ weight: 9
 tags: ["六韬"]
 draft: true
 summary: "旧题太公望撰，武经七书之一。文、武、龙、虎、豹、犬六韬六十篇，先秦军事思想集大成之作。"
+author: "旧题吕望"
+dynasty: "先秦"
 showToc: false
 tocOpen: false
 ShowShareButtons: false

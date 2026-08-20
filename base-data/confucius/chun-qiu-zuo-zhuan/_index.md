@@ -5,6 +5,8 @@ weight: 70
 tags: ["春秋左氏传"]
 draft: true
 summary: "《春秋》三传之一，以编年叙事见长。"
+author: "旧题左丘明"
+dynasty: "先秦"
 showToc: false
 tocOpen: false
 ShowShareButtons: false

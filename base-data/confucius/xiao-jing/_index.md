@@ -5,6 +5,8 @@ weight: 45
 tags: ["孝经"]
 draft: true
 summary: "孝经，儒家十三经之一，以孝道为核心。"
+author: "佚名"
+dynasty: "先秦"
 showToc: false
 tocOpen: false
 ShowShareButtons: false

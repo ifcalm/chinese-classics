@@ -5,6 +5,8 @@ weight: 19
 tags: ["晏子春秋"]
 draft: true
 summary: "晏子春秋八卷，记齐相晏婴言行与谏议故事。"
+author: "佚名"
+dynasty: "先秦"
 showToc: false
 tocOpen: false
 ShowShareButtons: false

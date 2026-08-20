@@ -92,6 +92,18 @@ function rawOrder(fields, name) {
   return m ? Number(m[1]) : null
 }
 
+// 书目元数据(author/dynasty)：frontmatter 里写了才带出，未考订的书留空而非猜。
+// 契约见 src/data/types.ts 的 BookRef / BookDetail。
+function meta(fields) {
+  if (!fields) return {}
+  const out = {}
+  for (const k of ['author', 'dynasty']) {
+    const v = (fields[k] || '').trim()
+    if (v) out[k] = v
+  }
+  return out
+}
+
 const TRAD = ['學', '說', '萬', '爲', '與', '經', '國', '書', '體', '禮', '樂', '從', '無']
 const SIMP = ['学', '说', '万', '为', '与', '经', '国', '书', '体', '礼', '乐', '从', '无']
 function detectVariant(text) {
@@ -222,9 +234,10 @@ function emitBookFromDir(dir, bookId) {
   writeJson(`book/${bookId}.json`, {
     schemaVersion: SCHEMA_VERSION, id: bookId, title,
     ...(idx.fields.summary ? { summary: idx.fields.summary } : {}),
+    ...meta(idx.fields),
     ...(variant ? { variant } : {}), createdAt: ts.createdAt, updatedAt: ts.updatedAt, nodes,
   })
-  return bookRef(bookId, title, idx.fields.summary, leafCount, variant, rawOrder(idx.fields, path.basename(dir)), idx.fields.date, ts)
+  return bookRef(bookId, title, idx.fields.summary, leafCount, variant, rawOrder(idx.fields, path.basename(dir)), idx.fields.date, ts, idx.fields)
 }
 
 // 产出一本「单文件书」（nav 层散落的 md）
@@ -238,15 +251,16 @@ function emitSingleFileBook(file, bookId) {
   writeJson(`book/${bookId}.json`, {
     schemaVersion: SCHEMA_VERSION, id: bookId, title,
     ...(fields.summary ? { summary: fields.summary } : {}),
+    ...meta(fields),
     ...(variant ? { variant } : {}), createdAt: ts.createdAt, updatedAt: ts.updatedAt,
     nodes: [{ type: 'text', id: bookId, title, order: 1, src }],
   })
-  return bookRef(bookId, title, fields.summary, 1, variant, rawOrder(fields, path.basename(file)), fields.date, ts)
+  return bookRef(bookId, title, fields.summary, 1, variant, rawOrder(fields, path.basename(file)), fields.date, ts, fields)
 }
 
-function bookRef(id, title, summary, chapterCount, variant, order, date, ts) {
+function bookRef(id, title, summary, chapterCount, variant, order, date, ts, fields) {
   return {
-    type: 'book', id, title, ...(summary ? { summary } : {}), chapterCount,
+    type: 'book', id, title, ...(summary ? { summary } : {}), ...meta(fields), chapterCount,
     _order: order, _date: date || '', ...(variant ? { variant } : {}),
     createdAt: ts.createdAt, updatedAt: ts.updatedAt,
   }

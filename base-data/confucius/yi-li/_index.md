@@ -5,6 +5,8 @@ weight: 13
 tags: ["仪礼"]
 draft: true
 summary: "仪礼，记载冠、婚、丧、祭、朝聘等礼仪制度。"
+author: "佚名"
+dynasty: "先秦"
 showToc: false
 tocOpen: false
 ShowShareButtons: false

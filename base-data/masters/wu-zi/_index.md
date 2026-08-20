@@ -5,6 +5,8 @@ weight: 7
 tags: ["吴子"]
 draft: true
 summary: "战国·吴起兵法，武经七书之一。图国、料敌、治兵、论将、应变、励士六篇，主内修文德、外治武备。"
+author: "旧题吴起"
+dynasty: "先秦"
 showToc: false
 tocOpen: false
 ShowShareButtons: false

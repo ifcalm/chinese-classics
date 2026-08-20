@@ -5,6 +5,8 @@ weight: 15
 tags: ["公孙龙子"]
 draft: true
 summary: "公孙龙子收录原序及今存六篇，名家代表典籍。"
+author: "公孙龙"
+dynasty: "先秦"
 showToc: false
 tocOpen: false
 ShowShareButtons: false

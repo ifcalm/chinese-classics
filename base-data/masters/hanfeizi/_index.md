@@ -5,6 +5,8 @@ weight: 3
 tags: ["韩非子"]
 draft: true
 summary: "韩非子五十五篇，法家集大成之作。"
+author: "韩非"
+dynasty: "先秦"
 showToc: false
 tocOpen: false
 ShowShareButtons: false

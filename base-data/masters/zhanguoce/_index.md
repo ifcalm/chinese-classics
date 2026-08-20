@@ -5,6 +5,8 @@ weight: 18
 tags: ["战国策"]
 draft: true
 summary: "战国策三十三卷，西汉刘向校录，辑战国游说策谋之文。"
+author: "刘向"
+dynasty: "西汉"
 showToc: false
 tocOpen: false
 ShowShareButtons: false

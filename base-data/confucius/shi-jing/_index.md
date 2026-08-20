@@ -5,6 +5,8 @@ weight: 10
 tags: ["诗经"]
 draft: true
 summary: "诗经，中国最早的诗歌总集，收诗305篇，儒家五经之一。"
+author: "佚名"
+dynasty: "先秦"
 showToc: false
 tocOpen: false
 ShowShareButtons: false

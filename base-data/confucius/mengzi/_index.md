@@ -5,6 +5,8 @@ weight: 50
 tags: ["孟子"]
 draft: true
 summary: "孟子七篇，战国孟轲撰。"
+author: "孟轲"
+dynasty: "先秦"
 showToc: false
 tocOpen: false
 ShowShareButtons: false
