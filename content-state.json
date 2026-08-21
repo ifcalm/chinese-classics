@@ -3313,5 +3313,50 @@
     "hash": "438948621156392a",
     "createdAt": "2026-08-20T16:09:44Z",
     "updatedAt": "2026-08-20T16:12:39Z"
+  },
+  "literature/yue-fu-shi-ji": {
+    "hash": "f52f9757a21f9f58",
+    "createdAt": "2026-08-21T00:38:52Z",
+    "updatedAt": "2026-08-21T00:38:52Z"
+  },
+  "masters/bai-hu-tong": {
+    "hash": "20bdea7efa0dcc55",
+    "createdAt": "2026-08-21T01:02:33Z",
+    "updatedAt": "2026-08-21T01:02:33Z"
+  },
+  "masters/chang-duan-jing": {
+    "hash": "17ade92897f92815",
+    "createdAt": "2026-08-21T01:02:33Z",
+    "updatedAt": "2026-08-21T01:05:23Z"
+  },
+  "masters/chunqiu-fanlu": {
+    "hash": "309d7215c7e103cc",
+    "createdAt": "2026-08-21T01:02:33Z",
+    "updatedAt": "2026-08-21T01:02:33Z"
+  },
+  "masters/liu-zi": {
+    "hash": "947beb9d7b23bf22",
+    "createdAt": "2026-08-21T01:02:33Z",
+    "updatedAt": "2026-08-21T01:02:33Z"
+  },
+  "masters/qian-fu-lun": {
+    "hash": "2fdb27a99b00dcf3",
+    "createdAt": "2026-08-21T01:02:33Z",
+    "updatedAt": "2026-08-21T01:02:33Z"
+  },
+  "masters/ren-wu-zhi": {
+    "hash": "b4531e3c969c91c4",
+    "createdAt": "2026-08-21T01:02:33Z",
+    "updatedAt": "2026-08-21T01:05:23Z"
+  },
+  "masters/shen-jian": {
+    "hash": "e5f03e54236acd45",
+    "createdAt": "2026-08-21T01:02:33Z",
+    "updatedAt": "2026-08-21T01:05:23Z"
+  },
+  "masters/xin-xu": {
+    "hash": "5baa746ef0b7b6c8",
+    "createdAt": "2026-08-21T01:02:33Z",
+    "updatedAt": "2026-08-21T01:05:23Z"
   }
 }
