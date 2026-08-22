@@ -270,6 +270,10 @@ def clean(t, page='', keep_refs=False, stray='drop'):
     t = re.sub(r'\n\s*([一二三四五六七八九十百]+)\s*\n\s*■\s*', r'\n\n\1　', t)
     t = re.sub(r'(?m)^\s*■\s*', '', t)
 
+    # 中點歸一：源本混用 ・(U+30FB 日文中點)、•(U+2022)，站內一律用 ·(U+00B7)
+    # ——2026-08-20 已就此全站歸一 9,446 處，新收各批照此
+    t = t.replace('・', '·').replace('•', '·')
+
     t = re.sub(r'[ \t]+\n', '\n', t)
     t = re.sub(r'\n{3,}', '\n\n', t)
     return t.strip()
