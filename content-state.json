@@ -1235,9 +1235,9 @@
     "updatedAt": "2026-06-28T04:27:04Z"
   },
   "buddha/zongpai/chan/yongming/zong-jing-lu": {
-    "hash": "14e08279e6472baa",
+    "hash": "e592bbface6d8dd6",
     "createdAt": "2026-06-28T04:27:04Z",
-    "updatedAt": "2026-06-28T04:27:04Z"
+    "updatedAt": "2026-08-22T15:51:40Z"
   },
   "taoism/alchemy/cuixu-pian": {
     "hash": "b40edb449ba5d68d",
@@ -4265,9 +4265,9 @@
     "updatedAt": "2026-08-22T13:04:31Z"
   },
   "buddha/zongpai/jingtu/an-le-ji": {
-    "hash": "1fbd35c2c41d52d0",
+    "hash": "517aa95b06426163",
     "createdAt": "2026-08-22T13:04:31Z",
-    "updatedAt": "2026-08-22T13:04:31Z"
+    "updatedAt": "2026-08-22T15:51:40Z"
   },
   "buddha/zongpai/jingtu/guan-wu-liang-shou-jing-shu": {
     "hash": "24c9dcaea2fd70aa",
@@ -4285,9 +4285,9 @@
     "updatedAt": "2026-08-22T13:14:06Z"
   },
   "buddha/zongpai/jingtu/wang-sheng-lun-zhu": {
-    "hash": "6f02810315160b7b",
+    "hash": "367c817354c132e5",
     "createdAt": "2026-08-22T13:04:31Z",
-    "updatedAt": "2026-08-22T13:04:31Z"
+    "updatedAt": "2026-08-22T15:51:40Z"
   },
   "buddha/zongpai/chan/chan-yuan-zhu-quan-ji-du-xu": {
     "hash": "385bb767b14dc4d9",
@@ -4315,13 +4315,93 @@
     "updatedAt": "2026-08-22T13:14:06Z"
   },
   "buddha/zongpai/huayan/hua-yan-jing-tan-xuan-ji": {
-    "hash": "871bcc4af534300d",
+    "hash": "702eee94abc651da",
     "createdAt": "2026-08-22T13:14:06Z",
-    "updatedAt": "2026-08-22T13:14:06Z"
+    "updatedAt": "2026-08-22T15:51:40Z"
   },
   "buddha/zongpai/huayan/hua-yan-yi-cheng-jiao-yi-fen-qi-zhang": {
     "hash": "074a04b31ff61dbe",
     "createdAt": "2026-08-22T13:14:06Z",
     "updatedAt": "2026-08-22T13:14:06Z"
+  },
+  "buddha/zongpai/tiantai/jiao-guan-gang-zong": {
+    "hash": "747928a968d0cf41",
+    "createdAt": "2026-08-22T15:10:22Z",
+    "updatedAt": "2026-08-22T15:10:22Z"
+  },
+  "buddha/zongpai/tiantai/jin-gang-pi": {
+    "hash": "8e87d7bc21135de2",
+    "createdAt": "2026-08-22T15:10:22Z",
+    "updatedAt": "2026-08-22T15:10:22Z"
+  },
+  "buddha/zongpai/tiantai/liu-miao-fa-men": {
+    "hash": "ca43c4e6ec499097",
+    "createdAt": "2026-08-22T15:10:22Z",
+    "updatedAt": "2026-08-22T15:10:22Z"
+  },
+  "buddha/zongpai/tiantai/tian-tai-si-jiao-yi": {
+    "hash": "46fbf2a91e14f314",
+    "createdAt": "2026-08-22T15:10:22Z",
+    "updatedAt": "2026-08-22T15:10:22Z"
+  },
+  "buddha/zongpai/tiantai/xiu-xi-zhi-guan-zuo-chan-fa-yao": {
+    "hash": "2abe50122ecf7327",
+    "createdAt": "2026-08-22T15:10:22Z",
+    "updatedAt": "2026-08-22T15:10:22Z"
+  },
+  "buddha/zongpai/tiantai/fa-hua-wen-ju": {
+    "hash": "061e789333e836a2",
+    "createdAt": "2026-08-22T15:10:22Z",
+    "updatedAt": "2026-08-22T15:10:22Z"
+  },
+  "buddha/zongpai/tiantai/fa-hua-xuan-yi": {
+    "hash": "c4b403f2f3b85b8f",
+    "createdAt": "2026-08-22T15:10:22Z",
+    "updatedAt": "2026-08-22T15:10:22Z"
+  },
+  "buddha/zongpai/tiantai/mo-he-zhi-guan": {
+    "hash": "7f1051579f00c338",
+    "createdAt": "2026-08-22T15:10:22Z",
+    "updatedAt": "2026-08-22T15:10:22Z"
+  },
+  "buddha/zongpai/tiantai/shi-bu-er-men-zhi-yao-chao": {
+    "hash": "288ad0eab2cc7fe8",
+    "createdAt": "2026-08-22T15:10:22Z",
+    "updatedAt": "2026-08-22T15:10:22Z"
+  },
+  "buddha/zongpai/sanlun/san-lun-xuan-yi": {
+    "hash": "85ed04ee3c47cd55",
+    "createdAt": "2026-08-22T15:46:20Z",
+    "updatedAt": "2026-08-22T15:51:40Z"
+  },
+  "buddha/zongpai/sanlun/da-cheng-xuan-lun": {
+    "hash": "3db6e64a93ef4925",
+    "createdAt": "2026-08-22T15:46:20Z",
+    "updatedAt": "2026-08-22T15:51:40Z"
+  },
+  "buddha/zongpai/sanlun/er-di-yi": {
+    "hash": "399b3794739cc022",
+    "createdAt": "2026-08-22T15:46:20Z",
+    "updatedAt": "2026-08-22T15:46:20Z"
+  },
+  "buddha/zongpai/sanlun/zhong-guan-lun-shu": {
+    "hash": "d2dc03e7a1428773",
+    "createdAt": "2026-08-22T15:46:20Z",
+    "updatedAt": "2026-08-22T15:46:20Z"
+  },
+  "buddha/zongpai/weishi/cheng-wei-shi-lun-shu-ji": {
+    "hash": "3cac0fcd41b5bb23",
+    "createdAt": "2026-08-22T15:46:20Z",
+    "updatedAt": "2026-08-22T15:46:20Z"
+  },
+  "buddha/zongpai/weishi/da-cheng-fa-yuan-yi-lin-zhang": {
+    "hash": "d78e29e126debd4b",
+    "createdAt": "2026-08-22T15:46:20Z",
+    "updatedAt": "2026-08-22T15:51:40Z"
+  },
+  "buddha/zongpai/weishi/yin-ming-ru-zheng-li-lun-shu": {
+    "hash": "6da4cf2561317bd9",
+    "createdAt": "2026-08-22T15:46:20Z",
+    "updatedAt": "2026-08-22T15:51:40Z"
   }
 }

@@ -20,18 +20,36 @@ const numToHan = (n) => {
 
 // ── 43 部书配置:file→{简体题,slug,目标目录,weight,summary,分册?} ──
 const BOOKS = [
+  // ── 宗派批④ 三论宗部 ＋ 唯识宗部（2026-08-22）皆一家之作，按纲要→别疏序 ──
+  ['T45n1852', '三论玄义', 'san-lun-xuan-yi', 'zongpai/sanlun', 10, '隋吉藏撰，破邪显正二门总序三论大归，三论宗纲要。', { date: '2026-08-22', dropW: 1 }],
+  ['T45n1853', '大乘玄论', 'da-cheng-xuan-lun', 'zongpai/sanlun', 20, '隋吉藏撰，五卷，论二谛、八不、佛性、一乘诸义，三论教义之总汇。', { date: '2026-08-22', dropW: 1 }],
+  ['T45n1854', '二谛义', 'er-di-yi', 'zongpai/sanlun', 30, '隋吉藏撰，三卷，立二谛十重，三论宗二谛说之专论。', { date: '2026-08-22', dropHeads: ['補刻二諦章敘', '鐫二諦章敘'] }],
+  ['T42n1824', '中观论疏', 'zhong-guan-lun-shu', 'zongpai/sanlun', 40, '隋吉藏撰，释青目《中论》，首列《中论序疏》释僧睿序，三论宗最详之疏。', { date: '2026-08-22' }],
+  ['T43n1830', '成唯识论述记', 'cheng-wei-shi-lun-shu-ji', 'zongpai/weishi', 10, '唐窥基撰，随文疏释《成唯识论》，法相宗根本释论。', { date: '2026-08-22', zhu: 1 }],
+  ['T45n1861', '大乘法苑义林章', 'da-cheng-fa-yuan-yi-lin-zhang', 'zongpai/weishi', 20, '唐窥基撰，七卷立总料简等章，法相宗义门之纲目。', { date: '2026-08-22', dropW: 1 }],
+  ['T44n1840', '因明入正理论疏', 'yin-ming-ru-zheng-li-lun-shu', 'zongpai/weishi', 30, '唐窥基撰，释商羯罗主《因明入正理论》，世称《大疏》，汉传因明之准的。', { date: '2026-08-22', dropW: 1 }],
+  // ── 宗派批③ 天台宗部（2026-08-22）祖师年代序 ──
+  ['T33n1716', '妙法莲华经玄义', 'fa-hua-xuan-yi', 'zongpai/tiantai', 10, '隋智𫖮说、灌顶记，二十卷，释《法华》经题五重玄义，天台三大部之一。', { date: '2026-08-22' }],
+  ['T34n1718', '妙法莲华经文句', 'fa-hua-wen-ju', 'zongpai/tiantai', 20, '隋智𫖮说、灌顶记，二十卷，以因缘、约教、本迹、观心四释随文解《法华》，天台三大部之一。', { date: '2026-08-22', dropHeads: ['天台法華䟽序'] }],
+  ['T46n1911', '摩诃止观', 'mo-he-zhi-guan', 'zongpai/tiantai', 30, '隋智𫖮说、灌顶记，二十卷，立十境十乘观法，天台观门之极唱，三大部之一。', { date: '2026-08-22' }],
+  ['T46n1915', '修习止观坐禅法要', 'xiu-xi-zhi-guan-zuo-chan-fa-yao', 'zongpai/tiantai', 40, '隋智𫖮撰，世称《小止观》，止观法门之入门书。', { date: '2026-08-22', dropPara: ['天台止觀有四本'] }],
+  ['T46n1917', '六妙法门', 'liu-miao-fa-men', 'zongpai/tiantai', 50, '隋智𫖮撰，以数随止观还净六门摄一切禅法。', { date: '2026-08-22' }],
+  ['T46n1932', '金刚錍', 'jin-gang-pi', 'zongpai/tiantai', 60, '唐湛然撰，假梦客问答立无情有性之义，天台性具思想之要籍。', { date: '2026-08-22', dropHeads: ['科金剛錍序'] }],
+  ['T46n1931', '天台四教仪', 'tian-tai-si-jiao-yi', 'zongpai/tiantai', 70, '高丽谛观录，撮天台化仪化法四教之要，宋以来天台入门第一书。', { date: '2026-08-22', dropHeads: ['四教頌', '四教儀緣起', '刻天台四教儀引'] }],
+  ['T46n1928', '十不二门指要钞', 'shi-bu-er-men-zhi-yao-chao', 'zongpai/tiantai', 80, '宋知礼撰，释湛然《十不二门》，山家山外之争所本。', { date: '2026-08-22', dropHeads: ['指要鈔序'] }],
+  ['T46n1939', '教观纲宗', 'jiao-guan-gang-zong', 'zongpai/tiantai', 90, '明智旭撰，重判五时八教，天台教观之总结。', { date: '2026-08-22' }],
   // ── 宗派批② 华严宗部（2026-08-22）祖师年代序；宗密《禅源诸诠集都序》属禅门总序，入禅宗部 ──
   ['T45n1866', '华严一乘教义分齐章', 'hua-yan-yi-cheng-jiao-yi-fen-qi-zhang', 'zongpai/huayan', 10, '唐法藏撰，世称《五教章》，立小始终顿圆五教十宗判，华严宗教判之纲。', { date: '2026-08-22' }],
-  ['T35n1733', '华严经探玄记', 'hua-yan-jing-tan-xuan-ji', 'zongpai/huayan', 20, '唐法藏撰，释六十卷本《华严》，华严宗最详备之经疏。', { date: '2026-08-22' }],
+  ['T35n1733', '华严经探玄记', 'hua-yan-jing-tan-xuan-ji', 'zongpai/huayan', 20, '唐法藏撰，释六十卷本《华严》，华严宗最详备之经疏。', { date: '2026-08-22', dropW: 1 }],
   ['T45n1880', '金师子章云间类解', 'jin-shi-zi-zhang', 'zongpai/huayan', 30, '唐法藏为则天说华严法界缘起，借殿前金师子为喻，宋净源为之类解。', { date: '2026-08-22' }],
   ['T45n1883', '华严法界玄镜', 'hua-yan-fa-jie-xuan-jing', 'zongpai/huayan', 40, '唐澄观撰，释杜顺《法界观门》真空、理事无碍、周遍含容三观。', { date: '2026-08-22' }],
   ['T45n1884', '注华严法界观门', 'zhu-hua-yan-fa-jie-guan-men', 'zongpai/huayan', 50, '唐宗密注杜顺《法界观门》，与澄观《玄镜》并为《法界观门》两大注本。', { date: '2026-08-22' }],
   ['T45n1886', '原人论', 'yuan-ren-lun', 'zongpai/huayan', 60, '唐宗密撰，斥迷执、斥偏浅、直显真源、会通本末四篇，判儒道与佛内外五教，华严判教之通俗名篇。', { date: '2026-08-22' }],
   ['T48n2015', '禅源诸诠集都序', 'chan-yuan-zhu-quan-ji-du-xu', 'zongpai/chan', 13, '唐宗密撰，为所集禅门诸家言教作总序，判禅三宗与教三种相摄，教禅一致之本。', { date: '2026-08-22', dropHeads: ['重刻禪源詮序', '禪源諸詮集都序敘'] }],
   // ── 宗派批① 净土宗部（2026-08-22）祖师年代序（站内已有「论藏批C」，勿混）──
-  ['T40n1819', '往生论注', 'wang-sheng-lun-zhu', 'zongpai/jingtu', 10, '北魏昙鸾撰，注释世亲《往生论》，立难行易行二道、自力他力之判，中国净土教义之始。', { date: '2026-08-22' }],
+  ['T40n1819', '往生论注', 'wang-sheng-lun-zhu', 'zongpai/jingtu', 10, '北魏昙鸾撰，注释世亲《往生论》，立难行易行二道、自力他力之判，中国净土教义之始。', { date: '2026-08-22', dropW: 1, zhu: 1 }],
   ['T47n1961', '净土十疑论', 'jing-tu-shi-yi-lun', 'zongpai/jingtu', 20, '题隋智𫖮撰，设十疑答释往生净土之惑，为净土问答体名篇。', { date: '2026-08-22', dropHeads: ['淨土十疑論序', '淨土十疑論後序'] }],
-  ['T47n1958', '安乐集', 'an-le-ji', 'zongpai/jingtu', 30, '唐道绰撰，判圣道净土二门，主称名念佛，上承昙鸾下启善导。', { date: '2026-08-22' }],
+  ['T47n1958', '安乐集', 'an-le-ji', 'zongpai/jingtu', 30, '唐道绰撰，判圣道净土二门，主称名念佛，上承昙鸾下启善导。', { date: '2026-08-22', dropW: 1 }],
   ['T37n1753', '观无量寿佛经疏', 'guan-wu-liang-shou-jing-shu', 'zongpai/jingtu', 40, '唐善导撰，世称《四帖疏》，判定观经为凡夫往生之教，净土宗立宗之典。', { date: '2026-08-22' }],
   ['T47n1980', '往生礼赞偈', 'wang-sheng-li-zan-ji', 'zongpai/jingtu', 50, '唐善导集，依六时行道立礼赞仪轨，净土行仪之本。', { date: '2026-08-22' }],
   ['T47n1963', '净土论', 'jing-tu-lun', 'zongpai/jingtu', 60, '唐迦才撰，会通诸家净土之说，兼录往生事迹。', { date: '2026-08-22' }],
@@ -236,6 +254,14 @@ function parseXml(file, opts) {
     .replace(/<item([^>]*)>([\s\S]*?)<\/item>/g, (_, a, inner) => '<p>' + inner.replace(/<p([^>]*)>/g, '</p><p$1>') + '</p>')
     .replace(/<\/?list[^>]*>/g, '')
     .replace(/<title[^>]*>/g, '').replace(/<\/title>/g, '')
+    // dropW：剥 <cb:div type="w"> 块。该类型在 CBETA 中无统一语义——多为刊记、奥书、
+    // 后人附传、版本考（因明疏日本奥书、三论玄义建长刊记、往生论注昙鸾传、安乐集版本考），
+    // 但龙舒净土文把正文章节也标为 w，故必须逐书开关，不可通剥。w 内无嵌套 div，非贪婪安全。
+    .replace(opts?.dropW ? /<cb:div type="w"[^>]*>[\s\S]*?<\/cb:div>/g : /(?!)/g, '')
+    // 注疏体（opts.zhu）：<cb:div type="orig"> 内为所释本文，打标以便落盘转引用块，
+    // 与疏文区分。实测往生论注 orig 117 段／commentary 118 段互不嵌套，非贪婪匹配安全。
+    .replace(/<cb:div type="orig">([\s\S]*?)<\/cb:div>/g, (_, inner) =>
+      inner.replace(/<p>/g, '<p data-orig="1">').replace(/<p /g, '<p data-orig="1" '))
     // dropHeads 用：div 结束哨兵，令跳过范围止于本 div，不致吞掉后续无 head 的正文
     .replace(/<\/cb:div>/g, '<cbdivend/>')
 
@@ -270,7 +296,10 @@ function parseXml(file, opts) {
         if (t) {
           // 卷首传目(mulu 选项):底本缩进小字排版(margin-left)且含「傳N」→ 引用块与正文区分
           const isMulu = opts?.mulu && m[2] && m[2].includes('margin-left')
-          if (!skip) blocks.push(isMulu ? '> ' + t : t)
+          // dropPara：按首句前缀剥无 head 的前附题记（如小止观「天台止觀有四本」书志注）
+          const isDropPara = opts?.dropPara && opts.dropPara.some((s) => t.startsWith(s))
+          const isOrig = opts?.zhu && m[2] && m[2].includes('data-orig')
+          if (!skip && !isDropPara) blocks.push(isMulu || isOrig ? '> ' + t : t)
         }
       }
     }
