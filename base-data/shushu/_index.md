@@ -3,7 +3,7 @@ title: "术数"
 date: "2026-07-06"
 weight: 9
 tags: ["术数"]
-draft: True
+draft: true
 summary: "术数，收录占卜、命理、相术、堪舆、式占之属古代数术典籍。"
 showToc: False
 tocOpen: False
