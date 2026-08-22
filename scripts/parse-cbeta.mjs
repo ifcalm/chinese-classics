@@ -20,6 +20,22 @@ const numToHan = (n) => {
 
 // ── 43 部书配置:file→{简体题,slug,目标目录,weight,summary,分册?} ──
 const BOOKS = [
+  // ── 宗派批② 华严宗部（2026-08-22）祖师年代序；宗密《禅源诸诠集都序》属禅门总序，入禅宗部 ──
+  ['T45n1866', '华严一乘教义分齐章', 'hua-yan-yi-cheng-jiao-yi-fen-qi-zhang', 'zongpai/huayan', 10, '唐法藏撰，世称《五教章》，立小始终顿圆五教十宗判，华严宗教判之纲。', { date: '2026-08-22' }],
+  ['T35n1733', '华严经探玄记', 'hua-yan-jing-tan-xuan-ji', 'zongpai/huayan', 20, '唐法藏撰，释六十卷本《华严》，华严宗最详备之经疏。', { date: '2026-08-22' }],
+  ['T45n1880', '金师子章云间类解', 'jin-shi-zi-zhang', 'zongpai/huayan', 30, '唐法藏为则天说华严法界缘起，借殿前金师子为喻，宋净源为之类解。', { date: '2026-08-22' }],
+  ['T45n1883', '华严法界玄镜', 'hua-yan-fa-jie-xuan-jing', 'zongpai/huayan', 40, '唐澄观撰，释杜顺《法界观门》真空、理事无碍、周遍含容三观。', { date: '2026-08-22' }],
+  ['T45n1884', '注华严法界观门', 'zhu-hua-yan-fa-jie-guan-men', 'zongpai/huayan', 50, '唐宗密注杜顺《法界观门》，与澄观《玄镜》并为《法界观门》两大注本。', { date: '2026-08-22' }],
+  ['T45n1886', '原人论', 'yuan-ren-lun', 'zongpai/huayan', 60, '唐宗密撰，斥迷执、斥偏浅、直显真源、会通本末四篇，判儒道与佛内外五教，华严判教之通俗名篇。', { date: '2026-08-22' }],
+  ['T48n2015', '禅源诸诠集都序', 'chan-yuan-zhu-quan-ji-du-xu', 'zongpai/chan', 13, '唐宗密撰，为所集禅门诸家言教作总序，判禅三宗与教三种相摄，教禅一致之本。', { date: '2026-08-22', dropHeads: ['重刻禪源詮序', '禪源諸詮集都序敘'] }],
+  // ── 宗派批① 净土宗部（2026-08-22）祖师年代序（站内已有「论藏批C」，勿混）──
+  ['T40n1819', '往生论注', 'wang-sheng-lun-zhu', 'zongpai/jingtu', 10, '北魏昙鸾撰，注释世亲《往生论》，立难行易行二道、自力他力之判，中国净土教义之始。', { date: '2026-08-22' }],
+  ['T47n1961', '净土十疑论', 'jing-tu-shi-yi-lun', 'zongpai/jingtu', 20, '题隋智𫖮撰，设十疑答释往生净土之惑，为净土问答体名篇。', { date: '2026-08-22', dropHeads: ['淨土十疑論序', '淨土十疑論後序'] }],
+  ['T47n1958', '安乐集', 'an-le-ji', 'zongpai/jingtu', 30, '唐道绰撰，判圣道净土二门，主称名念佛，上承昙鸾下启善导。', { date: '2026-08-22' }],
+  ['T37n1753', '观无量寿佛经疏', 'guan-wu-liang-shou-jing-shu', 'zongpai/jingtu', 40, '唐善导撰，世称《四帖疏》，判定观经为凡夫往生之教，净土宗立宗之典。', { date: '2026-08-22' }],
+  ['T47n1980', '往生礼赞偈', 'wang-sheng-li-zan-ji', 'zongpai/jingtu', 50, '唐善导集，依六时行道立礼赞仪轨，净土行仪之本。', { date: '2026-08-22' }],
+  ['T47n1963', '净土论', 'jing-tu-lun', 'zongpai/jingtu', 60, '唐迦才撰，会通诸家净土之说，兼录往生事迹。', { date: '2026-08-22' }],
+  ['T47n1970', '龙舒增广净土文', 'long-shu-jing-tu-wen', 'zongpai/jingtu', 70, '宋王日休撰，以浅明文字劝修净土，流传最广的居士净土劝化书。', { date: '2026-08-22', dropHeads: ['龍舒淨土文序', '重刊龍舒淨土文序', '丞相周益公贊', '晉軒李居士贊', '旴江聶允迪跋', '四明斷佛種人跋', '龍舒增廣淨土文卷第十（此卷後附周大資劉侍制大慧杲禪師題跋三段）'] }],
   // 批② 本缘部(接法句经80之后,按译出年代)
   ['T04n0200', '撰集百缘经', 'zhuan-ji-bai-yuan-jing', 'jingzang/benyuan', 90, '三国吴支谦译，十卷百缘，记佛世因缘果报故事。'],
   ['T03n0152', '六度集经', 'liu-du-ji-jing', 'jingzang/benyuan', 100, '三国吴康僧会译，八卷九十一章，依六度编次佛本生故事。'],
@@ -220,6 +236,8 @@ function parseXml(file, opts) {
     .replace(/<item([^>]*)>([\s\S]*?)<\/item>/g, (_, a, inner) => '<p>' + inner.replace(/<p([^>]*)>/g, '</p><p$1>') + '</p>')
     .replace(/<\/?list[^>]*>/g, '')
     .replace(/<title[^>]*>/g, '').replace(/<\/title>/g, '')
+    // dropHeads 用：div 结束哨兵，令跳过范围止于本 div，不致吞掉后续无 head 的正文
+    .replace(/<\/cb:div>/g, '<cbdivend/>')
 
   // 按卷切分(属性顺序不定)
   body = body.replace(/<milestone\s+unit="juan"\s+n="(\d+)"\s*\/>/g, '<milestone n="$1" unit="juan"/>')
@@ -232,23 +250,27 @@ function parseXml(file, opts) {
     const n = +segs[i]
     const seg = segs[i + 1]
     const blocks = []
-    const re = /<head[^>]*>([\s\S]*?)<\/head>|<p([^>]*)>([\s\S]*?)<\/p>|<lg[^>]*>([\s\S]*?)<\/lg>|<item[^>]*>([\s\S]*?)<\/item>/g
-    let m, covered = 0
+    const re = /<cbdivend\/>|<head[^>]*>([\s\S]*?)<\/head>|<p([^>]*)>([\s\S]*?)<\/p>|<lg[^>]*>([\s\S]*?)<\/lg>|<item[^>]*>([\s\S]*?)<\/item>/g
+    let m, covered = 0, skip = false
     while ((m = re.exec(seg))) {
       covered += han(stripTags(m[0]))
+      if (m[0] === '<cbdivend/>') { skip = false; continue }
       if (m[1] != null) { // head → ## 品题
         const t = fixPua(decode(stripTags(m[1])), rev).replace(/\s+/g, '')
-        if (t) blocks.push('## ' + t)
+        // 铁律：他人序跋不收。dropHeads 命中则连同其下正文一并跳过，直到下一个 head。
+        // 自序（作者本人所撰）不列入 dropHeads，属本书组成部分。
+        skip = !!(opts?.dropHeads && opts.dropHeads.includes(t))
+        if (t && !skip) blocks.push('## ' + t)
       } else if (m[4] != null) { // lg 偈颂:每 l 一行,硬换行
         const lines = [...m[4].matchAll(/<l[^>]*>([\s\S]*?)<\/l>/g)]
           .map((x) => fixPua(decode(stripTags(x[1])), rev).replace(/[\r\n\t]+/g, '').replace(/ {2,}/g, ' ').replace(/^[\s　]+|[\s　]+$/g, '')).filter(Boolean)
-        if (lines.length) blocks.push(lines.join('  \n'))
+        if (lines.length && !skip) blocks.push(lines.join('  \n'))
       } else { // p / item
         const t = fixPua(decode(stripTags(m[3] ?? m[5])), rev).replace(/[\r\n]+/g, '').replace(/^\s+|\s+$/g, '')
         if (t) {
           // 卷首传目(mulu 选项):底本缩进小字排版(margin-left)且含「傳N」→ 引用块与正文区分
           const isMulu = opts?.mulu && m[2] && m[2].includes('margin-left')
-          blocks.push(isMulu ? '> ' + t : t)
+          if (!skip) blocks.push(isMulu ? '> ' + t : t)
         }
       }
     }
@@ -260,7 +282,7 @@ function parseXml(file, opts) {
 }
 
 // ── 落盘 ──
-const fmDate = '2026-07-03'
+let fmDate = '2026-07-03'
 function fm(o) {
   const lines = ['---']
   for (const [k, v] of Object.entries(o)) {
@@ -282,6 +304,7 @@ const idxFm = (title, summary, weight, extra) => fm({
 
 let grand = 0, grandJ = 0
 for (const [file, title, slug, section, weight, note, opts] of BOOKS) {
+  fmDate = opts?.date || '2026-07-03'
   if (only.length && !only.some((o) => file.startsWith(o))) continue
   const { tTitle, juans, warn } = parseXml(file, opts)
   const nJ = juans.length

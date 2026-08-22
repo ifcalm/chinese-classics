@@ -31,3 +31,6 @@ public/content
 # scripts/quanzhen/__pycache__/ 曾因此被误提交）
 __pycache__/
 *.pyc
+
+# CBETA 底本 XML：公开可复得（cbeta-org/xml-p5），T 号记于 parse-cbeta.mjs 与校勘日志，不入库
+scripts/cbeta/
