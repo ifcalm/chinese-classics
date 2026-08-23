@@ -20,6 +20,17 @@ const numToHan = (n) => {
 
 // ── 43 部书配置:file→{简体题,slug,目标目录,weight,summary,分册?} ──
 const BOOKS = [
+  // ── 宗派批⑤ 史传部补全（2026-08-22）僧传18/地志38/论衡46/经录50-54/通史60-64/类书70 ──
+  ['T50n2064', '神僧传', 'shen-seng-zhuan', 'shizhuan', 18, '明初敕撰，九卷，采诸经传所载神异高僧事迹。', { date: '2026-08-22', dropHeads: ['御製神僧傳序'] }],
+  ['T51n2088', '释迦方志', 'shi-jia-fang-zhi', 'shizhuan', 38, '唐道宣撰，二卷，述佛国地理封疆、遗迹教相，中土所撰佛教地志之要籍。', { date: '2026-08-22' }],
+  ['T52n2104', '集古今佛道论衡', 'ji-gu-jin-fo-dao-lun-heng', 'shizhuan', 46, '唐道宣辑，四卷，集汉魏至唐佛道二教廷辩文献。', { date: '2026-08-22', dropHeads: ['集古今佛道論衡四卷重校序'] }],
+  ['T49n2034', '历代三宝纪', 'li-dai-san-bao-ji', 'shizhuan', 50, '隋费长房撰，十五卷，帝年、代录、入藏目三部，现存最早之综合性经录兼佛教编年。', { date: '2026-08-22' }],
+  ['T55n2149', '大唐内典录', 'da-tang-nei-dian-lu', 'shizhuan', 52, '唐道宣撰，十卷，历代众经传译所从录等十门，唐初经录之集成。', { date: '2026-08-22' }],
+  ['T55n2154', '开元释教录', 'kai-yuan-shi-jiao-lu', 'shizhuan', 54, '唐智昇撰，二十卷，总括群经、别分乘藏，汉文大藏经入藏之定本目录。', { date: '2026-08-22' }],
+  ['T49n2035', '佛祖统纪', 'fo-zu-tong-ji', 'shizhuan', 60, '宋志磐撰，五十四卷，仿纪传体作本纪世家列传诸志，天台宗立场之佛教通史。', { date: '2026-08-22', dropHeads: ['佛祖統紀敘'] }],
+  ['T49n2036', '佛祖历代通载', 'fo-zu-li-dai-tong-zai', 'shizhuan', 62, '元念常撰，二十二卷，编年体佛教通史，多录碑铭原文。', { date: '2026-08-22', dropHeads: ['佛祖歷代通載序', '華亭梅屋常禪師本傳通載序'] }],
+  ['T49n2037', '释氏稽古略', 'shi-shi-ji-gu-lue', 'shizhuan', 64, '元觉岸撰，四卷，年经国纬，编年记释氏事实。', { date: '2026-08-22', dropHeads: ['釋氏稽古略序', '稽古略序'] }],
+  ['T53n2122', '法苑珠林', 'fa-yuan-zhu-lin', 'shizhuan', 70, '唐道世撰，一百卷百篇，分部类事博引众经，佛教类书之渊薮。', { date: '2026-08-22', dropHeads: ['法苑珠林序'] }],
   // ── 宗派批④ 三论宗部 ＋ 唯识宗部（2026-08-22）皆一家之作，按纲要→别疏序 ──
   ['T45n1852', '三论玄义', 'san-lun-xuan-yi', 'zongpai/sanlun', 10, '隋吉藏撰，破邪显正二门总序三论大归，三论宗纲要。', { date: '2026-08-22', dropW: 1 }],
   ['T45n1853', '大乘玄论', 'da-cheng-xuan-lun', 'zongpai/sanlun', 20, '隋吉藏撰，五卷，论二谛、八不、佛性、一乘诸义，三论教义之总汇。', { date: '2026-08-22', dropW: 1 }],
@@ -250,10 +261,36 @@ function parseXml(file, opts) {
     .replace(/<cb:juan[^>]*fun="open"[^>]*>[\s\S]*?<\/cb:juan>/g, '')
     .replace(/<cb:juan[^>]*fun="close"[^>]*>[\s\S]*?<\/cb:juan>/g, '')
     .replace(/<byline[^>]*>[\s\S]*?<\/byline>/g, '')
+    // table/row/cell → 复用偈颂通道：一行一格硬换行。
+    // 阅读端为轻量渲染器（仅标题/引用块/代码块），不支持 markdown 表格；
+    // 释氏稽古略 400 表 3556 格（帝王年表）若不转，块正则不认，将丢 18,301 字。
+    .replace(/<row[^>]*>([\s\S]*?)<\/row>/g, (_, r) => {
+      const cells = [...r.matchAll(/<cell[^>]*>([\s\S]*?)<\/cell>/g)]
+        .map((x) => x[1].replace(/<[^>]+>/g, '').replace(/[\r\n]+/g, '').trim()).filter(Boolean)
+      return cells.length ? '<lg>' + cells.map((c) => '<l>' + c + '</l>').join('') + '</lg>' : ''
+    })
+    .replace(/<\/?table[^>]*>/g, '')
     // list/item 拆包:item 内嵌的块级 p 提升为兄弟段(经录卷「右N部」小注等),item 本体转 p
-    .replace(/<item([^>]*)>([\s\S]*?)<\/item>/g, (_, a, inner) => '<p>' + inner.replace(/<p([^>]*)>/g, '</p><p$1>') + '</p>')
+    // ⚠ item 会嵌套（开元释教录 45 处）。非贪婪正则在【内层】</item> 即闭合，
+    // 外层 item 的尾部遂成块外孤文而丢失。故须自最内层起循环拆包至无 item 为止。
+    .replace(/^/, '')
     .replace(/<\/?list[^>]*>/g, '')
     .replace(/<title[^>]*>/g, '').replace(/<\/title>/g, '')
+
+  // item 循环拆包（见上方注释）：INNER 只匹配不含嵌套 item 的最内层，反复至无 item。
+  {
+    const INNER = /<item([^>]*)>((?:(?!<item)[\s\S])*?)<\/item>/g
+    for (let i = 0; i < 12 && /<item[\s>]/.test(body); i++) {
+      const before = body
+      body = body.replace(INNER, (_, a, inner) => '<p>' + inner.replace(/<p([^>]*)>/g, '</p><p$1>') + '</p>')
+      if (body === before) break
+    }
+  }
+  body = body
+    // 高丽再雕藏刊记（「丙午/丁未/戊申歲分司大藏都監開板」）：非撰者之文，无条件剥。
+    // 只匹配整块即刊记者，故对 type="w" 里另有正文的书（法苑珠林 6 处「違法部」等）无伤。
+    .replace(/<cb:div type="w"[^>]*>((?:(?!<cb:div)[\s\S])*?)<\/cb:div>/g, (m0, inner) =>
+      /歲[^<]{0,14}大藏都監開板/.test(inner.replace(/<[^>]+>/g, '')) ? '' : m0)
     // dropW：剥 <cb:div type="w"> 块。该类型在 CBETA 中无统一语义——多为刊记、奥书、
     // 后人附传、版本考（因明疏日本奥书、三论玄义建长刊记、往生论注昙鸾传、安乐集版本考），
     // 但龙舒净土文把正文章节也标为 w，故必须逐书开关，不可通剥。w 内无嵌套 div，非贪婪安全。
