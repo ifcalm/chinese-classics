@@ -4453,5 +4453,115 @@
     "hash": "a0adb59ff6f647e7",
     "createdAt": "2026-08-23T01:32:25Z",
     "updatedAt": "2026-08-23T01:32:25Z"
+  },
+  "buddha/lunzang/pitan/a-pi-da-mo-da-pi-po-sha-lun": {
+    "hash": "d0ecbaa3bb62d6db",
+    "createdAt": "2026-08-25T15:32:05Z",
+    "updatedAt": "2026-08-25T15:35:18Z"
+  },
+  "buddha/lunzang/pitan/a-pi-da-mo-shun-zheng-li-lun": {
+    "hash": "b286b31b6cb5e0ae",
+    "createdAt": "2026-08-25T15:32:05Z",
+    "updatedAt": "2026-08-25T15:32:05Z"
+  },
+  "buddha/lunzang/pitan/a-pi-da-mo-zang-xian-zong-lun": {
+    "hash": "3cc7ff2ae8c43744",
+    "createdAt": "2026-08-25T15:32:05Z",
+    "updatedAt": "2026-08-25T15:32:05Z"
+  },
+  "buddha/lunzang/pitan/she-li-fu-a-pi-tan-lun": {
+    "hash": "4753b9c20ee6b526",
+    "createdAt": "2026-08-25T15:32:05Z",
+    "updatedAt": "2026-08-25T15:32:05Z"
+  },
+  "buddha/luzang/genben-youbu/an-ju-shi": {
+    "hash": "70b75ca4b6921f79",
+    "createdAt": "2026-08-25T15:45:25Z",
+    "updatedAt": "2026-08-25T15:45:25Z"
+  },
+  "buddha/luzang/genben-youbu/bi-chu-ni-jie-jing": {
+    "hash": "05843299e95f73d8",
+    "createdAt": "2026-08-25T15:45:25Z",
+    "updatedAt": "2026-08-25T15:45:25Z"
+  },
+  "buddha/luzang/genben-youbu/jie-chi-na-yi-shi": {
+    "hash": "12daca6e40bf499f",
+    "createdAt": "2026-08-25T15:45:25Z",
+    "updatedAt": "2026-08-25T15:45:25Z"
+  },
+  "buddha/luzang/genben-youbu/jie-jing": {
+    "hash": "6fd349691cdf9802",
+    "createdAt": "2026-08-25T15:45:25Z",
+    "updatedAt": "2026-08-25T15:45:25Z"
+  },
+  "buddha/luzang/genben-youbu/lue-pi-nai-ye-za-shi-she-song": {
+    "hash": "c48f0dbf0c82e87a",
+    "createdAt": "2026-08-25T15:45:25Z",
+    "updatedAt": "2026-08-25T15:45:25Z"
+  },
+  "buddha/luzang/genben-youbu/ni-tuo-na-mu-de-jia-she-song": {
+    "hash": "70bd89c946fbfeb5",
+    "createdAt": "2026-08-25T15:45:25Z",
+    "updatedAt": "2026-08-25T15:45:25Z"
+  },
+  "buddha/luzang/genben-youbu/sui-yi-shi": {
+    "hash": "cac2ea32ae85a9b8",
+    "createdAt": "2026-08-25T15:45:25Z",
+    "updatedAt": "2026-08-25T15:45:25Z"
+  },
+  "buddha/luzang/genben-youbu/bai-yi-jie-mo": {
+    "hash": "c4ea86db5fd7e405",
+    "createdAt": "2026-08-25T15:45:25Z",
+    "updatedAt": "2026-08-25T15:45:25Z"
+  },
+  "buddha/luzang/genben-youbu/bi-chu-ni-pi-nai-ye": {
+    "hash": "b7049496b4b900e9",
+    "createdAt": "2026-08-25T15:45:25Z",
+    "updatedAt": "2026-08-25T15:45:25Z"
+  },
+  "buddha/luzang/genben-youbu/chu-jia-shi": {
+    "hash": "1530c662b54d21f4",
+    "createdAt": "2026-08-25T15:45:25Z",
+    "updatedAt": "2026-08-25T15:45:25Z"
+  },
+  "buddha/luzang/genben-youbu/lv-she": {
+    "hash": "9405f1283b384f41",
+    "createdAt": "2026-08-25T15:45:25Z",
+    "updatedAt": "2026-08-25T15:45:25Z"
+  },
+  "buddha/luzang/genben-youbu/ni-tuo-na-mu-de-jia": {
+    "hash": "b6b03d7e2478431a",
+    "createdAt": "2026-08-25T15:45:25Z",
+    "updatedAt": "2026-08-25T15:45:25Z"
+  },
+  "buddha/luzang/genben-youbu/pi-ge-shi": {
+    "hash": "1b0325d8939e84d0",
+    "createdAt": "2026-08-25T15:45:25Z",
+    "updatedAt": "2026-08-25T15:45:25Z"
+  },
+  "buddha/luzang/genben-youbu/pi-nai-ye": {
+    "hash": "d1d90577890a0bcf",
+    "createdAt": "2026-08-25T15:45:25Z",
+    "updatedAt": "2026-08-25T15:45:25Z"
+  },
+  "buddha/luzang/genben-youbu/pi-nai-ye-song": {
+    "hash": "56a67570fd25ed1f",
+    "createdAt": "2026-08-25T15:45:25Z",
+    "updatedAt": "2026-08-25T15:45:25Z"
+  },
+  "buddha/luzang/genben-youbu/po-seng-shi": {
+    "hash": "312b233662acccef",
+    "createdAt": "2026-08-25T15:45:25Z",
+    "updatedAt": "2026-08-25T15:45:25Z"
+  },
+  "buddha/luzang/genben-youbu/yao-shi": {
+    "hash": "98916c10ef348e11",
+    "createdAt": "2026-08-25T15:45:25Z",
+    "updatedAt": "2026-08-25T15:45:25Z"
+  },
+  "buddha/luzang/genben-youbu/za-shi": {
+    "hash": "b35c34b0e08d8251",
+    "createdAt": "2026-08-25T15:45:25Z",
+    "updatedAt": "2026-08-25T15:45:25Z"
   }
 }

@@ -10,16 +10,57 @@ const WRITE = process.argv.includes('--write')
 const only = process.argv.slice(2).filter((a) => /^T\d/.test(a))
 const han = (s) => (s.match(/[㐀-鿿]/g) || []).length
 
+// 1–999 汉数字。⚠ 旧版只写到两位数：n≥100 时 d[Math.floor(n/10)] 索引越界，
+// 得「undefined十二」这类坏卷题（大毘婆沙论 200 卷，卷 101-200 全中）。
+// 百位后不足十者补「零」（一百零二），整十者作「一百一十」。
 const numToHan = (n) => {
   const d = '零一二三四五六七八九'
-  if (n === 100) return '一百'
-  if (n <= 10) return n === 10 ? '十' : d[n]
-  if (n < 20) return '十' + d[n % 10]
-  return d[Math.floor(n / 10)] + '十' + (n % 10 ? d[n % 10] : '')
+  const sub100 = (x) => {
+    if (x <= 10) return x === 10 ? '十' : d[x]
+    if (x < 20) return '十' + d[x % 10]
+    return d[Math.floor(x / 10)] + '十' + (x % 10 ? d[x % 10] : '')
+  }
+  if (n < 100) return sub100(n)
+  const h = Math.floor(n / 100), r = n % 100
+  if (r === 0) return d[h] + '百'
+  if (r < 10) return d[h] + '百零' + d[r]
+  if (r < 20) return d[h] + '百一十' + (r % 10 ? d[r % 10] : '')
+  return d[h] + '百' + sub100(r)
 }
 
 // ── 43 部书配置:file→{简体题,slug,目标目录,weight,summary,分册?} ──
 const BOOKS = [
+  // ── 白文批②「根本说一切有部律」18 部（2026-08-25）唐义净译，汉译第五部广律 ──
+  // 独立成组 luzang/genben-youbu（题名共前缀，须靠 _index 的 kind:"nav" 判为 collection，
+  // 否则 isBookDir 的 looksLikeOneWork 会把整组误并成一部书）。组内 weight 按大正藏经号：
+  // 广律 10-20 → 诸事 30-42 → 杂事 50 → 补遗 60 → 羯磨 70 → 戒本 80-82 → 摄颂 90-92 → 律摄/颂 100-110。
+  // ⚠ 律摄(T24n1458) 唯一的 <cb:div type="w"> 内是卷十四正文「四波羅底提舍尼法」10,226 字，
+  //   【绝不可 dropW】；dropW 只给 1443(高丽藏校记) 与 1452/1456/1457(景龙四年义净译场列位)。
+  ['T23n1442', '根本说一切有部毘奈耶', 'pi-nai-ye', 'luzang/genben-youbu', 10, '唐义净译（703年），五十卷，根本说一切有部广律之苾刍篇，汉译第五部广律。', { date: '2026-08-25' }],
+  ['T23n1443', '根本说一切有部苾刍尼毘奈耶', 'bi-chu-ni-pi-nai-ye', 'luzang/genben-youbu', 20, '唐义净译，二十卷，根本有部广律之苾刍尼篇。', { date: '2026-08-25', dropW: 1 }],
+  ['T23n1444', '根本说一切有部毘奈耶出家事', 'chu-jia-shi', 'luzang/genben-youbu', 30, '唐义净译，四卷，根本有部诸事之一，明受戒出家之法。', { date: '2026-08-25' }],
+  ['T23n1445', '根本说一切有部毘奈耶安居事', 'an-ju-shi', 'luzang/genben-youbu', 32, '唐义净译，一卷，明夏三月安居之制。', { date: '2026-08-25' }],
+  ['T23n1446', '根本说一切有部毘奈耶随意事', 'sui-yi-shi', 'luzang/genben-youbu', 34, '唐义净译，一卷，明安居竟自恣举罪之法，随意即自恣。', { date: '2026-08-25' }],
+  ['T23n1447', '根本说一切有部毘奈耶皮革事', 'pi-ge-shi', 'luzang/genben-youbu', 36, '唐义净译，二卷，明皮革履屣受用之开遮。', { date: '2026-08-25' }],
+  ['T24n1448', '根本说一切有部毘奈耶药事', 'yao-shi', 'luzang/genben-youbu', 38, '唐义净译，十八卷，明四种药之开遮，兼载佛世本生因缘甚富。', { date: '2026-08-25' }],
+  ['T24n1449', '根本说一切有部毘奈耶羯耻那衣事', 'jie-chi-na-yi-shi', 'luzang/genben-youbu', 40, '唐义净译，一卷，明安居竟受功德衣之法，羯耻那即功德衣。', { date: '2026-08-25' }],
+  ['T24n1450', '根本说一切有部毘奈耶破僧事', 'po-seng-shi', 'luzang/genben-youbu', 42, '唐义净译，二十卷，记提婆达多破僧始末，兼述释种谱系与佛传。', { date: '2026-08-25' }],
+  ['T24n1451', '根本说一切有部毘奈耶杂事', 'za-shi', 'luzang/genben-youbu', 50, '唐义净译，四十卷，收广律诸事之余，末记王舍城、毘舍离二次结集。', { date: '2026-08-25' }],
+  ['T24n1452', '根本说一切有部尼陀那目得迦', 'ni-tuo-na-mu-de-jia', 'luzang/genben-youbu', 60, '唐义净译，十卷，尼陀那（缘起）五卷、目得迦（本事）五卷，广律之补遗。', { date: '2026-08-25', dropW: 1 }],
+  ['T24n1453', '根本说一切有部百一羯磨', 'bai-yi-jie-mo', 'luzang/genben-youbu', 70, '唐义净译，十卷，集僧团一百零一种羯磨作法。', { date: '2026-08-25' }],
+  ['T24n1454', '根本说一切有部戒经', 'jie-jing', 'luzang/genben-youbu', 80, '唐义净译，一卷，根本有部苾刍别解脱戒本，布萨所诵。', { date: '2026-08-25' }],
+  ['T24n1455', '根本说一切有部苾刍尼戒经', 'bi-chu-ni-jie-jing', 'luzang/genben-youbu', 82, '唐义净译，一卷，根本有部苾刍尼别解脱戒本。', { date: '2026-08-25' }],
+  ['T24n1456', '根本说一切有部毘奈耶尼陀那目得迦摄颂', 'ni-tuo-na-mu-de-jia-she-song', 'luzang/genben-youbu', 90, '唐义净译，一卷，以摄颂总括尼陀那目得迦之纲目。', { date: '2026-08-25', dropW: 1 }],
+  ['T24n1457', '根本说一切有部略毘奈耶杂事摄颂', 'lue-pi-nai-ye-za-shi-she-song', 'luzang/genben-youbu', 92, '唐义净译，一卷，以摄颂总括毘奈耶杂事之纲目。', { date: '2026-08-25', dropW: 1 }],
+  ['T24n1458', '根本萨婆多部律摄', 'lv-she', 'luzang/genben-youbu', 100, '胜友集，唐义净译，十四卷，随文摄释别解脱戒经，根本有部律学之纲要。', { date: '2026-08-25' }],
+  ['T24n1459', '根本说一切有部毘奈耶颂', 'pi-nai-ye-song', 'luzang/genben-youbu', 110, '毘舍佉造，唐义净译，三卷，以偈颂摄广律要义。', { date: '2026-08-25' }],
+  // ── 白文批①「毘昙三大部＋舍利弗阿毘昙」（2026-08-25）纯白文，无前端依赖 ──
+  // 排序：顺正理/显宗为众贤破《俱舍》之作，紧接俱舍10；大毘婆沙广释《发智》，故居六足(30-50)之末；
+  // 舍利弗阿毘昙非有部系，与《异部宗轮论》同属部派material，置于卷末 80-90 区。
+  ['T29n1562', '阿毘达磨顺正理论', 'a-pi-da-mo-shun-zheng-li-lun', 'lunzang/pitan', 12, '众贤造，唐玄奘译，八十卷，破《俱舍论》所取经部义以申有部正宗，世称《俱舍雹论》。', { date: '2026-08-25' }],
+  ['T29n1563', '阿毘达磨藏显宗论', 'a-pi-da-mo-zang-xian-zong-lun', 'lunzang/pitan', 14, '众贤造，唐玄奘译，四十卷九品，撮《顺正理论》要义正显有部宗旨，去其破斥之辞。', { date: '2026-08-25' }],
+  ['T27n1545', '阿毘达磨大毘婆沙论', 'a-pi-da-mo-da-pi-po-sha-lun', 'lunzang/pitan', 55, '五百大阿罗汉造，唐玄奘译（显庆元年始译，四年讫），二百卷，广释《发智论》八蕴，说一切有部教义之总汇，汉译单部之最巨。', { date: '2026-08-25', dropW: 1 }],
+  ['T28n1548', '舍利弗阿毘昙论', 'she-li-fu-a-pi-tan-lun', 'lunzang/pitan', 85, '姚秦昙摩耶舍共昙摩崛多等译，三十卷，分问、非问、摄相应、绪四分，非说一切有部系阿毘昙之汉译孤本。', { date: '2026-08-25', dropW: 1, dropHeads: ['舍利弗阿毘曇論序'] }],
   // ── 宗派批⑤ 史传部补全（2026-08-22）僧传18/地志38/论衡46/经录50-54/通史60-64/类书70 ──
   ['T50n2064', '神僧传', 'shen-seng-zhuan', 'shizhuan', 18, '明初敕撰，九卷，采诸经传所载神异高僧事迹。', { date: '2026-08-22', dropHeads: ['御製神僧傳序'] }],
   ['T51n2088', '释迦方志', 'shi-jia-fang-zhi', 'shizhuan', 38, '唐道宣撰，二卷，述佛国地理封疆、遗迹教相，中土所撰佛教地志之要籍。', { date: '2026-08-22' }],
@@ -113,18 +154,6 @@ const BOOKS = [
   ['T09n0270', '大法鼓经', 'da-fa-gu-jing', 'jingzang/fahua', 70, '刘宋求那跋陀罗译，二卷，说一乘常住、如来藏义。'],
   ['T12n0323', '郁迦罗越问菩萨行经', 'yu-jia-luo-yue-wen-pu-sa-xing-jing', 'jingzang/baoji/yiyi', 100, '西晋竺法护译，一卷，说在家出家菩萨戒行，大宝积经郁伽长者会之异译。'],
   ['T12n0371', '观世音菩萨授记经', 'guan-shi-yin-pu-sa-shou-ji-jing', 'jingzang/baoji/yiyi', 110, '刘宋昙无竭译，一卷，记观世音、得大势二菩萨往因与授记。'],
-  // 批① 密教部(按大正藏经号序;楞严经既有,weight 改 60)
-  ['T18n0848', '大毗卢遮那成佛神变加持经', 'da-pi-lu-zhe-na-cheng-fo-shen-bian-jia-chi-jing', 'jingzang/mijiao', 10, '唐善无畏共一行译，七卷三十六品，即《大日经》，胎藏界根本经典。'],
-  ['T18n0865', '金刚顶一切如来真实摄大乘现证大教王经', 'jin-gang-ding-da-jiao-wang-jing', 'jingzang/mijiao', 20, '唐不空译，三卷，即《金刚顶经》，金刚界根本经典。'],
-  ['T18n0893a', '苏悉地羯罗经', 'su-xi-di-jie-luo-jing', 'jingzang/mijiao', 30, '唐输波迦罗（善无畏）译，三卷，说三部悉地成就法，与大日、金刚顶并称密教三大部。'],
-  ['T18n0895a', '苏婆呼童子请问经', 'su-po-hu-tong-zi-qing-wen-jing', 'jingzang/mijiao', 40, '唐输波迦罗（善无畏）译，三卷，说持诵者律仪轨范，密教受持之律。'],
-  ['T18n0897', '蕤呬耶经', 'rui-xi-ye-jing', 'jingzang/mijiao', 50, '唐不空译，三卷，说择地造坛、供养奉请之通则。'],
-  ['T19n0967', '佛顶尊胜陀罗尼经', 'fo-ding-zun-sheng-tuo-luo-ni-jing', 'jingzang/mijiao', 70, '唐佛陀波利译（683年），一卷，说尊胜陀罗尼灭罪延寿之力，经幢刻此殆遍天下。'],
-  ['T19n0982', '佛母大孔雀明王经', 'fo-mu-da-kong-que-ming-wang-jing', 'jingzang/mijiao', 80, '唐不空译，三卷，说孔雀明王真言除灾祛毒护国之法。'],
-  ['T19n1022A', '一切如来心秘密全身舍利宝箧印陀罗尼经', 'bao-qie-yin-tuo-luo-ni-jing', 'jingzang/mijiao', 90, '唐不空译，一卷，说宝箧印陀罗尼，塔藏经咒之制多出于此。'],
-  ['T20n1050', '佛说大乘庄严宝王经', 'fo-shuo-da-cheng-zhuang-yan-bao-wang-jing', 'jingzang/mijiao', 100, '宋天息灾译，四卷，说观自在菩萨功德与六字大明陀罗尼（唵嘛呢叭咪吽）之所出。'],
-  ['T20n1060', '千手千眼观世音菩萨广大圆满无碍大悲心陀罗尼经', 'da-bei-xin-tuo-luo-ni-jing', 'jingzang/mijiao', 110, '唐伽梵达摩译，一卷，说千手观音大悲心陀罗尼（大悲咒）及其十大愿力。'],
-  ['T20n1076', '七俱胝佛母所说准提陀罗尼经', 'zhun-ti-tuo-luo-ni-jing', 'jingzang/mijiao', 120, '唐不空译，一卷，说准提陀罗尼持诵仪则。'],
   // 论藏批A 唯识中观名论(瑜伽唯识部接摄论释70之后;中观部插百论/肇论间;因明二论入论集部)
   ['T31n1602', '显扬圣教论', 'xian-yang-sheng-jiao-lun', 'lunzang/yujia', 80, '无著造，唐玄奘译，二十卷十一品，撮举瑜伽师地论要义以显扬圣教。'],
   ['T31n1604', '大乘庄严经论', 'da-cheng-zhuang-yan-jing-lun', 'lunzang/yujia', 90, '无著造（本颂传为弥勒），唐波罗颇蜜多罗译（630年），十三卷二十四品，庄严大乘经义之瑜伽要典。'],
