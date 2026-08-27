@@ -88,6 +88,19 @@ BOOKS = [
  dict(root='base-data/history', slug='tang-hui-yao', title='唐会要', author='王溥',
       dynasty='北宋', w=350, src='唐會要',
       summary='北宋王溥撰，凡一百卷，分门辑录唐代典章沿革，会要体之祖，多存两《唐书》所无之史料。'),
+ # ── 紀事本末（四庫史部此類站內此前為零；插在編年 250/260 與別史 270 之間）──
+ # 底本是四庫全書本，乾隆館臣刪改痕跡明確（「敵」320 處、「鄰境」2 處，而「建州」
+ # 「女真」「滿洲」全書 0 次）。殆知閣本指紋逐項相同（敵 320、鄰境 2、女直 2），
+ # 是同一遞修本，別無更早之電子本可取。已挂 known-issues 与 #34 四库底本审计。
+ # 卷首傅以渐序系他人所撰，按铁律弃；谷应泰自序存。
+ dict(root='base-data/history', slug='ming-shi-ji-shi-ben-mo', title='明史纪事本末',
+      author='谷应泰', dynasty='清', w=265, src='明史紀事本末',
+      drop=('明史紀事本末序',), usesection=1,
+      summary='清谷应泰撰，凡八十卷，仿袁枢《通鉴纪事本末》体例纪明代事迹，每卷一事，'
+              '篇末各系论断。成书于顺治十五年（1658），早《明史》八十年，取材《明实录》'
+              '及谈迁、张岱诸家野史，为明代史事之独立史源。据维基文库四库全书本收录；'
+              '卷首傅以渐序系他人所撰不收，谷应泰自序存。'),
+
  # ── 目錄（四庫史部「目錄類」，站內此前為零；插在政書 350 與史評 360 之間）──
  # 「解題」是目錄提要而非注疏，不在「注疏不收」之列（用户 2026-08-22 已界定）。
  dict(root='base-data/history', slug='jun-zhai-du-shu-zhi', title='郡斋读书志',
@@ -167,6 +180,20 @@ HANRE = re.compile(r'[一-鿿]')
 SIMP = '来为国无与从东车马门时会说汉铁风鸟鱼龙岁书对长义爱经实举学权'
 
 
+SECT = re.compile(r"\|\s*section\s*=\s*(.+?)\s*(?=\n\s*\||\n\s*\}\})", re.S)
+QUOT = re.compile(r"'{2,3}")
+
+
+def section_of(raw):
+    """从 {{header2|…|section=…|…}} 取事目；取不到返回空串（parse 会退回页名）。"""
+    m = SECT.search(raw)
+    if not m:
+        return ''
+    t = QUOT.sub('', m.group(1))
+    t = re.sub(r"\[\[[^\]|]*\|", '', t).replace('[[', '').replace(']]', '')
+    return t.strip()
+
+
 def prune(bookdir, written):
     """剪除本次未产出的陈旧 .md。
 
@@ -206,7 +233,11 @@ def write_book(b, pages, index):
             continue
         txt = C.clean(C.inline(raw, pages), p, b.get('refs') == 'note',
                       b.get('stray', 'drop'))
-        pieces = post(P.parse(txt, p.split('/')[-1], b.get('maxlvl')),
+        # usesection：篇题取 header 的 |section=，而非页名。
+        # 纪事本末体一卷即一事，事目（「太祖起兵」「甲申殉難」）只在 header 参数里，
+        # 页名是「卷01」——不取的话八十卷全叫「卷01」…「卷80」，一部纪事本末就白收了。
+        fb = (section_of(raw) if b.get('usesection') else '') or p.split('/')[-1]
+        pieces = post(P.parse(txt, fb, b.get('maxlvl')),
                       b.get('drop', ()), b.get('retitle'))
         if not pieces:
             print('  ⚠ %s / %s 無正文' % (b['title'], p))
