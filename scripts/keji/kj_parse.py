@@ -14,6 +14,7 @@
 import re
 
 NOTE_S, NOTE_E = '\x01', '\x02'
+SUBH = '\x06'       # 深于 maxlvl 的标题：不切篇，落作篇内 ### 小标题
 HEAD = re.compile(r'^(=+)\s*(.*?)\s*=+\s*$')
 NOTE = re.compile(NOTE_S + '(.*?)' + NOTE_E, re.S)
 PB = '\x05'          # 註內段界的臨時替身：躲開 render 的空行切段
@@ -35,6 +36,11 @@ def render(text):
     out = []
     for para in re.split(r'\n\s*\n', text):
         if not para.strip():
+            continue
+        if para.lstrip().startswith(SUBH):     # 篇内小标题（见 parse 的 maxlvl）
+            h = para.lstrip()[1:].strip()
+            if h:
+                out.append('### ' + h)
             continue
         m = re.fullmatch(r'\s*' + NOTE_S + r'(.*)' + NOTE_E + r'\s*', para, re.S)
         if m:                                   # 整段是註 → 引用塊
@@ -72,8 +78,14 @@ def _split_notes(text):
     return ''.join(out)
 
 
-def parse(text, fallback):
-    """→ [(篇題, markdown)]。無標題則整頁作一篇，題用 fallback。"""
+def parse(text, fallback, maxlvl=None):
+    """→ [(篇題, markdown)]。無標題則整頁作一篇，題用 fallback。
+
+    `maxlvl`：只在不深于该级的标题处切篇，更深的落作篇内 `###` 小标题。
+    目录书要用它——《直斋书录解题》每著录一部书就是一个 `===` 标题，照单切篇
+    得 2,668 篇、篇均 52 字（「范仲淹撰。」五个字独占一页）。按类切（maxlvl=2）
+    则一类一篇、篇均两千余字，正合「看看某类著录了哪些书」的读法。
+    """
     # ⚠ cur 初值取 fallback：整理本常把附註節擺在頁尾，若 cur 從 None 起，
     # 首個標題之前的正文（往往是全篇）會被整段丟掉（《人物志》曾中招）
     stack, buf, cur, out = [], [], fallback, []
@@ -90,6 +102,9 @@ def parse(text, fallback):
             title = NOTE.sub(lambda x: '（%s）' % x.group(1), title).strip()
             title = re.sub(r"'''|''", '', title).strip()
             if not title:
+                continue
+            if maxlvl is not None and lvl > maxlvl:
+                buf += ['', SUBH + title, '']
                 continue
             flush(); buf = []
             while stack and stack[-1][0] >= lvl:

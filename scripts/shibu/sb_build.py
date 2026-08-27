@@ -88,12 +88,21 @@ BOOKS = [
  dict(root='base-data/history', slug='tang-hui-yao', title='唐会要', author='王溥',
       dynasty='北宋', w=350, src='唐會要',
       summary='北宋王溥撰，凡一百卷，分门辑录唐代典章沿革，会要体之祖，多存两《唐书》所无之史料。'),
+ # ── 目錄（四庫史部「目錄類」，站內此前為零；插在政書 350 與史評 360 之間）──
+ # 「解題」是目錄提要而非注疏，不在「注疏不收」之列（用户 2026-08-22 已界定）。
+ dict(root='base-data/history', slug='jun-zhai-du-shu-zhi', title='郡斋读书志',
+      author='晁公武', dynasty='南宋', w=355, src='郡齋讀書志', maxlvl=2,
+      summary='南宋晁公武撰，中国现存最早的私家藏书目提要，每书具解题，述作者行事与全书要旨，多录今已亡佚之书。'),
+ dict(root='base-data/history', slug='zhi-zhai-shu-lu-jie-ti', title='直斋书录解题',
+      author='陈振孙', dynasty='南宋', w=356, src='直齋書錄解題', maxlvl=2,
+      summary='南宋陈振孙撰，著录家藏五万馀卷，解题详辨卷帙源流与作者行事，与晁公武《郡斋读书志》并称宋代私家目录双璧。'),
  dict(root='base-data/history', slug='ri-zhi-lu', title='日知录', author='顾炎武',
       dynasty='清', w=360, src='日知錄', refs='note',
       summary='清顾炎武撰，凡三十二卷，经义、治道、博闻三部，考据与经世之学并重，清代朴学开山。'),
- dict(root='base-data/history', slug='nian-er-shi-zha-ji', title='廿二史札记',
-      author='赵翼', dynasty='清', w=370, pages=['廿二史劄記'],
-      summary='清赵翼撰，以史事归纳比较见长，与钱大昕《廿二史考异》、王鸣盛《十七史商榷》并称清代三大史考。'),
+ # ⚠《廿二史札记》已移出本表，改由 scripts/parse-zhaji.py 据殆知阁本收全本
+ #   （维基条目只有 10,938 汉字＝全书 2%，且页首今人导读、页尾外链节）。
+ #   **切勿加回来**——本表一跑就会拿维基残页把 39 万字的全本盖掉。
+ #   `drop=` / `retitle=` 两个选项是那次修复留下的，仍可给别的书用。
  dict(root='base-data/history', slug='wen-shi-tong-yi', title='文史通义',
       author='章学诚', dynasty='清', w=380, src='文史通義',
       summary='清章学诚撰，内篇外篇论史学义例与文史流别，「六经皆史」之说出焉。'),
@@ -115,9 +124,69 @@ BOOKS = [
       summary='唐张鷟撰，记初唐至开元间朝野轶闻、酷吏与谐谑之事，多为两《唐书》采录。'),
 ]
 
+SHELL = re.compile(r'^[卷巻]\s*[一二三四五六七八九十百零〇\d]+|[卷巻]第?[一二三四五六七八九十百]+$')
+HAN30 = re.compile(r'[一-鿿㐀-䶿]')
+
+
+def post(pieces, drop, retitle=None):
+    """篇级后处理：弃掉指定篇题，并把「卷题空壳」并入次篇。
+
+    ① drop：整理本页尾常挂「外部鏈接」节（正文是一条裸链），页首常有今人导读
+       （《廿二史劄記》那篇用「西元1727～1814」纪年、引《臺灣通志》议筑城），
+       两者皆非原书之文，按铁律不收。逐书按篇题指名弃，不做模糊匹配。
+    ② 卷题空壳：《文献通考》职官考二十一卷、《通典》卷三一、《日知录》卷二五
+       把「卷四十七　職官考一」这样的卷题单切成一篇，点开只有八个字。本书其余
+       各卷（如卷六十八「卷六十八　郊社考一」）卷题本就在首篇篇首，故并入次篇，
+       与全书体例取齐。**是并不是删**——一个字都不能少。
+
+    ⚠ 返回 (原序号, 篇题, 正文)，落盘文件名用**原序号**而非重新枚举。
+    弃篇/并篇会让后续各篇的位序整体前移，若按新位序命名，《文献通考》那 21 卷
+    里每一篇的 URL 都要位移（实测 509 个文件）——为 23 个八字空壳搬走五百多条
+    链接不划算。留原号即：空壳那格作废（少数死链），其余各篇 URL 纹丝不动。
+    """
+    out = []
+    for i, (pt, body) in enumerate(pieces, 1):
+        if pt in drop:
+            continue
+        out.append([i, (retitle or {}).get(pt, pt), body])
+    merged, k = [], 0
+    while k < len(out):
+        idx, pt, body = out[k]
+        if (k + 1 < len(out) and len(HAN30.findall(body)) < 30
+                and SHELL.search(body.strip())):
+            out[k + 1][2] = body.strip() + '\n\n' + out[k + 1][2]
+            k += 1
+            continue
+        merged.append((idx, pt, body))
+        k += 1
+    return merged
+
+
 ODD = re.compile(r'[�□■]')
 HANRE = re.compile(r'[一-鿿]')
 SIMP = '来为国无与从东车马门时会说汉铁风鸟鱼龙岁书对长义爱经实举学权'
+
+
+def prune(bookdir, written):
+    """剪除本次未产出的陈旧 .md。
+
+    此前 write_book 只写不删：弃篇、并篇、上游卷数变少时，旧文件原地留着，
+    构建产物与管线输出讲的不是同一件事，线上还照旧渲染那些废页
+    （23 个卷题空壳并入次篇后，0001.md 仍在）。同 dist-content 的 pruneStale
+    之教训，见 memory verification-blindspots #5。
+    """
+    n = 0
+    for dp, dns, fns in os.walk(bookdir, topdown=False):
+        for f in fns:
+            fp = os.path.join(dp, f)
+            if f.endswith('.md') and fp != os.path.join(bookdir, '_index.md') \
+                    and fp not in written:
+                os.remove(fp); n += 1
+        if dp != bookdir and not os.listdir(dp):
+            os.rmdir(dp)
+    if n:
+        print('  剪除陈旧文件 %d（%s）' % (n, os.path.basename(bookdir)))
+    return n
 
 
 def write_book(b, pages, index):
@@ -129,6 +198,7 @@ def write_book(b, pages, index):
         fm(title=b['title'], weight=b['w'], kind='book',
            author=b['author'], dynasty=b['dynasty'], summary=b['summary']))
     nvol = npiece = nchar = nodd = nsimp = 0
+    written = set()          # 本次产出的文件全路径，收尾据以剪除陈旧残留
     for vi, p in enumerate(b['pages'], 1):
         raw = pages.get(p, '')
         if not raw or re.match(r'\s*#\s*(重定向|REDIRECT)', raw, re.I):
@@ -136,22 +206,28 @@ def write_book(b, pages, index):
             continue
         txt = C.clean(C.inline(raw, pages), p, b.get('refs') == 'note',
                       b.get('stray', 'drop'))
-        pieces = P.parse(txt, p.split('/')[-1])
+        pieces = post(P.parse(txt, p.split('/')[-1], b.get('maxlvl')),
+                      b.get('drop', ()), b.get('retitle'))
         if not pieces:
             print('  ⚠ %s / %s 無正文' % (b['title'], p))
             continue
         nvol += 1
         vdir = os.path.join(d, '%03d' % vi)
         os.makedirs(vdir, exist_ok=True)
-        open(os.path.join(vdir, '_index.md'), 'w', encoding='utf-8').write(
+        vix = os.path.join(vdir, '_index.md')
+        open(vix, 'w', encoding='utf-8').write(
             fm(title=p.split('/')[-1], weight=vi))
-        for j, (pt, body) in enumerate(pieces, 1):
-            open(os.path.join(vdir, '%04d.md' % j), 'w', encoding='utf-8').write(
+        written.add(vix)
+        for j, pt, body in pieces:
+            fp = os.path.join(vdir, '%04d.md' % j)
+            open(fp, 'w', encoding='utf-8').write(
                 fm(title=pt.replace('"', '”'), weight=j) + '\n' + body)
+            written.add(fp)
             npiece += 1
             nchar += len(HANRE.findall(body))
             nodd += len(ODD.findall(body))
             nsimp += sum(body.count(c) for c in SIMP)
+    prune(d, written)
     return nvol, npiece, nchar, nodd, nsimp
 
 
