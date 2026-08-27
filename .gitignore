@@ -34,3 +34,6 @@ __pycache__/
 
 # CBETA 底本 XML：公开可复得（cbeta-org/xml-p5），T 号记于 parse-cbeta.mjs 与校勘日志，不入库
 scripts/cbeta/
+
+# 殆知阁底本 txt：公开可复得（garychowcmu/daizhigev20），书名与路径记于 parse-zhaji.py，不入库
+scripts/dzg/
