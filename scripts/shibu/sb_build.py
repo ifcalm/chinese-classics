@@ -253,6 +253,43 @@ BOOKS = [
       author='黄宗羲', dynasty='清', w=25.1, pages=['明夷待訪錄'],
       summary='清黄宗羲撰，凡二十一篇，斥「为天下之大害者，君而已矣」，中国古代政治批判之绝响。'),
 
+ # ── 子部收尾批（2026-08-28）：masters 最後幾處成體系的缺口 ────────────
+ dict(root='base-data/masters', slug='san-shi-liu-ji', title='三十六计',
+      author='佚名', dynasty='明', w=12.2, drop=('目錄',),
+      vtitle={'三十六計': '卷首'},
+      pages=['三十六計'] + ['三十六計/' + x for x in (
+          '勝戰計', '敵戰計', '攻戰計', '混戰計', '並戰計', '敗戰計')],
+      summary='明清间无名氏撰，以《易》理与兵法相发明，分胜战、敌战、攻战、混战、并战、败战六套三十六计，每计系以按语。'),
+ dict(root='base-data/masters', slug='yu-zi', title='鬻子',
+      author='鬻熊', dynasty='先秦', w=15.6, notes='drop',
+      pages=['鬻子/卷上', '鬻子/卷下'],
+      summary='旧题周鬻熊撰，实为战国至汉人缀辑，凡十四篇，言撰吏、贵道、守道之要，为诸子中最简古之一种。（唐逢行珪注不录，此为白文）'),
+ dict(root='base-data/masters', slug='zhong-jing', title='忠经',
+      author='旧题马融', dynasty='东汉', w=21.8, notes='drop',
+      pages=['忠經'],
+      summary='旧题汉马融撰，四库辨为宋人依托，拟《孝经》为十八章，自天地神明至尽忠而止，与《孝经》并称忠孝二典。（托名郑玄之注不录，此为白文）'),
+ dict(root='base-data/masters', slug='jin-lou-zi', title='金楼子',
+      author='萧绎', dynasty='南朝梁', w=22.6, hdrnotes='drop',
+      # 二南五霸篇七底本明言「今存其目而刪其文」，正文一字不存，留下就是個空頁。
+      drop=('二南五霸篇七',),
+      pages=['金樓子/序'] + ['金樓子/卷' + v for v in '一二三四五六'],
+      summary='梁元帝萧绎撰，杂载古今闻见、治忽贞邪而系以议论，《聚书》《著书》二篇自述藏书撰述之勤，为六朝书史之要证。原书二十卷宋后散佚，今本六卷从《永乐大典》辑出。'),
+ dict(root='base-data/masters', slug='zhong-shuo', title='中说',
+      author='王通', dynasty='隋', w=23.05,
+      pages=['中說/卷' + v for v in (
+          '一', '二', '三', '四', '五', '六', '七', '八', '九', '十')]
+          + ['中說/' + x for x in (
+              '敘篇', '文中子世家', '錄唐太宗與房魏論禮樂事',
+              '東臯子答陳尚書書', '錄關子明事', '王氏家書雜錄')],
+      summary='隋王通与门人问答之书，薛收、姚义集录，凡十卷，仿《论语》体，房玄龄、魏徵、杜如晦皆出其门，为汉魏至两宋之间唯一成体系的传世子书。卷末六篇为唐人所记附录。'),
+ dict(root='base-data/masters', slug='qian-shu', title='潜书',
+      author='唐甄', dynasty='清', w=25.6,
+      # 主頁不取：三節皆非唐甄之文。維基標作「作者序」的那篇末署「舊史氏、
+      # 松陵潘耒撰」，是潘耒序而非自序，標題掛錯；另兩節是張序與目錄。
+      # 《潛書》維基本無自序，唐甄自述在《下篇下·潛存》，已隨正文收入。
+      pages=['潛書/' + x for x in ('上篇上', '上篇下', '下篇上', '下篇下')],
+      summary='清唐甄撰，初名《衡书》，凡九十七篇，上篇言学、下篇言治，斥「自秦以来，凡为帝王者皆贼也」，与黄宗羲《明夷待访录》并为清初政论双璧。'),
+
  # ── 筆記 ───────────────────────────────────────────────────────────
  dict(root='base-data/biji', slug='chao-ye-qian-zai', title='朝野佥载',
       author='张鷟', dynasty='唐', w=12, src='朝野僉載',
@@ -316,6 +353,36 @@ def section_of(raw):
     return t.strip()
 
 
+NOTESPAN = re.compile(C.NOTE_S + '.*?' + C.NOTE_E, re.S)
+
+
+def drop_notes(txt):
+    """剝掉整部書的古註，只留白文。**只用於註文全出他人之手、且與正文界限分明者**。
+
+    《鬻子》通行本是唐逢行珪註本，138 處註逐句夾在正文之間，剝掉才是《鬻子》
+    本文；《忠經》第一章有十三處託名鄭玄的註。按「註疏不收」，二者的註不該落盤，
+    而剝掉是刪——不違「只刪不改不增」。
+
+    ⚠ 切勿施於《金樓子》一類：它的 187 處 {{*|}} 裏既有四庫館臣的校勘案語，
+    也有蕭繹《著書篇》逐書自述的自註（「金樓年在弱冠，著此書」）。一刀切會把
+    作者本人的正文刪掉。註源混裝的書一律留作夾註——留著不丟東西，刪則可能丟。
+    """
+    return NOTESPAN.sub('', txt)
+
+
+HDRLINE = re.compile(r'(?m)^(=+.*=+)[ \t]*$')
+
+
+def strip_hdr_notes(txt):
+    """只剝標題行裏的註，正文裏的一概留著。
+
+    《金樓子》的篇題後綴著四庫館臣的校勘案語，最長一條 187 字，折進篇題後整屏
+    目錄全是案語。案語是校記非正文，剝掉合「註疏不收」。但同一部書的正文夾註裏
+    混着蕭繹《著書篇》逐書自述的自註，故只能剝標題、不能像《鬻子》那樣剝全書。
+    """
+    return HDRLINE.sub(lambda m: NOTESPAN.sub('', m.group(1)), txt)
+
+
 def prune(bookdir, written):
     """剪除本次未产出的陈旧 .md。
 
@@ -356,6 +423,10 @@ def write_book(b, pages, index):
             continue
         txt = C.clean(C.inline(fixup(p, raw), pages), p,
                       b.get('refs') == 'note', b.get('stray', 'drop'))
+        if b.get('notes') == 'drop':
+            txt = drop_notes(txt)
+        if b.get('hdrnotes') == 'drop':
+            txt = strip_hdr_notes(txt)
         # usesection：篇题取 header 的 |section=，而非页名。
         # 纪事本末体一卷即一事，事目（「太祖起兵」「甲申殉難」）只在 header 参数里，
         # 页名是「卷01」——不取的话八十卷全叫「卷01」…「卷80」，一部纪事本末就白收了。
@@ -369,8 +440,11 @@ def write_book(b, pages, index):
         vdir = os.path.join(d, '%03d' % vi)
         os.makedirs(vdir, exist_ok=True)
         vix = os.path.join(vdir, '_index.md')
+        # vtitle：卷題默認取頁名，主頁充當卷首時那就是書名本身——讀者側會看到
+        # 「潛書 / 上篇上 / …」這種以書名作卷名的怪目錄，故許其改標為「卷首」。
+        # 卷題是本站自擬的導航標籤（校驗器不看 _index.md），非底本文字。
         open(vix, 'w', encoding='utf-8').write(
-            fm(title=p.split('/')[-1], weight=vi))
+            fm(title=b.get('vtitle', {}).get(p, p.split('/')[-1]), weight=vi))
         written.add(vix)
         for j, pt, body in pieces:
             fp = os.path.join(vdir, '%04d.md' % j)

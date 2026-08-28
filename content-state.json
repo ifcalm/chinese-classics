@@ -4688,5 +4688,35 @@
     "hash": "a5a51f2ded71cae5",
     "createdAt": "2026-08-27T16:08:26Z",
     "updatedAt": "2026-08-27T16:08:26Z"
+  },
+  "masters/jin-lou-zi": {
+    "hash": "a5bdae162c053ba9",
+    "createdAt": "2026-08-28T02:16:01Z",
+    "updatedAt": "2026-08-28T02:16:01Z"
+  },
+  "masters/qian-shu": {
+    "hash": "2fd40038b1af241e",
+    "createdAt": "2026-08-28T02:16:01Z",
+    "updatedAt": "2026-08-28T02:19:02Z"
+  },
+  "masters/san-shi-liu-ji": {
+    "hash": "1b09ab4f8e4011f9",
+    "createdAt": "2026-08-28T02:16:01Z",
+    "updatedAt": "2026-08-28T02:16:01Z"
+  },
+  "masters/yu-zi": {
+    "hash": "d9fe822975adc184",
+    "createdAt": "2026-08-28T02:16:01Z",
+    "updatedAt": "2026-08-28T02:16:01Z"
+  },
+  "masters/zhong-jing": {
+    "hash": "ee4dacab9a951e6d",
+    "createdAt": "2026-08-28T02:16:01Z",
+    "updatedAt": "2026-08-28T02:16:01Z"
+  },
+  "masters/zhong-shuo": {
+    "hash": "e037cc31b30d920b",
+    "createdAt": "2026-08-28T02:16:01Z",
+    "updatedAt": "2026-08-28T02:16:01Z"
   }
 }

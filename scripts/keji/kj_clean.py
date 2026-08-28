@@ -194,7 +194,7 @@ def clean(t, page='', keep_refs=False, stray='drop'):
         if t == prev:
             break
 
-    t = replace_braces(t, r'(?i)\{\{\s*(?:quote|annotate)\s*(?=[|}])',
+    t = replace_braces(t, r'(?i)\{\{\s*quote\s*(?=[|}])',
                        lambda b: (_args(b)[0] if _args(b) else ''))
     t = re.sub(r'\{\{\s*!\s*\}\}', '｜', t)          # 表格轉義的豎線
 
@@ -207,7 +207,10 @@ def clean(t, page='', keep_refs=False, stray='drop'):
     # 有 {{*|…{{*|…}}…}} 嵌套，掃描只取最外層，內層留在參數文本裏，一輪不盡
     for _ in range(8):
         prev = t
-        t = replace_braces(t, r'\{\{\s*(?:\*|注|\^)\s*(?=[|}])',
+        # `annotate` 原與 quote 同路，取首參**平鋪進正文**——那是為別種用法寫的。
+        # 《忠經》第一章十三處 {{annotate|…}} 裝的是託名鄭玄的注，平鋪就等於把注
+        # 混進經文、與正文再也分不開。它與 {{*|…}} 是同一件東西，歸此處作註哨兵。
+        t = replace_braces(t, r'(?i)\{\{\s*(?:\*|注|\^|annotate)\s*(?=[|}])',
                            # 註文本身已帶一對圓括號時剝掉，免得渲染成「（（五人））」
                            lambda b: NOTE_S + re.sub(
                                r'^（(.*)）$', r'\1',
