@@ -27,7 +27,13 @@ JUNK = (r'header2?|Header2?|Novel|footer|PD-old|PD-|Textquality|檢索|Clear|cle
         r'|Col-begin|Col-break|Col-end|-|ruby|Ruby|anchor|Anchor'
         r'|未完成|TextQuality|Incomplete'
         r'|十通|会要|會要|Alsosee|alsosee|edition|NoteTA|noteTA'
-        r'|GFDL|PD-[A-Za-z0-9-]*|消歧義頁|消歧义页|未校订|未校訂|Disambig'
+        r'|GFDL|PD-[A-Za-z0-9-]*|PD|消歧義頁|消歧义页|未校订|未校訂|Disambig'
+        # 注本：指向同书注释本的导航横幅（《通书》→《通书 (附朱熹解)》），非正文
+        r'|注本|注釋本'
+        # 2026-08-27 子部三批新见：gap 是缩进空白；search／Collection header／其它版本／
+        # 四子真經 是检索框、版面头与导航盒；Annotation 内是今人所加的英译本外链
+        # （《孔子家语·卷五》指向翟理斯译文），皆非正文。
+        r'|gap|search|Collection header|其它版本|其他版本|四子真經|四子真经|Annotation'
         r'|[^|}\n]{2,4}作品')
 
 
@@ -188,7 +194,7 @@ def clean(t, page='', keep_refs=False, stray='drop'):
         if t == prev:
             break
 
-    t = replace_braces(t, r'(?i)\{\{\s*(?:quote|annotate)\s*(?=[|}])',
+    t = replace_braces(t, r'(?i)\{\{\s*quote\s*(?=[|}])',
                        lambda b: (_args(b)[0] if _args(b) else ''))
     t = re.sub(r'\{\{\s*!\s*\}\}', '｜', t)          # 表格轉義的豎線
 
@@ -201,7 +207,10 @@ def clean(t, page='', keep_refs=False, stray='drop'):
     # 有 {{*|…{{*|…}}…}} 嵌套，掃描只取最外層，內層留在參數文本裏，一輪不盡
     for _ in range(8):
         prev = t
-        t = replace_braces(t, r'\{\{\s*(?:\*|注|\^)\s*(?=[|}])',
+        # `annotate` 原與 quote 同路，取首參**平鋪進正文**——那是為別種用法寫的。
+        # 《忠經》第一章十三處 {{annotate|…}} 裝的是託名鄭玄的注，平鋪就等於把注
+        # 混進經文、與正文再也分不開。它與 {{*|…}} 是同一件東西，歸此處作註哨兵。
+        t = replace_braces(t, r'(?i)\{\{\s*(?:\*|注|\^|annotate)\s*(?=[|}])',
                            # 註文本身已帶一對圓括號時剝掉，免得渲染成「（（五人））」
                            lambda b: NOTE_S + re.sub(
                                r'^（(.*)）$', r'\1',
