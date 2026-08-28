@@ -4578,5 +4578,115 @@
     "hash": "73ac622b84da78b2",
     "createdAt": "2026-08-27T15:42:40Z",
     "updatedAt": "2026-08-27T15:42:40Z"
+  },
+  "masters/chang-yan": {
+    "hash": "1d5573ae5d04d304",
+    "createdAt": "2026-08-27T16:08:26Z",
+    "updatedAt": "2026-08-27T16:08:26Z"
+  },
+  "masters/deng-xi-zi": {
+    "hash": "5e55fe73db6c5232",
+    "createdAt": "2026-08-27T16:08:26Z",
+    "updatedAt": "2026-08-27T16:08:26Z"
+  },
+  "masters/du-duan": {
+    "hash": "a35b902baf0a71f5",
+    "createdAt": "2026-08-27T16:08:26Z",
+    "updatedAt": "2026-08-27T16:08:26Z"
+  },
+  "masters/er-cheng-yi-shu": {
+    "hash": "e399da99770dc2a1",
+    "createdAt": "2026-08-27T16:08:26Z",
+    "updatedAt": "2026-08-27T16:08:26Z"
+  },
+  "masters/fa-yan": {
+    "hash": "12ff10dbe401df58",
+    "createdAt": "2026-08-27T16:08:26Z",
+    "updatedAt": "2026-08-27T16:08:26Z"
+  },
+  "masters/fen-shu": {
+    "hash": "57261595fb3bd74c",
+    "createdAt": "2026-08-27T16:08:26Z",
+    "updatedAt": "2026-08-27T16:08:26Z"
+  },
+  "masters/feng-su-tong-yi": {
+    "hash": "70aa676ff36f166f",
+    "createdAt": "2026-08-27T16:08:26Z",
+    "updatedAt": "2026-08-27T16:08:26Z"
+  },
+  "masters/kong-cong-zi": {
+    "hash": "60db3602d3d01438",
+    "createdAt": "2026-08-27T16:08:26Z",
+    "updatedAt": "2026-08-27T16:08:26Z"
+  },
+  "masters/kong-zi-jia-yu": {
+    "hash": "77aadce68b7fd676",
+    "createdAt": "2026-08-27T16:08:26Z",
+    "updatedAt": "2026-08-27T16:08:26Z"
+  },
+  "masters/kun-zhi-ji": {
+    "hash": "cb5680ef95cf8d73",
+    "createdAt": "2026-08-27T16:08:26Z",
+    "updatedAt": "2026-08-27T16:08:26Z"
+  },
+  "masters/ming-ru-xue-an": {
+    "hash": "afd7d4bf96e012ec",
+    "createdAt": "2026-08-27T16:08:26Z",
+    "updatedAt": "2026-08-27T16:08:26Z"
+  },
+  "masters/shen-yin-yu": {
+    "hash": "b4695ffe3cdd6ef1",
+    "createdAt": "2026-08-27T16:08:26Z",
+    "updatedAt": "2026-08-27T16:08:26Z"
+  },
+  "masters/shen-zi": {
+    "hash": "291d6016d31eda80",
+    "createdAt": "2026-08-27T16:08:26Z",
+    "updatedAt": "2026-08-27T16:08:26Z"
+  },
+  "masters/shi-zi": {
+    "hash": "165cb0d4445524bb",
+    "createdAt": "2026-08-27T16:08:26Z",
+    "updatedAt": "2026-08-27T16:08:26Z"
+  },
+  "masters/tai-ji-tu-shuo": {
+    "hash": "e4f3e4f9e39a0bc1",
+    "createdAt": "2026-08-27T16:08:26Z",
+    "updatedAt": "2026-08-27T16:08:26Z"
+  },
+  "masters/tai-xuan-jing": {
+    "hash": "95b5ae62998b000a",
+    "createdAt": "2026-08-27T16:08:26Z",
+    "updatedAt": "2026-08-27T16:08:26Z"
+  },
+  "masters/tong-shu": {
+    "hash": "df4102e12f8572b6",
+    "createdAt": "2026-08-27T16:08:26Z",
+    "updatedAt": "2026-08-27T16:08:26Z"
+  },
+  "masters/wen-zi": {
+    "hash": "fa63f45411ceac5f",
+    "createdAt": "2026-08-27T16:08:26Z",
+    "updatedAt": "2026-08-27T16:08:26Z"
+  },
+  "masters/xin-shu": {
+    "hash": "77b34f609110c3c5",
+    "createdAt": "2026-08-27T16:08:26Z",
+    "updatedAt": "2026-08-27T16:08:26Z"
+  },
+  "masters/xin-yu": {
+    "hash": "e0a6227f2e77c3c9",
+    "createdAt": "2026-08-27T16:08:26Z",
+    "updatedAt": "2026-08-27T16:08:26Z"
+  },
+  "masters/yin-wen-zi": {
+    "hash": "c25a09db1a432d27",
+    "createdAt": "2026-08-27T16:08:26Z",
+    "updatedAt": "2026-08-27T16:08:26Z"
+  },
+  "masters/zheng-meng": {
+    "hash": "a5a51f2ded71cae5",
+    "createdAt": "2026-08-27T16:08:26Z",
+    "updatedAt": "2026-08-27T16:08:26Z"
   }
 }

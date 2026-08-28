@@ -43,7 +43,42 @@ def cn2int(t):
 LEAD = ('序', '自序', '總序', '总序', '原序', '抄白', '提要', '目錄', '目录')
 
 
-def order(book, index, skip=()):
+# 底本錄文的花括號筆誤：整批只此一處，逐字列明，不做通用「修花括號」的兜底——
+# 兜底會把別處真正的結構問題悄悄抹平。補的是一個 `}`（標記），漢字一個未動。
+# 《孔子家語·卷九》「大夫之妻，為命婦」那條夾註只用單 `}` 收尾，深度掃描遂越過它
+# 一直吃到下一條夾註的 `}}`，把中間正文吞掉、並讓後兩條夾註成為孤立殘留。
+FIXUP = {
+    '孔子家語/卷九': [('{{*|大夫之妻，為命婦}。}', '{{*|大夫之妻，為命婦}}。')],
+}
+
+
+def fixup(page, raw):
+    for a, b in FIXUP.get(page, ()):
+        if a not in raw:
+            raise AssertionError('%s 的底本筆誤补丁失效（上游已改？）：%s' % (page, a))
+        raw = raw.replace(a, b)
+    return raw
+
+
+LINK = re.compile(r"\[\[\s*(?:\.\./)?/?([^\[\]|#]+?)\s*(?:\|[^\]]*)?\]\]")
+
+
+def order_by_links(mainraw, subs):
+    """按主页 TOC 链接的出现次序排子页；主页没提到的按原序缀在后面。
+
+    `order()` 靠抽末尾数字排序，遇到题名无数字的书就废了——《昌言》的
+    卷上/卷中/卷下会被按字母排成 卷上/卷下/卷中，《明儒学案》七十八个学案名
+    更是全乱。这类书的正确次序只有主页目录知道，故据其链接次序排。
+    """
+    want, seen = [], set()
+    for m in LINK.finditer(mainraw):
+        tail = m.group(1).split('/')[-1].strip()
+        if tail in subs and tail not in seen:
+            want.append(tail); seen.add(tail)
+    return want + [s for s in subs if s not in seen]
+
+
+def order(book, index, skip=(), mainraw=None):
     """按卷次排出一部書的頁序。
 
     ⚠ 不能用 allpages 給的字典序——那會把「卷十一」排到「卷二」前面、
@@ -52,6 +87,10 @@ def order(book, index, skip=()):
     故一律抽出數字再排；序、自序、提要之類無數字者置於卷首。
     """
     subs = [p for p in index[book][1:] if p.split('/')[-1] not in skip]
+    if mainraw is not None:                       # toc 模式：以主页目录次序为准
+        tails = [p.split('/')[-1] for p in subs]
+        byname = {p.split('/')[-1]: p for p in subs}
+        return [byname[t] for t in order_by_links(mainraw, tails)]
     head, body = [], []
     for p in subs:
         tail = p.split('/')[-1]
@@ -121,6 +160,89 @@ BOOKS = [
       summary='清章学诚撰，内篇外篇论史学义例与文史流别，「六经皆史」之说出焉。'),
 
  # ── 子部 ───────────────────────────────────────────────────────────
+ # ══ 子部三批（2026-08-27）══════════════════════════════════════════
+ # A 理學立本：站內原有近思錄/朱子語類/傳習錄，卻無周張二程原文——有轉述而無源頭。
+ #   weight 23.2-23.5，排在近思錄 24 之前，本在末先。
+ dict(root='base-data/masters', slug='tai-ji-tu-shuo', title='太极图说',
+      author='周敦颐', dynasty='北宋', w=23.2, pages=['太極圖說'],
+      summary='北宋周敦颐撰，正文二百四十九字，自无极太极推及阴阳五行、人极中正，宋明理学之开山纲领。'),
+ dict(root='base-data/masters', slug='tong-shu', title='通书',
+      author='周敦颐', dynasty='北宋', w=23.3, pages=['通書'],
+      summary='北宋周敦颐撰，四十章，即《易通》，以诚为枢纽贯通天道人道，与《太极图说》并为濂溪之学所寄。'),
+ dict(root='base-data/masters', slug='zheng-meng', title='正蒙',
+      author='张载', dynasty='北宋', w=23.4, src='正蒙',
+      summary='北宋张载撰，十七篇，立太虚即气、一物两体之说，「民胞物与」《西铭》即在其《乾称篇》，关学之本。'),
+ dict(root='base-data/masters', slug='er-cheng-yi-shu', title='二程遗书',
+      author='程颢、程颐', dynasty='北宋', w=23.5, src='二程遺書',
+      summary='即《河南程氏遗书》二十五卷，朱熹编次二程门人所记语录，洛学文献之主体，《近思录》多取材于此。'),
+
+ # B 先秦小家·孔門文獻·漢魏子書：諸子九流補其缺，漢代子書補其半壁。
+ dict(root='base-data/masters', slug='kong-zi-jia-yu', title='孔子家语',
+      author='王肃注', dynasty='三国魏', w=0.5, src='孔子家語', toc=1,
+      summary='记孔子及门弟子言行，十卷四十四篇，旧题孔安国序、王肃注，宋以来多疑为王肃缀辑，然所存孔门遗说多与《论语》《礼记》相发。'),
+ dict(root='base-data/masters', slug='kong-cong-zi', title='孔丛子',
+      author='孔鲋', dynasty='秦汉间', w=0.6, src='孔叢子',
+      summary='旧题秦末孔鲋撰，记孔子及子思、子高、子顺、孔臧诸孔氏子孙言行，附《连丛子》，孔门家学之传述。'),
+ dict(root='base-data/masters', slug='yin-wen-zi', title='尹文子',
+      author='尹文', dynasty='战国', w=15.1, src='尹文子', toc=1,
+      summary='战国尹文撰，大道上下二篇，以形名相符论名实治道，名家兼综黄老刑名之作。'),
+ dict(root='base-data/masters', slug='shen-zi', title='慎子',
+      author='慎到', dynasty='战国', w=15.2, pages=['慎子'],
+      summary='战国慎到撰，今存七篇及佚文，主势治、尚法而弃智去己，法家「势」派之宗。'),
+ dict(root='base-data/masters', slug='deng-xi-zi', title='邓析子',
+      author='邓析', dynasty='春秋', w=15.3, src='鄧析子',
+      summary='旧题春秋郑邓析撰，无厚、转辞二篇，操两可之说、设无穷之辞，先秦名辩之滥觞。'),
+ dict(root='base-data/masters', slug='shi-zi', title='尸子',
+      author='尸佼', dynasty='战国', w=15.4, src='尸子', toc=1,
+      summary='战国尸佼撰，原书二十篇久佚，清人辑为卷上下并存疑一卷，杂糅儒墨名法，为杂家之先。'),
+ dict(root='base-data/masters', slug='wen-zi', title='文子',
+      author='辛钘', dynasty='战国', w=15.5, src='文子',
+      summary='旧题老子弟子文子撰，十二篇，即《通玄真经》，述道德之义而多与《淮南子》互见，定州汉简出土证其战国已有其书。'),
+ dict(root='base-data/masters', slug='xin-yu', title='新语',
+      author='陆贾', dynasty='西汉', w=19.5, src='新語',
+      # 卷上/卷下 是把 01-12 各篇 {{:轉錄}} 起来的汇总页，与各篇本身重复。
+      # 不跳过则每篇收两遍（实测 □ 由 102 变 204），而两侧同源故校验查不出。
+      skip=('卷上', '卷下'),
+      summary='西汉陆贾撰，十二篇，为高祖论「马上得之，宁可以马上治之」而作，汉初崇儒尚仁义之首倡。'),
+ dict(root='base-data/masters', slug='xin-shu', title='新书',
+      author='贾谊', dynasty='西汉', w=19.6, src='新書', toc=1,
+      summary='西汉贾谊撰，十卷五十八篇，《过秦论》《陈政事疏》皆在其中，论秦亡汉兴之故与众建诸侯之策。'),
+ dict(root='base-data/masters', slug='fa-yan', title='法言',
+      author='扬雄', dynasty='西汉', w=21.6, src='法言',
+      summary='西汉扬雄撰，十三卷，拟《论语》为问答体，尊孔孟而斥诸子，汉代儒学之重镇。'),
+ dict(root='base-data/masters', slug='tai-xuan-jing', title='太玄经',
+      author='扬雄', dynasty='西汉', w=21.7, pages=['太玄經'],
+      summary='西汉扬雄撰，拟《易》而作，立八十一首、七百二十九赞，以方州部家配三方九州，汉代象数之学名著。'),
+ dict(root='base-data/masters', slug='feng-su-tong-yi', title='风俗通义',
+      author='应劭', dynasty='东汉', w=22.3, src='風俗通義',
+      summary='东汉应劭撰，今存十卷，辨风正俗、纠谬正名，兼存汉代礼俗、传说与佚闻，考据家所重。'),
+ dict(root='base-data/masters', slug='du-duan', title='独断',
+      author='蔡邕', dynasty='东汉', w=22.4, pages=['獨斷'],
+      summary='东汉蔡邕撰，二卷，记汉代典章名物、宗庙谥法与帝系沿革，汉制之实录。'),
+ dict(root='base-data/masters', slug='chang-yan', title='昌言',
+      author='仲长统', dynasty='东汉', w=22.5, src='昌言', toc=1,
+      summary='东汉仲长统撰，原书三十四篇久佚，今存卷上中下及附录，斥豪强兼并、论治乱循环，汉末政论之峻切者。'),
+
+ # C 明清思想：接理學之後（傳習錄 25 / 明夷待訪錄 25.1）。
+ dict(root='base-data/masters', slug='kun-zhi-ji', title='困知记',
+      author='罗钦顺', dynasty='明', w=25.2, pages=['困知記'],
+      summary='明罗钦顺撰，正续四卷，主理在气中、辨心性之别，与王阳明往复论学，明代气学之要籍。'),
+ dict(root='base-data/masters', slug='shen-yin-yu', title='呻吟语',
+      author='吕坤', dynasty='明', w=25.3,
+      pages=['呻吟語/序', '呻吟語/性命', '呻吟語/存心', '呻吟語/倫理', '呻吟語/談道',
+             '呻吟語/修身', '呻吟語/問學', '呻吟語/應務', '呻吟語/養生', '呻吟語/天地',
+             '呻吟語/世運', '呻吟語/聖賢', '呻吟語/品藻', '呻吟語/治道', '呻吟語/人情',
+             '呻吟語/物理', '呻吟語/廣喻', '呻吟語/詞章'],
+      summary='明吕坤撰，内外六卷十七篇，三十年间随得随录之语，切近日用而气象沉毅，明代语录体名著。'),
+ dict(root='base-data/masters', slug='fen-shu', title='焚书',
+      author='李贽', dynasty='明', w=25.4, src='焚書', toc=1,
+      summary='明李贽撰，六卷附增补，书答、杂述、读史、诗汇为一编，倡童心之说、非圣无法，明末思想解放之标帜。'),
+ dict(root='base-data/masters', slug='ming-ru-xue-an', title='明儒学案',
+      author='黄宗羲', dynasty='清', w=25.5, src='明儒學案', toc=1,
+      skip=('于准序', '仇兆鼇序', '莫晉序', '賈念祖跋', '賈樸跋', '賈潤序',
+            '鄭性序', '黃千秋跋', '馮全垓跋'),
+      summary='清黄宗羲撰，六十二卷，分十九学案叙明代二百余家学术源流，各系小传、语录与文录，中国第一部完整的学术史。'
+              '卷首师说、发凡与黄氏自序存，于准、仇兆鳌、莫晋、贾氏父子、郑性、冯全垓诸序跋系他人所撰不收。'),
  dict(root='base-data/masters', slug='wu-jing-zong-yao', title='武经总要',
       author='曾公亮、丁度', dynasty='北宋', w=12.1, src='武經總要',
       summary='北宋曾公亮等奉敕编，中国第一部官修综合性兵书，前集详制度器械，火药配方之最早记载在焉。'),
@@ -218,7 +340,8 @@ def prune(bookdir, written):
 
 def write_book(b, pages, index):
     if 'pages' not in b:
-        b['pages'] = order(b['src'], index, b.get('skip', ()))
+        b['pages'] = order(b['src'], index, b.get('skip', ()),
+                           pages.get(b['src']) if b.get('toc') else None)
     d = os.path.join(b['root'], b['slug'])
     os.makedirs(d, exist_ok=True)
     open(os.path.join(d, '_index.md'), 'w', encoding='utf-8').write(
@@ -231,8 +354,8 @@ def write_book(b, pages, index):
         if not raw or re.match(r'\s*#\s*(重定向|REDIRECT)', raw, re.I):
             print('  ⚠ %s / %s 缺页或重定向' % (b['title'], p))
             continue
-        txt = C.clean(C.inline(raw, pages), p, b.get('refs') == 'note',
-                      b.get('stray', 'drop'))
+        txt = C.clean(C.inline(fixup(p, raw), pages), p,
+                      b.get('refs') == 'note', b.get('stray', 'drop'))
         # usesection：篇题取 header 的 |section=，而非页名。
         # 纪事本末体一卷即一事，事目（「太祖起兵」「甲申殉難」）只在 header 参数里，
         # 页名是「卷01」——不取的话八十卷全叫「卷01」…「卷80」，一部纪事本末就白收了。

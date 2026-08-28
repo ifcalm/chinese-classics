@@ -27,7 +27,13 @@ JUNK = (r'header2?|Header2?|Novel|footer|PD-old|PD-|Textquality|檢索|Clear|cle
         r'|Col-begin|Col-break|Col-end|-|ruby|Ruby|anchor|Anchor'
         r'|未完成|TextQuality|Incomplete'
         r'|十通|会要|會要|Alsosee|alsosee|edition|NoteTA|noteTA'
-        r'|GFDL|PD-[A-Za-z0-9-]*|消歧義頁|消歧义页|未校订|未校訂|Disambig'
+        r'|GFDL|PD-[A-Za-z0-9-]*|PD|消歧義頁|消歧义页|未校订|未校訂|Disambig'
+        # 注本：指向同书注释本的导航横幅（《通书》→《通书 (附朱熹解)》），非正文
+        r'|注本|注釋本'
+        # 2026-08-27 子部三批新见：gap 是缩进空白；search／Collection header／其它版本／
+        # 四子真經 是检索框、版面头与导航盒；Annotation 内是今人所加的英译本外链
+        # （《孔子家语·卷五》指向翟理斯译文），皆非正文。
+        r'|gap|search|Collection header|其它版本|其他版本|四子真經|四子真经|Annotation'
         r'|[^|}\n]{2,4}作品')
 
 

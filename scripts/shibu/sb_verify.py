@@ -45,7 +45,12 @@ def main():
     index = json.load(open(os.path.join(S, 'sbindex.json'), encoding='utf-8'))
     for b in BOOKS:
         if 'pages' not in b:
-            b['pages'] = order(b['src'], index, b.get('skip', ()))
+            # ⚠ 必须与 sb_build 用同一套页序：本校验判「落盘流是底本流的子序列」，
+            # 而子序列是**有序**判据。toc 模式的书若这边仍按 order() 的数字序取页，
+            # 两侧顺序不同，明明一字未改也会整片报失配（2026-08-27 尹文子、新书、
+            # 昌言、焚书、明儒学案五部曾因此误报）。
+            b['pages'] = order(b['src'], index, b.get('skip', ()),
+                               pages.get(b['src']) if b.get('toc') else None)
     bad = 0
     print('%-14s %9s %9s %7s %8s' % ('书', '底本', '落盘', '留存', '头模板'))
     for b in BOOKS:
