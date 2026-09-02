@@ -290,6 +290,17 @@ BOOKS = [
       pages=['潛書/' + x for x in ('上篇上', '上篇下', '下篇上', '下篇下')],
       summary='清唐甄撰，初名《衡书》，凡九十七篇，上篇言学、下篇言治，斥「自秦以来，凡为帝王者皆贼也」，与黄宗羲《明夷待访录》并为清初政论双璧。'),
 
+ # ── 術數·堪輿（2026-09-02）─────────────────────────────────────────
+ dict(root='base-data/shushu/kanyu', slug='qing-wu-jing', title='青乌经',
+      author='旧题青乌子', dynasty='汉', w=5, src='青烏經', skip=('全覽',),
+      summary='旧题汉青乌子撰，四言韵语上下二篇，论山川融结、藏风得水之理，为形法堪舆现存最古之文，《葬书》多本其说。'),
+ dict(root='base-data/shushu/kanyu', slug='tian-yuan-wu-ge', title='天元五歌',
+      author='蒋大鸿', dynasty='明', w=90, pages=['天元五歌'],
+      summary='明蒋大鸿撰，七言歌行五篇，依次论大义、山龙、平洋水龙、阳宅、造命，为元空理气一派提纲挈领之作。'),
+ dict(root='base-data/shushu/kanyu', slug='yang-zhai-zhi-nan', title='阳宅指南',
+      author='蒋大鸿', dynasty='明', w=95, pages=['陽宅指南'],
+      summary='明蒋大鸿撰，七言歌诀论阳宅，自宅命、宅体、生向、辅弼、门路次第而下，末及双龙格与分房换气之法。'),
+
  # ── 筆記 ───────────────────────────────────────────────────────────
  dict(root='base-data/biji', slug='chao-ye-qian-zai', title='朝野佥载',
       author='张鷟', dynasty='唐', w=12, src='朝野僉載',
@@ -383,14 +394,24 @@ def strip_hdr_notes(txt):
     return HDRLINE.sub(lambda m: NOTESPAN.sub('', m.group(1)), txt)
 
 
-def prune(bookdir, written):
+def prune(bookdir, written, skipped):
     """剪除本次未产出的陈旧 .md。
+
+    ⚠ **本次有页没落成，就一个都不剪。** 2026-09-02 抓取还在后台写 sbcache.json，
+    构建就读了那份半截缓存，《武经总要》十九卷读成缺页，prune 随即把那 150 个文件
+    全删了——而 sb_verify **照过**：删掉整卷之后，落盘流仍是底本流的子序列，
+    「只删不改」的判据对「删过头」是瞎的。唯一露头的地方是 git 的删除计数。
+    缺页即意味着本次产出本就不全，此时任何删除都可能是删真东西。
 
     此前 write_book 只写不删：弃篇、并篇、上游卷数变少时，旧文件原地留着，
     构建产物与管线输出讲的不是同一件事，线上还照旧渲染那些废页
     （23 个卷题空壳并入次篇后，0001.md 仍在）。同 dist-content 的 pruneStale
     之教训，见 memory verification-blindspots #5。
     """
+    if skipped:
+        print('  ⚠ %s 本次有 %d 页未落成，跳过剪除（避免误删）'
+              % (os.path.basename(bookdir), skipped))
+        return 0
     n = 0
     for dp, dns, fns in os.walk(bookdir, topdown=False):
         for f in fns:
@@ -414,12 +435,13 @@ def write_book(b, pages, index):
     open(os.path.join(d, '_index.md'), 'w', encoding='utf-8').write(
         fm(title=b['title'], weight=b['w'], kind='book',
            author=b['author'], dynasty=b['dynasty'], summary=b['summary']))
-    nvol = npiece = nchar = nodd = nsimp = 0
+    nvol = npiece = nchar = nodd = nsimp = nskip = 0
     written = set()          # 本次产出的文件全路径，收尾据以剪除陈旧残留
     for vi, p in enumerate(b['pages'], 1):
         raw = pages.get(p, '')
         if not raw or re.match(r'\s*#\s*(重定向|REDIRECT)', raw, re.I):
             print('  ⚠ %s / %s 缺页或重定向' % (b['title'], p))
+            nskip += 1
             continue
         txt = C.clean(C.inline(fixup(p, raw), pages), p,
                       b.get('refs') == 'note', b.get('stray', 'drop'))
@@ -435,6 +457,7 @@ def write_book(b, pages, index):
                       b.get('drop', ()), b.get('retitle'))
         if not pieces:
             print('  ⚠ %s / %s 無正文' % (b['title'], p))
+            nskip += 1
             continue
         nvol += 1
         vdir = os.path.join(d, '%03d' % vi)
@@ -455,7 +478,7 @@ def write_book(b, pages, index):
             nchar += len(HANRE.findall(body))
             nodd += len(ODD.findall(body))
             nsimp += sum(body.count(c) for c in SIMP)
-    prune(d, written)
+    prune(d, written, nskip)
     return nvol, npiece, nchar, nodd, nsimp
 
 

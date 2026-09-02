@@ -3937,12 +3937,12 @@
   "masters/wu-jing-zong-yao": {
     "hash": "33356db1c3bc05fe",
     "createdAt": "2026-08-21T11:40:51Z",
-    "updatedAt": "2026-08-21T11:40:51Z"
+    "updatedAt": "2026-09-02T12:19:10Z"
   },
   "masters/zhu-zi-yu-lei": {
-    "hash": "19a6e044ee2c01da",
+    "hash": "0509108c44657518",
     "createdAt": "2026-08-21T11:40:51Z",
-    "updatedAt": "2026-08-21T11:40:51Z"
+    "updatedAt": "2026-09-02T12:16:55Z"
   },
   "literature/songci/bao-yue-ji": {
     "hash": "8ebc616e83475e12",
@@ -4718,5 +4718,30 @@
     "hash": "e037cc31b30d920b",
     "createdAt": "2026-08-28T02:16:01Z",
     "updatedAt": "2026-08-28T02:16:01Z"
+  },
+  "shushu/kanyu/qing-wu-jing": {
+    "hash": "c299fbcf10f067f9",
+    "createdAt": "2026-09-02T12:16:55Z",
+    "updatedAt": "2026-09-02T12:16:55Z"
+  },
+  "shushu/kanyu/ren-zi-xu-zhi": {
+    "hash": "1aff7c0b31dfa6f8",
+    "createdAt": "2026-09-02T12:16:55Z",
+    "updatedAt": "2026-09-02T12:16:55Z"
+  },
+  "shushu/kanyu/shan-yang-zhi-mi": {
+    "hash": "27380280e65e2bf3",
+    "createdAt": "2026-09-02T12:16:55Z",
+    "updatedAt": "2026-09-02T12:16:55Z"
+  },
+  "shushu/kanyu/tian-yuan-wu-ge": {
+    "hash": "e1c5e559ea228448",
+    "createdAt": "2026-09-02T12:16:55Z",
+    "updatedAt": "2026-09-02T12:16:55Z"
+  },
+  "shushu/kanyu/yang-zhai-zhi-nan": {
+    "hash": "13b73ff9b0469bc9",
+    "createdAt": "2026-09-02T12:16:55Z",
+    "updatedAt": "2026-09-02T12:16:55Z"
   }
 }
