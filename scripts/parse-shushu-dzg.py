@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-"""堪舆二部 ← 殆知阁本（简体）：《地理人子须知》《山洋指迷》。
+"""术数五部 ← 殆知阁本（简体）。堪舆：《地理人子须知》《山洋指迷》；
+相术：《神相全编》《柳庄相法》《神相铁关刀》。
 
 **为什么走殆知阁而不走维基**：这两部维基文库都有条目，但都不能用——
 《人子须知》维基本只有 11,820 汉字（凡例＋序＋书目＋琐言，约全书 4%），
@@ -29,11 +30,21 @@
 **⚠ 此法只对注源单一的书用**：括号里全是张九仪与抄本诠注，无一句周景一本文；
 若像《金楼子》那样自注与他人案语混装在同一种标记里，一刀切会删掉作者正文。
 
+**相术三部（2026-09-02 同日续收）**：
+- 《神相全编》——**底本非全帙**。通行本十二卷，殆知阁本只 30,647 字、无卷次，
+  内容止于总论、十三部位、十二宫、学堂、五行形相与诸格例，约当卷一至卷四之数，
+  不含麻衣石室神异赋、女相、气色详论。照《东观汉记》之例**照收并在提要里写明非全书**。
+- 《柳庄相法》——篇题作「一、未出腹预知贵贱」，带顿号，通用篇题判据认不出，
+  故用 `titlere` 单给一条规则。全书 150 题，上下册各自另起编号。
+- 《神相铁关刀》——卷一至卷四齐全；卷端题名忽作「卷一」忽作「（卷二）」，
+  volre 兼收两式。「铁关刀原序」是破纳云谷山人自序，存。
+
 **已知讹字**（见 docs/known-issues.md）：殆知阁本有 IT 词表串入之讹，
 《人子须知》两处「李维祯」作「利瓦伊祯／利瓦伊桢」（LeVi→利瓦伊），一处在弃收的
-郢中序、一处在卷七上之二正文内。**照收不改**——只删不改不增是铁律。
+郢中序、一处在卷七上之二正文内。《柳庄相法》另有成片的「日」讹作「曰」
+（「三曰知一生」「夏曰火旺」）。**一律照收不改**——只删不改不增是铁律。
 
-用法: python3 scripts/parse-kanyu.py [--write]
+用法: python3 scripts/parse-shushu-dzg.py [--write]
 """
 import os, re, sys
 
@@ -46,8 +57,10 @@ han = lambda s: len(HAN.findall(s))
 # 篇题判据：无标点、够短，且其后正文成段。图说残题（「图」「说」「卦」「河」）
 # 与正文里的问答短句（「或曰：肌理刷开，未尝闻之。」）都得挡在外面——
 # 前者靠「其后正文须成段」挡，后者靠「不含标点」挡。
-PUNCT = '。，、；：？！“”‘’「」《》〈〉（）()·…—:;,.?!"\''
-BODYMIN = 60          # 标题之后须有这么多汉字，才算标题而非图说残题
+# 顿号不在其中：《神相铁关刀》有「涎、精、汗、泪、溺各有所属」这样的篇题，
+# 《柳庄相法》有「斑有黑、黄、大、小」，把顿号算进标点会把它们判成正文。
+PUNCT = '。，；：？！“”‘’「」《》〈〉（）()·…—:;,.?!"\''
+BODYMIN = 60          # 标题之后须有这么多汉字，才算标题而非图说残题；逐书可覆写
 TITLEMAX = 15         # 再长的无标点短行是落款（「嘉靖甲子孟春德兴山人徐善继书于双芝堂」）
 
 
@@ -85,6 +98,37 @@ BOOKS = [
          summary='明周景一撰，凡四卷，前三卷论山龙之开面地步、龙穴砂水真伪，第四卷专论平洋，'
                  '为峦头一派辨形析理最细密之作。据殆知阁本收录（简体），'
                  '清张九仪增注 500 处按「注疏不收」剥去，存周景一白文。'),
+    # ── 相术（2026-09-02）──────────────────────────────────────────────
+    dict(src='神相全编', slug='shen-xiang-quan-bian', title='神相全编',
+         author='旧题陈抟秘传、袁忠彻订正', dynasty='明', w=30,
+         root='base-data/shushu/xiangshu',
+         skip_head=2,                       # 空行＋「《神相全编》」题名行
+         volre=r'^(?!)$',                   # 底本无卷次，全书作一卷
+         head='全编', drop=(), bodymin=12, leaddash=True,   # 本书各条极短，「一取威仪」正文才三十馀字
+         summary='旧题宋陈抟秘传、明袁忠彻订正，相法总论之集大成者，十观、五法、'
+                 '十三部位、十二宫、四学堂八学堂、五岳四渎、五星六耀以至诸格例，'
+                 '相书言部位、宫位者多本于此。'
+                 '据殆知阁本收录（简体）。此本非全帙：通行本十二卷，而此本三万馀字、无卷次，'
+                 '约当前四卷之数，不含麻衣石室神异赋、女相与气色详论。'),
+    dict(src='柳庄相法', slug='liu-zhuang-xiang-fa', title='柳庄相法',
+         author='袁珙', dynasty='明', w=40,
+         root='base-data/shushu/xiangshu',
+         volre=r'^(上册|下册)$',
+         titlere=r'^[一二三四五六七八九十百零]+、',
+         head=None, drop=(), bodymin=0,     # 篇题规则严，不必再用正文长度兜底
+         qsplit=True,                       # 永乐问答一行问答连排，题只取问句
+         summary='明袁珙撰，珙号柳庄居士，以相术名于洪武、永乐间。上册自「未出腹预知贵贱」'
+                 '至「论行说」凡九十馀题，兼载永乐帝问答；下册专论气色，分四时、十二月而断。'
+                 '据殆知阁本收录（简体），底本有成片的「日」讹作「曰」，照收不改。'),
+    dict(src='神相铁关刀', slug='shen-xiang-tie-guan-dao', title='神相铁关刀',
+         author='云谷山人', dynasty='清', w=50,
+         root='base-data/shushu/xiangshu',
+         skip_head=1,                       # 首行题名
+         volre=r'^神相铁关刀[（(]?(卷[一二三四五六七八九十]+)[）)]?$',
+         head='卷首', drop=(), bodymin=12,
+         summary='旧题破纳云谷山人得之异人、自谓希夷先生秘本，凡四卷，'
+                 '自须眉发毛所属、面部刻误秘旨，至相气、相神与各官各部秘诀，'
+                 '论断细密而多口诀，清以来相家习用之书。据殆知阁本收录（简体）。'),
 ]
 
 
@@ -102,12 +146,35 @@ BYLINE = re.compile(r'^(?:重刊人子须知资孝地理心学统宗\s*)?'
 CUT_FROM = '望阳按：由于时代之局限'
 
 
+# 殆知阁《神相全编》给每段正文加了行首破折号（「——如虎下山，百兽自惊」），
+# 是数字化者的排版记号、非底本文字，剥掉。破折号不是汉字，剥它不动汉字流。
+LEADDASH = re.compile(r'^[—－–-]{1,3}\s*')
+
+
 def norm(s):
     return re.sub(r'\s+', '', s)
 
 
-def is_title(s):
+def is_title(s, tre=None):
+    if tre is not None:                     # 书自带篇题规则时，一律以它为准
+        return bool(tre.match(s))
     return 0 < len(s) <= TITLEMAX and not any(c in PUNCT for c in s) and HAN.search(s)
+
+
+QSPLIT = re.compile(r'^(.{4,30}?[？?])(.+)$', re.S)
+
+
+def qsplit(s):
+    """问答体的一行里问与答连排时，题只取问句，答退回正文。
+
+    《柳庄相法》上册后半是永乐帝问答，一问一答挤在同一行：
+    「三、朕昨见一尚书天庭低，何故又得为官？对曰：天庭虽低，曰月角开辅……」
+    整行作篇题则目录里全是长段。切在第一个问号处，**问句与答语各出现一次、
+    次序不变**，故仍是底本的子序列——若把问句既留在题里又留在正文里，
+    落盘流就会多出一份，校验立刻报错。
+    """
+    m = QSPLIT.match(s)
+    return (m.group(1), m.group(2).strip()) if m else (s, None)
 
 
 def parse(b):
@@ -115,7 +182,11 @@ def parse(b):
     lines = raw.split('\n')[b.get('skip_head', 0):]
     if b.get('paren'):
         lines = [strip_paren(x) for x in lines]
-    lines = [norm(x) if is_title(norm(x)) else x.strip() for x in lines]
+    if b.get('leaddash'):
+        lines = [LEADDASH.sub('', x.strip()) for x in lines]
+    tre = re.compile(b['titlere']) if b.get('titlere') else None
+    bodymin = b.get('bodymin', BODYMIN)
+    lines = [norm(x) if is_title(norm(x), tre) else x.strip() for x in lines]
 
     vre = re.compile(b['volre'])
     if b.get('cut'):
@@ -147,12 +218,14 @@ def parse(b):
         L = v['pieces']
         while i < len(L):
             s = L[i]
-            if is_title(s):
+            if is_title(s, tre):
                 j, acc = i + 1, 0
-                while j < len(L) and not is_title(L[j]):
+                while j < len(L) and not is_title(L[j], tre):
                     acc += han(L[j]); j += 1
-                if acc >= BODYMIN:
-                    ps.append({'title': s, 'body': L[i + 1:j]})
+                if acc >= bodymin:
+                    t, rest = qsplit(s) if b.get('qsplit') else (s, None)
+                    ps.append({'title': t,
+                               'body': ([rest] if rest else []) + L[i + 1:j]})
                     i = j
                     continue
             if not ps:                      # 卷首无篇题的散文

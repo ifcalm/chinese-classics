@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
-"""堪舆二部·零改字校验（对 `scripts/parse-kanyu.py` 的产出）。
+"""术数五部·零改字校验（对 `scripts/parse-shushu-dzg.py` 的产出）。
 
-**两侧不同源**：底本侧直接从 `scripts/dzg/*.txt` 原文抽汉字流，**不走 parse-kanyu
-的任何清洗**——不剥括号、不剔题署、不切今人窜入段。落盘侧从 base-data 抽，
+**两侧不同源**：底本侧直接从 `scripts/dzg/*.txt` 原文抽汉字流，**不走 parse-shushu-dzg
+的任何清洗**——不剥括号、不剔题署、不切今人窜入段、不拆问答行。落盘侧从 base-data 抽，
 篇题一并计入（篇题在底本里本就是正文中的一行）。
 
 判据：落盘汉字流须是底本汉字流的**子序列**（只许删、不许改、不许增）。
-本批的三种处理——剥张九仪增注、剔卷端题署、切孟广顺今人文字——全是删，
-故子序列判据仍应成立；判据过不去就说明有一处不是删而是改。
+本批的处理——剥张九仪增注、剔卷端题署、切孟广顺今人文字、把问答行切成题与正文——
+要么是删、要么只挪不改，故子序列判据仍应成立；判据过不去就说明有一处不是删而是改。
+（问答行那处尤其要靠它守着：问句若既留在题里又留在正文里，落盘流就会多出一份。）
 
-用法: python3 scripts/verify-kanyu.py
+用法: python3 scripts/verify-shushu-dzg.py
 """
 import os, re, sys
 
@@ -17,10 +18,13 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 HAN = re.compile(r'[一-鿿㐀-䶿]')
 stream = lambda s: ''.join(HAN.findall(s))
 
-# 只取 slug/root/src 三项，刻意不 import parse-kanyu 的解析逻辑
+# 只取 slug/root/src 三项，刻意不 import parse-shushu-dzg 的解析逻辑
 BOOKS = [
     ('人子须知', 'base-data/shushu/kanyu/ren-zi-xu-zhi', '地理人子须知'),
     ('山洋指迷原本', 'base-data/shushu/kanyu/shan-yang-zhi-mi', '山洋指迷'),
+    ('神相全编', 'base-data/shushu/xiangshu/shen-xiang-quan-bian', '神相全编'),
+    ('柳庄相法', 'base-data/shushu/xiangshu/liu-zhuang-xiang-fa', '柳庄相法'),
+    ('神相铁关刀', 'base-data/shushu/xiangshu/shen-xiang-tie-guan-dao', '神相铁关刀'),
 ]
 
 
