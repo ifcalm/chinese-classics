@@ -1824,11 +1824,6 @@
     "createdAt": "2026-07-02T13:16:48Z",
     "updatedAt": "2026-08-20T14:25:10Z"
   },
-  "literature/lin-chuan-wen-ji": {
-    "hash": "c4b62d69d84c261d",
-    "createdAt": "2026-07-02T13:49:19Z",
-    "updatedAt": "2026-07-03T12:49:56Z"
-  },
   "literature/luan-cheng-ji": {
     "hash": "60445325fdc6180a",
     "createdAt": "2026-07-02T13:49:19Z",
@@ -2203,61 +2198,6 @@
     "hash": "a935a67f23f0a175",
     "createdAt": "2026-07-03T16:42:29Z",
     "updatedAt": "2026-07-03T16:42:29Z"
-  },
-  "buddha/jingzang/mijiao/bao-qie-yin-tuo-luo-ni-jing": {
-    "hash": "7d793c9a123ef704",
-    "createdAt": "2026-07-03T17:05:51Z",
-    "updatedAt": "2026-07-03T17:05:51Z"
-  },
-  "buddha/jingzang/mijiao/da-bei-xin-tuo-luo-ni-jing": {
-    "hash": "cc735a1826b92cc9",
-    "createdAt": "2026-07-03T17:05:51Z",
-    "updatedAt": "2026-07-03T17:05:51Z"
-  },
-  "buddha/jingzang/mijiao/fo-ding-zun-sheng-tuo-luo-ni-jing": {
-    "hash": "5ff3a97d0bf0274e",
-    "createdAt": "2026-07-03T17:05:51Z",
-    "updatedAt": "2026-07-03T17:05:51Z"
-  },
-  "buddha/jingzang/mijiao/zhun-ti-tuo-luo-ni-jing": {
-    "hash": "8b380f3349139d1a",
-    "createdAt": "2026-07-03T17:05:51Z",
-    "updatedAt": "2026-07-03T17:05:51Z"
-  },
-  "buddha/jingzang/mijiao/da-pi-lu-zhe-na-cheng-fo-shen-bian-jia-chi-jing": {
-    "hash": "3fe302dec64334dd",
-    "createdAt": "2026-07-03T17:05:51Z",
-    "updatedAt": "2026-07-03T17:05:51Z"
-  },
-  "buddha/jingzang/mijiao/fo-mu-da-kong-que-ming-wang-jing": {
-    "hash": "43170df9a40ef107",
-    "createdAt": "2026-07-03T17:05:51Z",
-    "updatedAt": "2026-07-03T17:05:51Z"
-  },
-  "buddha/jingzang/mijiao/fo-shuo-da-cheng-zhuang-yan-bao-wang-jing": {
-    "hash": "6669cca398f6949a",
-    "createdAt": "2026-07-03T17:05:51Z",
-    "updatedAt": "2026-07-03T17:05:51Z"
-  },
-  "buddha/jingzang/mijiao/jin-gang-ding-da-jiao-wang-jing": {
-    "hash": "f64c035e56cb7794",
-    "createdAt": "2026-07-03T17:05:51Z",
-    "updatedAt": "2026-07-03T17:05:51Z"
-  },
-  "buddha/jingzang/mijiao/rui-xi-ye-jing": {
-    "hash": "598627a11ebe8586",
-    "createdAt": "2026-07-03T17:05:51Z",
-    "updatedAt": "2026-07-03T17:05:51Z"
-  },
-  "buddha/jingzang/mijiao/su-po-hu-tong-zi-qing-wen-jing": {
-    "hash": "4ba6ba468ed0aae5",
-    "createdAt": "2026-07-03T17:05:51Z",
-    "updatedAt": "2026-07-03T17:05:51Z"
-  },
-  "buddha/jingzang/mijiao/su-xi-di-jie-luo-jing": {
-    "hash": "23b20af1077d8e4e",
-    "createdAt": "2026-07-03T17:05:51Z",
-    "updatedAt": "2026-07-03T17:05:51Z"
   },
   "buddha/lunzang/lunji/yin-ming-ru-zheng-li-lun": {
     "hash": "cc8716e6ca14289a",
@@ -2714,26 +2654,6 @@
     "createdAt": "2026-07-17T08:29:07Z",
     "updatedAt": "2026-07-17T08:29:07Z"
   },
-  "xiaoshuo/xi-you-ji": {
-    "hash": "ba1acb214b018993",
-    "createdAt": "2026-07-17T08:29:07Z",
-    "updatedAt": "2026-07-17T08:30:27Z"
-  },
-  "xiaoshuo/hou-xi-you-ji": {
-    "hash": "23337e5b1ceac5dd",
-    "createdAt": "2026-07-17T09:28:01Z",
-    "updatedAt": "2026-07-17T09:28:01Z"
-  },
-  "xiaoshuo/xi-you-bu": {
-    "hash": "e38e9025b14e6cd8",
-    "createdAt": "2026-07-17T09:28:01Z",
-    "updatedAt": "2026-07-17T09:28:01Z"
-  },
-  "xiaoshuo/xu-xi-you-ji": {
-    "hash": "e8c4defa3031a50a",
-    "createdAt": "2026-07-17T09:28:01Z",
-    "updatedAt": "2026-07-17T09:28:01Z"
-  },
   "xiaoshuo/xi-you/hou-xi-you-ji": {
     "hash": "912b31f87fa505c4",
     "createdAt": "2026-07-17T09:44:18Z",
@@ -2829,16 +2749,6 @@
     "createdAt": "2026-07-17T16:41:08Z",
     "updatedAt": "2026-07-17T16:41:08Z"
   },
-  "taoism/classics/heshanggong-zhangju/dao-jing": {
-    "hash": "5756119df1a78753",
-    "createdAt": "2026-07-17T16:41:08Z",
-    "updatedAt": "2026-07-17T16:41:08Z"
-  },
-  "taoism/classics/heshanggong-zhangju/de-jing": {
-    "hash": "08c44386e5f89f4d",
-    "createdAt": "2026-07-17T16:41:08Z",
-    "updatedAt": "2026-07-17T16:41:08Z"
-  },
   "taoism/cultivation/chongyang-lijiao-shiwulun": {
     "hash": "3da01e91f12fcff4",
     "createdAt": "2026-07-17T16:41:08Z",
@@ -2856,211 +2766,6 @@
   },
   "taoism/ethics/wenchang-yinzhiwen": {
     "hash": "f6f60c4167a0587b",
-    "createdAt": "2026-07-17T16:41:08Z",
-    "updatedAt": "2026-07-17T16:41:08Z"
-  },
-  "taoism/shangqing/dadong-zhenjing/000": {
-    "hash": "8b3a7beb57fde023",
-    "createdAt": "2026-07-17T16:41:08Z",
-    "updatedAt": "2026-07-17T16:41:08Z"
-  },
-  "taoism/shangqing/dadong-zhenjing/001": {
-    "hash": "3be80528a10f67e8",
-    "createdAt": "2026-07-17T16:41:08Z",
-    "updatedAt": "2026-07-17T16:41:08Z"
-  },
-  "taoism/shangqing/dadong-zhenjing/002": {
-    "hash": "e5083e568f55a511",
-    "createdAt": "2026-07-17T16:41:08Z",
-    "updatedAt": "2026-07-17T16:41:08Z"
-  },
-  "taoism/shangqing/dadong-zhenjing/003": {
-    "hash": "3a196bebde310258",
-    "createdAt": "2026-07-17T16:41:08Z",
-    "updatedAt": "2026-07-17T16:41:08Z"
-  },
-  "taoism/shangqing/dadong-zhenjing/004": {
-    "hash": "cde690de0218eb8d",
-    "createdAt": "2026-07-17T16:41:08Z",
-    "updatedAt": "2026-07-17T16:41:08Z"
-  },
-  "taoism/shangqing/dadong-zhenjing/005": {
-    "hash": "da9ce289cf92ff68",
-    "createdAt": "2026-07-17T16:41:08Z",
-    "updatedAt": "2026-07-17T16:41:08Z"
-  },
-  "taoism/shangqing/dadong-zhenjing/006": {
-    "hash": "63ba45ef7af6b18d",
-    "createdAt": "2026-07-17T16:41:08Z",
-    "updatedAt": "2026-07-17T16:41:08Z"
-  },
-  "taoism/shangqing/dadong-zhenjing/007": {
-    "hash": "4a15521741781e23",
-    "createdAt": "2026-07-17T16:41:08Z",
-    "updatedAt": "2026-07-17T16:41:08Z"
-  },
-  "taoism/shangqing/dadong-zhenjing/008": {
-    "hash": "6404e4daeb1de335",
-    "createdAt": "2026-07-17T16:41:08Z",
-    "updatedAt": "2026-07-17T16:41:08Z"
-  },
-  "taoism/shangqing/dadong-zhenjing/009": {
-    "hash": "8b163e03a8056096",
-    "createdAt": "2026-07-17T16:41:08Z",
-    "updatedAt": "2026-07-17T16:41:08Z"
-  },
-  "taoism/shangqing/dadong-zhenjing/010": {
-    "hash": "3630bee3a8b2025a",
-    "createdAt": "2026-07-17T16:41:08Z",
-    "updatedAt": "2026-07-17T16:41:08Z"
-  },
-  "taoism/shangqing/dadong-zhenjing/011": {
-    "hash": "ce9d4bc8bca13a24",
-    "createdAt": "2026-07-17T16:41:08Z",
-    "updatedAt": "2026-07-17T16:41:08Z"
-  },
-  "taoism/shangqing/dadong-zhenjing/012": {
-    "hash": "4f79c138c680dee6",
-    "createdAt": "2026-07-17T16:41:08Z",
-    "updatedAt": "2026-07-17T16:41:08Z"
-  },
-  "taoism/shangqing/dadong-zhenjing/013": {
-    "hash": "fe72fc8ff07e4b1c",
-    "createdAt": "2026-07-17T16:41:08Z",
-    "updatedAt": "2026-07-17T16:41:08Z"
-  },
-  "taoism/shangqing/dadong-zhenjing/014": {
-    "hash": "e10402e5e8464224",
-    "createdAt": "2026-07-17T16:41:08Z",
-    "updatedAt": "2026-07-17T16:41:08Z"
-  },
-  "taoism/shangqing/dadong-zhenjing/015": {
-    "hash": "5cd7179e4c1af2d0",
-    "createdAt": "2026-07-17T16:41:08Z",
-    "updatedAt": "2026-07-17T16:41:08Z"
-  },
-  "taoism/shangqing/dadong-zhenjing/016": {
-    "hash": "66907ed81816124f",
-    "createdAt": "2026-07-17T16:41:08Z",
-    "updatedAt": "2026-07-17T16:41:08Z"
-  },
-  "taoism/shangqing/dadong-zhenjing/017": {
-    "hash": "726047dca5a3f064",
-    "createdAt": "2026-07-17T16:41:08Z",
-    "updatedAt": "2026-07-17T16:41:08Z"
-  },
-  "taoism/shangqing/dadong-zhenjing/018": {
-    "hash": "0506653b31cc546f",
-    "createdAt": "2026-07-17T16:41:08Z",
-    "updatedAt": "2026-07-17T16:41:08Z"
-  },
-  "taoism/shangqing/dadong-zhenjing/019": {
-    "hash": "2eb3b17fdab088f3",
-    "createdAt": "2026-07-17T16:41:08Z",
-    "updatedAt": "2026-07-17T16:41:08Z"
-  },
-  "taoism/shangqing/dadong-zhenjing/020": {
-    "hash": "23ed15aa80259e1e",
-    "createdAt": "2026-07-17T16:41:08Z",
-    "updatedAt": "2026-07-17T16:41:08Z"
-  },
-  "taoism/shangqing/dadong-zhenjing/021": {
-    "hash": "32154c1b7f625cca",
-    "createdAt": "2026-07-17T16:41:08Z",
-    "updatedAt": "2026-07-17T16:41:08Z"
-  },
-  "taoism/shangqing/dadong-zhenjing/022": {
-    "hash": "854d08a67c3c374f",
-    "createdAt": "2026-07-17T16:41:08Z",
-    "updatedAt": "2026-07-17T16:41:08Z"
-  },
-  "taoism/shangqing/dadong-zhenjing/023": {
-    "hash": "232f336976f54798",
-    "createdAt": "2026-07-17T16:41:08Z",
-    "updatedAt": "2026-07-17T16:41:08Z"
-  },
-  "taoism/shangqing/dadong-zhenjing/024": {
-    "hash": "0df4f3d9a23f378e",
-    "createdAt": "2026-07-17T16:41:08Z",
-    "updatedAt": "2026-07-17T16:41:08Z"
-  },
-  "taoism/shangqing/dadong-zhenjing/025": {
-    "hash": "cd66e602204f9cb2",
-    "createdAt": "2026-07-17T16:41:08Z",
-    "updatedAt": "2026-07-17T16:41:08Z"
-  },
-  "taoism/shangqing/dadong-zhenjing/026": {
-    "hash": "30bc9589e3035d26",
-    "createdAt": "2026-07-17T16:41:08Z",
-    "updatedAt": "2026-07-17T16:41:08Z"
-  },
-  "taoism/shangqing/dadong-zhenjing/027": {
-    "hash": "987fb511f2b66008",
-    "createdAt": "2026-07-17T16:41:08Z",
-    "updatedAt": "2026-07-17T16:41:08Z"
-  },
-  "taoism/shangqing/dadong-zhenjing/028": {
-    "hash": "d530444c7ae8502b",
-    "createdAt": "2026-07-17T16:41:08Z",
-    "updatedAt": "2026-07-17T16:41:08Z"
-  },
-  "taoism/shangqing/dadong-zhenjing/029": {
-    "hash": "71c0af62346e6fee",
-    "createdAt": "2026-07-17T16:41:08Z",
-    "updatedAt": "2026-07-17T16:41:08Z"
-  },
-  "taoism/shangqing/dadong-zhenjing/030": {
-    "hash": "9f5e9fcc48c4233e",
-    "createdAt": "2026-07-17T16:41:08Z",
-    "updatedAt": "2026-07-17T16:41:08Z"
-  },
-  "taoism/shangqing/dadong-zhenjing/031": {
-    "hash": "b38dafa123930371",
-    "createdAt": "2026-07-17T16:41:08Z",
-    "updatedAt": "2026-07-17T16:41:08Z"
-  },
-  "taoism/shangqing/dadong-zhenjing/032": {
-    "hash": "dfa3707bcf95c930",
-    "createdAt": "2026-07-17T16:41:08Z",
-    "updatedAt": "2026-07-17T16:41:08Z"
-  },
-  "taoism/shangqing/dadong-zhenjing/033": {
-    "hash": "18956acfeb952818",
-    "createdAt": "2026-07-17T16:41:08Z",
-    "updatedAt": "2026-07-17T16:41:08Z"
-  },
-  "taoism/shangqing/dadong-zhenjing/034": {
-    "hash": "d6493a0faad829a8",
-    "createdAt": "2026-07-17T16:41:08Z",
-    "updatedAt": "2026-07-17T16:41:08Z"
-  },
-  "taoism/shangqing/dadong-zhenjing/035": {
-    "hash": "97e01dae3432a875",
-    "createdAt": "2026-07-17T16:41:08Z",
-    "updatedAt": "2026-07-17T16:41:08Z"
-  },
-  "taoism/shangqing/dadong-zhenjing/036": {
-    "hash": "a85a70fe041ce2a2",
-    "createdAt": "2026-07-17T16:41:08Z",
-    "updatedAt": "2026-07-17T16:41:08Z"
-  },
-  "taoism/shangqing/dadong-zhenjing/037": {
-    "hash": "d977c17372844c2d",
-    "createdAt": "2026-07-17T16:41:08Z",
-    "updatedAt": "2026-07-17T16:41:08Z"
-  },
-  "taoism/shangqing/dadong-zhenjing/038": {
-    "hash": "44d38fe6dd9765b3",
-    "createdAt": "2026-07-17T16:41:08Z",
-    "updatedAt": "2026-07-17T16:41:08Z"
-  },
-  "taoism/shangqing/dadong-zhenjing/039": {
-    "hash": "ed4f17e02bb70766",
-    "createdAt": "2026-07-17T16:41:08Z",
-    "updatedAt": "2026-07-17T16:41:08Z"
-  },
-  "taoism/shangqing/dadong-zhenjing/040": {
-    "hash": "336fc497e6cdd0c4",
     "createdAt": "2026-07-17T16:41:08Z",
     "updatedAt": "2026-07-17T16:41:08Z"
   },
@@ -3233,11 +2938,6 @@
     "hash": "c0b28821eaf44b0c",
     "createdAt": "2026-07-27T15:47:43Z",
     "updatedAt": "2026-07-27T15:49:15Z"
-  },
-  "shushu/xiangshu/huangji-jingshi": {
-    "hash": "c8d1131161feae66",
-    "createdAt": "2026-07-29T13:07:00Z",
-    "updatedAt": "2026-07-29T13:07:00Z"
   },
   "shushu/xiang-shu/huangji-jingshi": {
     "hash": "92c6e67f77cc28fb",

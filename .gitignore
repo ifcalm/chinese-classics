@@ -7,6 +7,8 @@ dist-ssr
 .vite
 
 # TypeScript / 构建产物
+# tsconfig.node 的产物已改投 node_modules/.tmp/tsconfig-node（见 tsconfig.node.json）——
+# 根目录留 vite.config.js 会 shadow 掉 .ts。下两条留作防回归。
 *.tsbuildinfo
 vite.config.js
 vite.config.d.ts
@@ -16,7 +18,8 @@ vite.config.d.ts
 !.vscode/extensions.json
 .idea
 
-# 本地内容(由 build-content 生成，dev 用软链)
+# 本地内容(由 build-content 生成；dev 的 /content/* 由 vite.config.ts 的 dev-content 插件供给。
+# public/content 软链已于 2026-09-13 移除——vite 会把它实体拷进 dist，白拷 817MB)
 public/content
 
 # R2 上传临时记录

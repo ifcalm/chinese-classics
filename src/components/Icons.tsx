@@ -38,9 +38,3 @@ export const ChevronLeftIcon = ({ size = 18, className }: IconProps) => (
     <path d="m15 18-6-6 6-6" />
   </svg>
 )
-
-export const ArrowRightIcon = ({ size = 16, className }: IconProps) => (
-  <svg {...base(size)} className={className} aria-hidden="true">
-    <path d="M5 12h14M13 6l6 6-6 6" />
-  </svg>
-)

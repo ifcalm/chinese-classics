@@ -1,15 +1,17 @@
 # 内容数据架构设计
 
-> 目标：让收录量从当前 ~257 部 / 8 千篇，无痛扩展到数千部 / 数十万篇，**新增内容只丢文件、跑构建，绝不改应用代码**；且**数据与代码彻底分家**——代码仓库永远是小仓库，GB 级语料全部存 R2。
+> 目标：让收录量无痛扩展，**新增内容只丢文件、跑构建，绝不改应用代码**。这条已验证到 **892 部 / 116,500 篇 / 1.08 亿字**（2026-09-04），期间应用代码未因新增内容改过一行。
+>
+> 另一条原设想「数据与代码彻底分家、代码仓库永远是小仓库」**未按原样落地**——`base-data` 最终进了 git 并成为唯一源，原因与代价见 §2。
 
 ## 0. 一句话总览
 
-**正文用 Markdown（机器与人都可读的内容），结构用 JSON（机器索引）；两者都存 Cloudflare R2，按需 fetch。源 markdown 只是整理暂存，转换上传后即从项目删除。**
+**正文用 Markdown（机器与人都可读的内容），结构用 JSON（机器索引）；两者都存 Cloudflare R2，按需 fetch。源 markdown（`base-data`）随仓库长期保留，是改正文与改结构的唯一下手处。**
 
 ```
 base-data/**.md            build-content              R2 content/                     应用 (React SPA)
 （带 frontmatter 的脏 md）  ──解析/拆分/剥字段──▶   JSON 索引 + 纯文本 md      ──按需 fetch──▶  首页/书页/阅读页
-（整理暂存，用完即删）        （一次性/增量）           （数据的长期家，与代码分离）
+（长期源，随仓库提交）        （增量，按门类跑）         （派生产物，应用只读这一片）
 ```
 
 ---
@@ -21,35 +23,40 @@ base-data/**.md            build-content              R2 content/               
 | 数据 | 形态 | 谁产生 | 编辑方式 |
 |---|---|---|---|
 | 正文 | `.md` 纯文本 | build 从源 md 剥出 | 改 md（覆盖单个文件） |
-| 门类 / 书目 / 章节树 | JSON | build 从 frontmatter 汇总 | 改对应 JSON |
+| 门类 / 书目 / 章节树 | JSON | build 从 frontmatter 汇总 | **改源 md 的 frontmatter**（JSON 每次 build 重生成，手改必被覆盖） |
 
 为什么这样分：正文是连续散文，用 md 才可读、可 diff、可改（避免被压成转义字符串）；目录/树/排序本就是结构化数据，用 JSON 才好被机器索引。各按数据的天然纹理选格式。
 
 ---
 
-## 2. 数据生命周期（数据 ≠ 代码）
+## 2. 数据生命周期（源在 git，派生在 R2）
 
 ```
-整理阶段(现在)            一次性构建              长期(数据的家)
-base-data/*.md   ──build──▶  md + JSON  ──上传──▶   R2 content/
-（临时暂存，可删）                                  （GB 级数据，和代码彻底分开）
-        │
-        └── 整理+上传完成后，从项目里删除（或永不提交 git）
+长期源(git)                 增量构建                 派生产物(R2)
+base-data/**.md   ──build──▶  md + JSON  ──upload──▶   R2 content/
+（随仓库提交，唯一下手处）                        （应用只读这一片，可随时重建）
 ```
 
-- **代码仓库**：只留 `代码 + scripts/build-content.ts + 几 KB 配置`，永远小。
-- **R2**：内容的唯一长期家。GB 级正是对象存储该干的事。
-- **base-data**：带 Hugo frontmatter 的脏 md，**只是本次整理的暂存**，转换上传后从项目删除，不进 git、不长期保留。
+- **base-data**：带 Hugo frontmatter 的源 md，**长期源**，随代码一起提交（现 120,322 个文件 / 788 MB，`.git` 214 MB）。
+- **R2**：派生产物的家，GB 级正是对象存储该干的事。**丢了可以从 base-data 重新 build + upload 重建**。
+- **改正文只改 base-data**，然后 `npm run content` + `npm run content:upload`；**不要去改 R2 或 `dist-content` 上的 md/JSON**，下次构建即被覆盖。
 
-> ⚠️ 当前 `base-data/` 尚未进 git。整理期间若要防丢，可临时另存备份；但**最终不随代码长期保留**。
+> ⚠️ **本节原先写的是反的，2026-09-13 校正**。原设计把 `base-data` 当「整理暂存，上传后从项目删除、不进 git」，把 R2 的 `content/text/**.md` 当长期源。实际演进成了相反，因为**校勘链必须锚在一个带版本历史的源上**：
+>
+> - `scripts/check-integrity.py`（CI 每次 push 跑）比对断句稿与 `base-data/shushu/mingli/san-ming-tong-hui`，base-data 一删这道闸就失去依据；
+> - `data/quotes.json` 的 134 条名句声明「逐字取自站内 base-data 源本」，校验须在 base-data 上原样命中；
+> - `docs/collation-log.md` 与 `docs/known-issues.md` 的逐字挂账（讹字、阙文、简体卷）全部按 base-data 路径记录。
+>
+> 代价是代码仓库不再是「小仓库」。这笔账是认过的：换来的是**每一次改字都留在 git 历史里可查**，与「只删不改不增」那条铁律互为支撑。
 
-### 长期可编辑的「源」是什么
+### 可编辑的「源」是什么
 
-删掉 base-data 后，R2 里有两类可编辑的源（都在 R2、都不在代码仓库）：
-- **正文源** = `content/text/**.md`（干净 md，既是应用读的，也是将来改正文时拉下来改的）。
-- **结构源** = `content/{manifest,catalog,book}` 的 JSON（改书名/排序/分类时改这里）。
+两类源都在 `base-data`，都在 git 里：
 
-即「**改正文在 md 上，改结构在 JSON 上**」，没有任何一处需要手抠转义字符串。
+- **正文源** = `base-data/**.md` 的正文部分。
+- **结构源** = 同一批 md 的 **frontmatter**（`title` / `weight` / `summary` / `kind`）——门类、书目、章节树由 build 从 frontmatter 汇总。
+
+即「**改正文和改结构都在 base-data 的 md 上**」，build 是唯一的单向通道，没有任何一处需要手抠转义字符串。
 
 ---
 
@@ -130,7 +137,7 @@ base-data/
 
 ### 5.3 时间戳来源（`createdAt` / `updatedAt`）
 
-用于「最新收录 / 最近更新 / 按时间排」。**不取 Hugo 的 `date`**——那是录入时间戳、噪声大（史记 130 卷同一天、还有 2021 老日期），且 `base-data` 将来删除后其 git 历史也不可依赖。
+用于「最新收录 / 最近更新 / 按时间排」。**不取 Hugo 的 `date`**——那是录入时间戳、噪声大（史记 130 卷同一天、还有 2021 老日期）。
 
 改由**构建增量状态**维护（与 §11 的 hash 增量是同一份状态，需持久化：体积极小，提交进代码仓库或存 R2）：
 
@@ -313,20 +320,21 @@ next = flat[i + 1]                             // 到末篇为 undefined → 显
 
 ## 10. 内容更新与缓存
 
-- **改正文** = 覆盖一个 `content/text/*.md`，不动索引。
-  - 单篇：`wrangler r2 object get/put`（拉下→改→覆盖，本地副本临时、不进 git）。
-  - 批量校对：`rclone sync` 把 `text/` 当远程文件夹拉下改回。
-  - 未来高频编辑：自建登录保护的「编辑后台」，网页改 md → Worker `PUT` 回 R2。
-- **改结构**（书名/排序/分类）= 改对应 JSON。
+- **改正文** = 改 `base-data/**.md` 的正文，再 `npm run content` + `npm run content:upload`。
+  - ⚠️ **不要直接改 R2 上的 `content/text/*.md`**（`wrangler r2 object put`、`rclone sync` 都算）。
+    那样改出来的字**不留 git 历史、不过 `check-integrity.py`、与 collation-log 的逐字挂账脱节**，
+    且下一次 build+upload 会把它默默覆盖回去。本节原先教的正是这个做法，2026-09-13 已改正。
+- **改结构**（书名/排序/分类）= 改源 md 的 frontmatter（`title`/`weight`/`summary`/`kind`），
+  **不改 JSON**——`dist-content` 与 R2 上的 JSON 每次 build 都重生成。
 - **缓存**：`text/*.md` 设较短 `Cache-Control` TTL；需立即生效时覆盖后 purge。
   （强一致可选：在 `book.json` 的 text 节点加 `rev` 短 hash，正文按 `?v=<rev>` 取；默认先不上这层。）
 
 ---
 
-## 11. 构建流程（`scripts/build-content.ts`）
+## 11. 构建流程（`scripts/build-content.mjs`）
 
 ```
-base-data/**.md (暂存)
+base-data/**.md (长期源)
    │ 1. 递归扫描，跳过 .DS_Store；折叠数字分批目录(§5.1)
    │ 2. 顶层→门类(_meta.yml)；按书边界规则(§5.1)定位「书」，书之上入 catalog 树、书之下入 book 树
    │ 3. 解析 frontmatter：title/order/summary 进 JSON；探测繁简写 variant；其余丢弃
@@ -406,10 +414,11 @@ npm 脚本：`content:build`(构建全部门类) · `readme`(刷新 README) · `
 - **`content-state.json`**（随仓库提交）：每本书一条 `{hash, createdAt, updatedAt}`。在册=已收录；不在=全新；`createdAt` 即首次收录时间，`updatedAt>createdAt` 即被补录改过。
 - **git 状态**：base-data 里新丢的文件显示为未跟踪 `??`，一眼看出哪些还没纳入。
 
-**增量上传**：`build` 产出 `dist-content/.files.json`（每个产物文件的内容哈希）；`upload-r2.mjs` 拿它与本地 `.r2-uploaded.json`（已传哈希）对比，**只上传哈希变了的文件**。实测改一篇正文 → 仅 4 个文件上传（该篇 + 其 book.json + catalog + manifest），而非全量 8040。
+**增量上传**：`build` 产出 `dist-content/.files.json`（每个产物文件的内容哈希）；`upload-r2-s3.mjs` 拿它与本地 `.r2-uploaded.json`（已传哈希）对比，**只上传哈希变了的文件**。实测改一篇正文 → 仅 4 个文件上传（该篇 + 其 book.json + catalog + manifest），而非全量 117,430。
 
 > `.r2-uploaded.json` 是本地缓存（gitignore，丢了重传即可）；`content-state.json` 才是随仓库走的「收录台账」。
-> 上传用 `.env.local` 的 `CLOUDFLARE_API_TOKEN`（走 Cloudflare API，限流 ~4/s，故并发压到 3，对增量小批量足够快）。
+> 上传走 R2 的 S3 接口（SigV4），凭据取 `.env.local` 的 `R2_ACCOUNT_ID` / `R2_ACCESS_KEY_ID` / `R2_SECRET_ACCESS_KEY`，无 Cloudflare API 的 ~4/s 限流，默认并发 24。
+> 旧的 `upload-r2.mjs`（走 Cloudflare API、并发 3）已于 2026-09-13 删除。
 
 ---
 
@@ -426,8 +435,11 @@ npm 脚本：`content:build`(构建全部门类) · `readme`(刷新 README) · `
 ## 落地阶段
 
 1. ✅ 本文档定稿（md 正文 + JSON 索引版）。
-2. 定三层 schema 的 TS 类型 → `src/data/types.ts`（前后端共用）。
-3. 写 `scripts/build-content.ts`，先拿 `confucius` 跑通三种结构 + 校验报告。
-4. 全量构建，修 §13 清洗项。
-5. 前端 loader 改造，先用本地 `dist-content/` 联调。
-6. 接 R2 + Worker `/api/*`，上线。
+2. ✅ 定三层 schema 的 TS 类型 → `src/data/types.ts`（前后端共用）。
+3. ✅ 写 `scripts/build-content.mjs`，先拿 `confucius` 跑通三种结构 + 校验报告。
+4. ✅ 全量构建，修 §13 清洗项。
+5. ✅ 前端 loader 改造，先用本地 `dist-content/` 联调。
+6. ✅ 接 R2 + Worker `/api/*`，上线（https://chinese-classics.org）。
+
+> 本阶段表已全部完成；此后的演进（按门类增量构建、S3 接口上传、边缘渲染 SEO、名句库 D1）
+> 见 `docs/seo.md` 与 `docs/collation-log.md`。

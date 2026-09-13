@@ -1,8 +1,8 @@
 // 内容 loader：按需 fetch dist-content 的 JSON/md，带内存缓存。
-// 本地 dev 从 /content（软链到 dist-content）取；将来换 R2 只需改 BASE。
+// 本地 dev 从 /content 取（由 vite.config.ts 的 dev-content 插件读 dist-content 供给）；将来换 R2 只需改 BASE。
 import type { Manifest, Catalog, BookDetail, BookNode, BookText, CatalogNode, BookRef } from './types'
 
-// dev 走本地软链 /content；部署时用 VITE_CONTENT_BASE 指向 R2 公共域或 Worker /api
+// dev 走本地 /content（dev-content 插件）；部署时用 VITE_CONTENT_BASE 指向 R2 公共域或 Worker /api
 const BASE = import.meta.env.VITE_CONTENT_BASE ?? '/content'
 
 /** 请求超时：连接停滞时让 Promise 快速落定，避免挂起的请求永远占住缓存

@@ -386,15 +386,6 @@ main.page {
   text-align: justify;
   margin: 0 0 1em;
 }
-.reader__note {
-  margin: 18px 0 0;
-  padding-top: 16px;
-  border-top: 1px solid var(--border);
-  font-size: 0.867rem;
-  line-height: 1.9;
-  color: var(--text-secondary);
-  text-align: justify;
-}
 /* 引用块:僧传卷首传目等底本缩进小字区,与正文视觉区分 */
 .reader__quote {
   margin: 0 0 1em;
@@ -417,10 +408,6 @@ main.page {
   border-top: 2px solid var(--accent);
   padding: 1em 0 0 0.2em;
   margin: 0 0 0 1em;
-}
-.reader__note-tag {
-  color: var(--accent);
-  margin-right: 8px;
 }
 
 /* ---------- 通用：kbd / 空态 / 筛选 pill ---------- */
@@ -459,11 +446,6 @@ kbd {
 }
 .pill:hover {
   border-color: var(--border-strong);
-}
-.pill--active {
-  background: var(--text);
-  color: var(--bg);
-  border-color: var(--text);
 }
 
 /* ---------- 阅读页：导航 / 工具条 ---------- */
@@ -613,13 +595,6 @@ kbd {
   overflow-y: hidden;
   text-align: start;
   padding-bottom: 8px;
-}
-.reader--vertical .reader__note {
-  border-top: none;
-  border-right: 1px solid var(--border);
-  padding-top: 0;
-  padding-right: 16px;
-  margin-top: 0;
 }
 
 /* ---------- 目录抽屉 ---------- */
