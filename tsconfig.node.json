@@ -5,7 +5,12 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "allowSyntheticDefaultImports": true,
-    "strict": true
+    "strict": true,
+    "types": ["node"],
+    // 产物丢到 node_modules 下，不要落在仓库根目录：
+    // vite 解析配置时 vite.config.js 优先于 .ts，根目录留一份 tsc 产出的 .js 会
+    // shadow 掉 .ts——改了 .ts 不 build 就跑 dev，加载的是旧 .js（2026-09-13 实地踩过）。
+    "outDir": "./node_modules/.tmp/tsconfig-node"
   },
   "include": ["vite.config.ts"]
 }

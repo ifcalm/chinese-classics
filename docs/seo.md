@@ -77,9 +77,10 @@ canonical 域名：`https://www.chinese-classics.org`。
 
 ## 注意事项
 
-- `public/content` 软链 vite 会实体拷进 dist（374MB/34k 文件），
-  `public/.assetsignore` 已把它排除出 Worker 静态资产（2 万文件上限，
-  且线上 `/content/*` 由 Worker 代理 R2，轮不到 ASSETS）；
+- 线上 `/content/*` 由 Worker 代理 R2，轮不到 ASSETS；`public/.assetsignore` 仍把 `content`
+  排除在静态资产之外作兜底（2 万文件上限）。**dev 的 `/content/*` 由 `vite.config.ts` 的
+  `dev-content` 插件读 `dist-content` 供给**——原先那个 `public/content` 软链会被 vite
+  实体拷进 dist（11.7 万文件 / 817MB，build 耗时 21.7s），已于 2026-09-13 移除；
 - 模板改动只需 `npm run deploy`，不必重传内容；内容改动只需
   `content:build` + `content:upload`，不必重新部署 Worker；
 - 边缘 HTML 缓存 1 小时：内容更新后最长 1 小时可见旧页，可接受；
