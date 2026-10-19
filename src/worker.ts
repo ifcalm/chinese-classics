@@ -91,6 +91,27 @@ function getShell(env: Env, origin: string): Promise<string> {
   return shellPromise
 }
 
+/** 短哈希(FNV-1a)。 */
+function fnv1a(s: string): string {
+  let h = 0x811c9dc5
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i)
+    h = Math.imul(h, 0x01000193)
+  }
+  return (h >>> 0).toString(36)
+}
+
+/** 边缘缓存键：请求 URL + 当前构建指纹。
+    渲染结果里嵌着带哈希的 JS/CSS 文件名，而每次部署旧哈希文件都会被资产层删除；
+    Cache API 的条目不随部署清除，若按裸 URL 缓存，部署后最长 s-maxage 内命中的都是
+    指向 404 资源的旧页面(无样式、无脚本的裸 HTML)。shell(index.html)里含这些文件名，
+    构建一变它就变——指纹随之变，旧条目不再被命中，自然过期。 */
+function cacheKey(url: URL, shell: string): Request {
+  const k = new URL(url.toString())
+  k.searchParams.set('__v', fnv1a(shell))
+  return new Request(k.toString())
+}
+
 /** 边缘渲染失败时的兜底：直出 SPA shell 由前端自己路由。
     资产层已关掉 SPA fallback，故须显式取 index.html。不缓存——降级响应别粘住。 */
 async function spaFallback(env: Env, origin: string): Promise<Response> {
@@ -256,11 +277,13 @@ export default {
     if (req.method === 'GET' && isDocRoute(url.pathname)) {
       try {
         const cache = edgeCache()
-        const hit = await cache.match(req)
+        // shell 先取：缓存键依赖它。getShell 在 isolate 内记忆，只有首个请求真正取一次资产
+        const shell = await getShell(env, url.origin)
+        const key = cacheKey(url, shell)
+        const hit = await cache.match(key)
         if (hit) return hit
         const page = await renderRoute(env, url.pathname)
         if (page) {
-          const shell = await getShell(env, url.origin)
           const notFound = page.status === 404
           const resp = new Response(inject(shell, page), {
             status: notFound ? 404 : 200,
@@ -269,7 +292,7 @@ export default {
               'cache-control': notFound ? 'no-store' : 'public, max-age=300, s-maxage=3600',
             },
           })
-          if (!notFound) ctx.waitUntil(cache.put(req, resp.clone()))
+          if (!notFound) ctx.waitUntil(cache.put(key, resp.clone()))
           return resp
         }
       } catch {
