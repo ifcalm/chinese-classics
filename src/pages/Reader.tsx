@@ -4,6 +4,7 @@ import { errText, getBook, getChapterText, flattenBook, resolveBookId } from '..
 import type { BookDetail, BookText } from '../data/types'
 import { useTheme } from '../theme/ThemeProvider'
 import { ChevronLeftIcon } from '../components/Icons'
+import Footer from '../components/Footer'
 import { isVerse, splitBlocks } from '../seo/render'
 import { chapterDisplayTitle, chapterPageTitle, SITE_TITLE } from '../seo/meta'
 
@@ -251,6 +252,8 @@ export default function Reader() {
             </nav>
           </>
         )}
+        {/* 页脚放在 article 内：article 底部留白本为悬浮工具条让位，放在外面会被工具条盖住 */}
+        <Footer inline />
       </article>
 
       <div className="reader__tools" role="toolbar" aria-label="阅读设置">

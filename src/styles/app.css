@@ -832,3 +832,88 @@ kbd {
   border-radius: 8px;
   overflow-x: auto;
 }
+
+/* ---------- 页脚 / 联系浮层 ---------- */
+.site-footer {
+  margin-top: 4rem;
+  padding: 1.4rem 0 2rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.8rem;
+  color: var(--text-tertiary);
+}
+.site-footer__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.site-footer__contact {
+  position: relative;
+}
+.site-footer__btn {
+  background: none;
+  border: none;
+  padding: 4px 0;
+  font: inherit;
+  color: var(--text-secondary);
+}
+.site-footer__btn:hover,
+.site-footer__btn[aria-expanded='true'] {
+  color: var(--accent);
+}
+.contact-pop {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 8px);
+  z-index: 30;
+  width: 19rem;
+  max-width: 84vw;
+  padding: 14px 16px;
+  text-align: start;
+  background: var(--bg);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+  animation: slideup 0.18s var(--ease);
+}
+.contact-pop__tip {
+  margin: 0 0 10px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+.contact-pop__addr {
+  display: block;
+  padding: 8px 10px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.8rem;
+  color: var(--text);
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  user-select: all;
+  white-space: nowrap;
+  overflow-x: auto;
+}
+.contact-pop__actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+.contact-pop__act {
+  flex: 1;
+  padding: 6px 0;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  background: transparent;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+}
+.contact-pop__act:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.contact-pop__act--main {
+  color: var(--accent);
+  background: var(--accent-soft);
+  border-color: transparent;
+}

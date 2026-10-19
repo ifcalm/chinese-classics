@@ -1,5 +1,6 @@
 import { Route, Routes } from 'react-router-dom'
 import Header from './components/Header'
+import Footer from './components/Footer'
 import Home from './pages/Home'
 import Category from './pages/Category'
 import Book from './pages/Book'
@@ -25,6 +26,7 @@ export default function App() {
                 <Route path="/category/:id" element={<Category />} />
                 <Route path="/book/*" element={<Book />} />
               </Routes>
+              <Footer />
             </>
           }
         />

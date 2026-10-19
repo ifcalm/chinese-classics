@@ -24,6 +24,11 @@ export interface PageMeta {
 
 const e = escapeHtml
 
+/** 页脚直出结构，与 components/Footer.tsx 同构(改动须两边同步)。
+    联系按钮此处只是占位：邮箱地址由前端点击时才拼出，直出 HTML 里不含。 */
+const footerHtml = (inline: boolean) =>
+  `<footer class="site-footer"><div class="site-footer__inner${inline ? '' : ' page'}"><span class="site-footer__copy">© 古典文库</span><div class="site-footer__contact"><button type="button" class="site-footer__btn" aria-expanded="false" aria-haspopup="dialog">联系</button></div></div></footer>`
+
 function breadcrumbLd(items: Array<{ name: string; path?: string }>): object {
   return {
     '@context': 'https://schema.org',
@@ -65,7 +70,8 @@ export function renderHome(manifest: Manifest): PageMeta {
 <p class="hero__sub">${manifest.categories.length} 门类 · ${total} 部典籍 · 书名可搜</p></section>
 <section class="bento" aria-label="门类导航">
 ${cards}
-</section></main>`,
+</section></main>
+${footerHtml(false)}`,
   }
 }
 
@@ -100,7 +106,8 @@ export function renderCategory(cat: CategoryMeta, tree: CatalogNode[]): PageMeta
 <nav class="crumb"><a class="crumb__link" href="/">首页</a><span class="crumb__sep">/</span><span>${e(cat.name)}</span></nav>
 <h1 class="cat-title">${e(cat.name)}</h1>
 <p class="cat-title__sub"><span class="cat-title__count">共 ${cat.bookCount} 部</span></p>
-${catalogHtml(tree, 0)}</main>`,
+${catalogHtml(tree, 0)}</main>
+${footerHtml(false)}`,
   }
 }
 
@@ -149,7 +156,8 @@ export function renderBookPage(book: BookDetail, catName: string, chapterCount: 
 <nav class="crumb"><a class="crumb__link" href="/">首页</a><span class="crumb__sep">/</span><a class="crumb__link" href="/category/${e(categoryId)}">${e(catName)}</a><span class="crumb__sep">/</span><span>${e(book.title)}</span></nav>
 <h1 class="cat-title">${e(book.title)}</h1>
 ${book.summary ? `<p class="cat-title__sub">${e(book.summary)}</p>` : ''}
-${tocHtml(book.title, book.nodes)}</main>`,
+${tocHtml(book.title, book.nodes)}</main>
+${footerHtml(false)}`,
   }
 }
 
@@ -197,6 +205,7 @@ export function renderChapterPage(
 ${content}
 </div>
 <nav class="reader__nav">${prev ? navLink(prev, 'prev') : '<span></span>'}${next ? navLink(next, 'next') : '<span></span>'}</nav>
+${footerHtml(true)}
 </article></div>`,
   }
 }
@@ -210,6 +219,7 @@ export function renderNotFound(path: string): PageMeta {
     ogType: 'website',
     jsonLd: [],
     status: 404,
-    body: `<main class="page"><p class="empty">没有找到这个页面，<a class="accent" href="/">返回首页</a>。</p></main>`,
+    body: `<main class="page"><p class="empty">没有找到这个页面，<a class="accent" href="/">返回首页</a>。</p></main>
+${footerHtml(false)}`,
   }
 }
