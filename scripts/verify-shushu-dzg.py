@@ -2,12 +2,13 @@
 """术数五部·零改字校验（对 `scripts/parse-shushu-dzg.py` 的产出）。
 
 **两侧不同源**：底本侧直接从 `scripts/dzg/*.txt` 原文抽汉字流，**不走 parse-shushu-dzg
-的任何清洗**——不剥括号、不剔题署、不切今人窜入段、不拆问答行。落盘侧从 base-data 抽，
+的清洗**——不剥括号、不剔题署、不切今人窜入段、不拆问答行。落盘侧从 base-data 抽，
 篇题一并计入（篇题在底本里本就是正文中的一行）。
 
 判据：落盘汉字流须是底本汉字流的**子序列**（只许删、不许改、不许增）。
 本批的处理——剥张九仪增注、剔卷端题署、切孟广顺今人文字、把问答行切成题与正文——
-要么是删、要么只挪不改，故子序列判据仍应成立；判据过不去就说明有一处不是删而是改。
+要么是删、要么只挪不改。柳庄相法的答语移位先在底本文字流中按明刻本归位，
+其余章节保持原序。
 （问答行那处尤其要靠它守着：问句若既留在题里又留在正文里，落盘流就会多出一份。）
 
 用法: python3 scripts/verify-shushu-dzg.py
@@ -54,8 +55,14 @@ def main():
     bad = 0
     print('%-14s %9s %9s %7s' % ('书', '底本', '落盘', '留存'))
     for src, rel, title in BOOKS:
-        s = stream(open(os.path.join(ROOT, 'scripts/dzg', src + '.txt'),
-                        encoding='utf-8').read())
+        raw = open(os.path.join(ROOT, 'scripts/dzg', src + '.txt'), encoding='utf-8').read()
+        if src == '柳庄相法':
+            # 只移动清楚错接于第九问末尾的原文答语。
+            pattern = (r'(^八、曰月交锋，反得善终，为何？\n)'
+                       r'(\n+九、吴尚书之母.*?)(^[　 \t]*对曰：凡武将不边眼眉上生杀气[^\n]*\n)'
+                       r'(?=\n+十、宫中之女)')
+            raw = re.sub(pattern, r'\1\3\2', raw, flags=re.M | re.S)
+        s = stream(raw)
         d = disk_stream(os.path.join(ROOT, rel))
         ok, pos = is_subseq(d, s)
         print('%-14s %9d %9d %6.1f%%  %s' % (

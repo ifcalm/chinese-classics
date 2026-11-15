@@ -233,6 +233,15 @@ def parse(b):
             ps[-1]['body'].append(s)
             i += 1
         ps = [p for p in ps if norm(p['title']) not in b['drop']]
+        if b['slug'] == 'liu-zhuang-xiang-fa' and v['title'] == '上册':
+            # 明刻本将「凡武將」放在第八问和第九问之间（docs/collation-log.md）。
+            for eighth, ninth in zip(ps, ps[1:]):
+                if eighth['title'] != '八、曰月交锋，反得善终，为何？':
+                    continue
+                if (not eighth['body'] and ninth['title'].startswith('九、吴尚书之母')
+                        and ninth['body'] and ninth['body'][-1].startswith('对曰：凡武将不边眼眉上生杀气')):
+                    eighth['body'].append(ninth['body'].pop())
+                break
         if ps:
             out.append({'title': v['title'], 'pieces': ps})
     return out
