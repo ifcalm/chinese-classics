@@ -32,6 +32,12 @@ han = lambda s: len(HAN.findall(s))
 # 他人序不收（铁律）。小引是赵翼自序，收。
 DROP_SEC = ('序（一）', '序（二）')
 
+# 殆知阁把两篇正文误标为篇题，据卷二十、卷二十二的印本篇题恢复。
+RESTORED_HEADINGS = {
+    ('卷二十', '诸方镇各擅土地'): '方镇兵出境即仰度支供馈',
+    ('卷二十二', '唐庄宗为晋王时'): '一军中有五帝',
+}
+
 SUMMARY = ('清赵翼撰，凡三十六卷，就正史纪、传、表、志参互勘校，兼论历代治乱兴衰之故，'
            '与钱大昕《廿二史考异》、王鸣盛《十七史商榷》并称清代三大史考。'
            '据殆知阁本收录（简体）；钱大昕、李保泰二序系他人所撰不收，赵翼自撰《小引》存。')
@@ -57,7 +63,13 @@ def parse():
         elif s.startswith('○'):
             if cur is None:
                 continue
-            cur['items'].append({'title': s[1:].strip(), 'body': []})
+            title = s[1:].strip()
+            restored = next((heading for (volume, start), heading in RESTORED_HEADINGS.items()
+                             if cur['title'] == volume and title.startswith(start)), None)
+            if restored:
+                cur['items'].append({'title': restored, 'body': [title]})
+            else:
+                cur['items'].append({'title': title, 'body': []})
         elif cur is not None:
             if not cur['items']:      # 卷首无条目题的散文（小引即此）
                 cur['items'].append({'title': cur['title'], 'body': []})
